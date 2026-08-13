@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>seniorsecured.org</title>
+<script>
+/* GitHub Pages has no rewrite rules: a hard load of /p/<slug> lands here.
+   Stash where the reader was going, then hand back to the app at the root,
+   which restores the URL with replaceState. */
+(function () {
+  var to = location.pathname + location.search + location.hash;
+  try { sessionStorage.setItem('ss_redirect', to); } catch (e) {}
+  location.replace('/');
+})();
+</script>
+</head>
+<body></body>
+</html>

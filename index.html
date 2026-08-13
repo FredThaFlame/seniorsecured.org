@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>seniorsecured.org &middot; Community</title>
+<meta name="description" content="Plain-spoken writing on scams, fraud and staying safe online."/>
+<link rel="canonical" href="https://seniorsecured.org/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="seniorsecured.org"/>
+<meta property="og:url" content="https://seniorsecured.org/"/>
+<meta property="og:title" content="seniorsecured.org &middot; Community"/>
+<meta property="og:description" content="Plain-spoken writing on scams, fraud and staying safe online."/>
+<meta property="og:image" content="https://seniorsecured.org/fred-flamer.jpg"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231B3A5C'/><text x='16' y='23' font-size='19' font-family='Tahoma' font-weight='bold' fill='%23C8922A' text-anchor='middle'>S</text></svg>"/>
+<style>
+/* ─────────────────────────────────────────────────────────────
+   TOKENS  ·  UI type: MS Sans Serif @ 12px  ·  Article @ 16.5px
+   Light-only by design — a printed-page cream, navy and gold.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --font:"MS Sans Serif", Tahoma, "Segoe UI", system-ui, sans-serif;
+  --bg:#EFECE6;      --surface:#FFFFFF;   --surface-2:#F7F5F0;
+  --ink:#14181D;     --ink-2:#52514E;     --muted:#6F6D67;
+  --navy:#1B3A5C;    --navy-2:#254D78;
+  --gold:#B8862A;    --gold-lt:#FBF3E2;   --gold-line:#E8D3A2;
+  --line:#DCD7CB;    --line-soft:#EAE6DC;
+
+  /* chart ink */
+  --grid:#E6E3DA;    --axis:#C3C2B7;
+  --series:#2A78D6;  --series-wash:rgba(42,120,214,.10);
+  --ord-1:#86B6EF;   --ord-2:#5598E7;     --ord-3:#2A78D6;  --ord-4:#1C5CAB;
+
+  --r:3px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);font-size:12px;line-height:1.6;background:var(--bg);color:var(--ink);min-height:100vh}
+button,input,textarea,select{font-family:inherit;font-size:12px;color:inherit}
+a{color:var(--navy-2)}
+[hidden]{display:none!important}
+
+/* reading progress */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:300;transition:width .1s linear}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:#fff;padding:6px;z-index:500;border:1px solid var(--navy)}
+
+/* ── page frame: profile+links | masthead+blog | latest ────── */
+.page{
+  max-width:1180px;margin:0 auto;padding:22px 18px 60px;
+  display:grid;gap:18px;
+  grid-template-columns:190px minmax(0,1fr) 232px;
+  grid-template-areas:
+    "profile  title    latest"
+    "profile  blog     latest"
+    "links    blog     latest"
+    ".        blog     latest";
+  align-items:start;
+}
+#profile{grid-area:profile}
+#title{grid-area:title}
+#blog{grid-area:blog}
+#latest{grid-area:latest}
+#links{grid-area:links}
+
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
+         color:var(--muted);margin-bottom:7px}
+
+/* ── profile ───────────────────────────────────────────────── */
+#profile .shot{
+  width:100%;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block;
+  border:1px solid var(--line);background:var(--bg)
+}
+#profile .name{font-size:14px;font-weight:700;color:var(--navy);margin-top:9px}
+#profile .role{color:var(--muted);margin-top:1px}
+#profile .bio{color:var(--ink-2);margin-top:8px;line-height:1.55}
+
+/* ── masthead ──────────────────────────────────────────────── */
+#title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
+       padding:12px 0 10px;text-align:center}
+#title h1{font-size:30px;font-weight:700;letter-spacing:-.6px;color:var(--navy);line-height:1}
+#title h1 span{color:var(--gold)}
+#title h1 .tld{color:var(--muted);font-weight:400;letter-spacing:0}
+#title .kicker{font-size:9px;font-weight:700;letter-spacing:3.4px;text-transform:uppercase;
+               color:var(--muted);margin-top:6px}
+#title .home{background:none;border:0;cursor:pointer;padding:0;display:block;width:100%}
+
+/* ── the blog body ─────────────────────────────────────────── */
+#blog{padding:26px 30px 18px;min-height:520px;display:flex;flex-direction:column}
+.post-title{font-size:26px;line-height:1.22;font-weight:700;color:var(--navy);
+            letter-spacing:-.3px;margin-bottom:8px}
+.post-sub{font-size:14px;line-height:1.5;color:var(--ink-2);margin-bottom:12px}
+.byline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);
+        padding:9px 0;border-top:1px solid var(--line-soft);
+        border-bottom:1px solid var(--line-soft);margin-bottom:24px}
+.byline b{color:var(--ink)}
+.dot{color:var(--line)}
+.tag{background:var(--gold-lt);border:1px solid var(--gold-line);color:#7A5300;
+     font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+     padding:1px 5px;border-radius:2px}
+.tag.draft{background:#F3F0FF;border-color:#D5CDF0;color:#4A3AA7}
+
+.article{font-size:16.5px;line-height:1.78;color:#1A1D21}
+#p-body{flex:1}
+.article p{margin-bottom:20px}
+.article h2{font-size:19px;line-height:1.35;color:var(--navy);margin:32px 0 10px;font-weight:700}
+.article h3{font-size:16px;color:var(--navy);margin:24px 0 8px;font-weight:700}
+.article ul,.article ol{margin:0 0 20px 22px}
+.article li{margin-bottom:6px}
+.article blockquote{border-left:3px solid var(--gold);padding:2px 0 2px 16px;margin:24px 0;
+                    color:#33383D;font-style:italic}
+.article strong{font-weight:700}
+.article a{color:var(--navy-2)}
+
+/* share + heart, bottom of the blog box */
+.post-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);
+           display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.post-foot .left{color:var(--muted)}
+.share{margin-left:auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+       padding:7px 14px;cursor:pointer;color:var(--ink-2);font-weight:600}
+.share:hover{border-color:var(--navy);color:var(--navy)}
+.heart{
+  display:inline-flex;align-items:center;gap:7px;background:var(--surface);
+  border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:700;
+  transition:border-color .15s,background .15s
+}
+.heart .em{font-size:15px;line-height:1;filter:grayscale(1);opacity:.45;transition:filter .15s,opacity .15s}
+.heart .n{font-variant-numeric:tabular-nums;font-size:13px}
+.heart:hover{border-color:var(--gold);background:var(--gold-lt)}
+.heart[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-lt);color:#7A5300}
+.heart[aria-pressed="true"] .em{filter:none;opacity:1}
+.heart:disabled{opacity:.6;cursor:default}
+
+/* ── latest publishings ────────────────────────────────────── */
+#latest{padding:14px;position:sticky;top:18px}
+#latest ol{list-style:none}
+#latest li+li{border-top:1px solid var(--line-soft)}
+.pub{
+  display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  padding:10px 8px;border-left:2px solid transparent;border-radius:0 var(--r) var(--r) 0
+}
+.pub:hover{background:var(--surface-2)}
+.pub[aria-current="true"]{background:var(--gold-lt);border-left-color:var(--gold)}
+.pub .d{color:var(--muted);font-size:10px;letter-spacing:.4px;text-transform:uppercase}
+.pub .t{font-weight:700;color:var(--navy);line-height:1.35;margin:3px 0 4px}
+.pub[aria-current="true"] .t{color:#7A5300}
+.pub .m{color:var(--muted);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+
+/* ── elsewhere ─────────────────────────────────────────────── */
+#links{padding:12px 14px}
+#links ul{list-style:none}
+#links li+li{margin-top:1px}
+#links a{display:flex;align-items:center;gap:8px;padding:5px 0;color:var(--ink-2);
+         text-decoration:none;font-weight:600}
+#links a:hover{color:var(--navy)}
+#links a:hover .lab{text-decoration:underline}
+.ico{width:15px;height:15px;flex-shrink:0;fill:var(--navy);opacity:.8}
+#links .split{border-top:1px solid var(--line-soft);margin:9px 0}
+#links .mail{color:var(--muted);font-weight:400;word-break:break-all;margin-top:2px}
+
+/* ── comments ──────────────────────────────────────────────── */
+.comments{margin-top:28px}
+.comments h3{font-size:13px;color:var(--navy);margin-bottom:12px}
+.c-card{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--r);
+        padding:12px 14px;margin-bottom:6px}
+.c-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.c-init{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;
+        display:grid;place-items:center;font-size:10px;font-weight:700;flex-shrink:0}
+.c-name{font-weight:700}
+.c-date{color:var(--muted);margin-left:auto}
+.c-text{color:#2A2E33;line-height:1.65;white-space:pre-wrap}
+.empty{color:var(--muted);padding:16px 0;text-align:center}
+
+/* ── forms ─────────────────────────────────────────────────── */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.panel h4{font-size:12px;color:var(--navy);margin-bottom:12px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:10px;font-weight:700;letter-spacing:.8px;
+          text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fg input,.fg textarea,.fg select{
+  width:100%;border:1px solid var(--line);border-radius:var(--r);
+  padding:7px 9px;background:var(--surface-2);line-height:1.5;resize:vertical}
+.fg textarea{min-height:90px}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:var(--r);padding:8px 16px;
+     font-weight:700;cursor:pointer}
+.btn:hover{background:var(--navy-2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:none;color:var(--navy);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2)}
+.hint{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.linkish{background:none;border:0;color:var(--navy-2);cursor:pointer;padding:0;text-align:left;font-weight:600}
+.linkish:hover{text-decoration:underline}
+.back{background:none;border:0;color:var(--navy);cursor:pointer;font-weight:600;padding:0;margin-bottom:16px}
+.back:hover{text-decoration:underline}
+
+/* ── editor modal ──────────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(20,24,29,.55);z-index:200;
+         display:none;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+       width:100%;max-width:680px;padding:20px;position:relative}
+.modal h2{font-size:14px;color:var(--navy);margin-bottom:14px}
+.modal .x{position:absolute;top:10px;right:10px;background:none;border:0;font-size:14px;
+          cursor:pointer;color:var(--muted);line-height:1;padding:4px}
+.modal .x:hover{color:var(--ink)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;
+             padding:6px 12px;font-weight:700;cursor:pointer;color:var(--muted)}
+.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy)}
+#preview{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--r);
+         padding:14px;min-height:140px;margin-bottom:10px}
+
+/* ── dashboard ─────────────────────────────────────────────── */
+.shell{max-width:1080px;margin:0 auto;padding:24px 16px 72px}
+.filters{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+      padding:5px 11px;cursor:pointer;color:var(--ink-2);font-weight:600}
+.chip:hover{border-color:var(--navy)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.filters select{width:auto;min-width:180px;border:1px solid var(--line);border-radius:20px;
+                padding:5px 10px;background:var(--surface)}
+
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+      padding:18px 20px;margin-bottom:8px}
+.hero .n{font-size:48px;line-height:1;font-weight:700;color:var(--navy);letter-spacing:-1px}
+.hero .lbl{color:var(--muted);margin-top:6px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.tile .lbl{color:var(--muted);margin-bottom:5px}
+.tile .n{font-size:22px;font-weight:700;color:var(--ink);line-height:1.1}
+.tile .sub{color:var(--muted);margin-top:4px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+            padding:14px 16px;margin-bottom:8px;position:relative}
+.chart-card h3{font-size:12px;color:var(--ink);margin-bottom:2px}
+.chart-card .cap{color:var(--muted);margin-bottom:12px}
+.plot{position:relative}
+.plot svg{display:block;width:100%;overflow:visible}
+.tick{fill:var(--muted);font-size:10px}
+.tick.num{font-variant-numeric:tabular-nums}
+.mark-label{fill:var(--ink-2);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.tt{position:absolute;pointer-events:none;background:var(--ink);color:#fff;
+    border-radius:var(--r);padding:6px 9px;white-space:nowrap;opacity:0;
+    transition:opacity .1s;z-index:5;transform:translate(-50%,-100%);line-height:1.45}
+.tt b{font-variant-numeric:tabular-nums}
+.tt.on{opacity:1}
+
+table.data{width:100%;border-collapse:collapse}
+table.data th,table.data td{padding:7px 8px;border-bottom:1px solid var(--line-soft);text-align:right}
+table.data th:first-child,table.data td:first-child{text-align:left}
+table.data th{color:var(--muted);font-weight:700;font-size:10px;letter-spacing:.6px;
+              text-transform:uppercase;border-bottom:1px solid var(--line)}
+table.data td{font-variant-numeric:tabular-nums}
+table.data td:first-child{font-variant-numeric:normal}
+table.data tbody tr:hover{background:var(--surface-2)}
+
+details.tableview{margin-top:10px}
+details.tableview summary{cursor:pointer;color:var(--muted);font-weight:600;padding:4px 0}
+details.tableview summary:hover{color:var(--ink)}
+
+/* ── toast + footer ────────────────────────────────────────── */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(50px);
+       background:var(--ink);color:#fff;padding:8px 16px;border-radius:20px;opacity:0;
+       transition:transform .22s,opacity .22s;pointer-events:none;z-index:400;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+footer{border-top:1px solid var(--line);padding:16px;text-align:center;color:var(--muted)}
+footer .author-bar{margin-top:6px;display:flex;gap:8px;justify-content:center;align-items:center}
+footer .author-bar .linkish{color:var(--muted);font-weight:400}
+footer .author-bar .linkish:hover{color:var(--navy)}
+
+/* ── responsive ────────────────────────────────────────────── */
+@media(max-width:1000px){
+  .page{grid-template-columns:170px minmax(0,1fr);
+        grid-template-areas:"profile title" "profile blog" "links blog" "latest blog" ". blog"}
+  #latest{position:static}
+}
+@media(max-width:720px){
+  .page{grid-template-columns:1fr;
+        grid-template-areas:"title" "profile" "blog" "latest" "links";gap:12px}
+  #profile{display:flex;gap:12px;align-items:flex-start}
+  #profile .shot{width:78px;flex-shrink:0}
+  #profile .who{min-width:0}
+  #profile .name{margin-top:0}
+  #blog{padding:20px 18px 16px;min-height:0}
+  .post-title{font-size:22px}
+  .article{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<a class="skip" href="#blog">Skip to content</a>
+
+<!-- ═══ READER SITE ═══════════════════════════════════════════ -->
+<div class="page" id="site">
+
+  <!-- ① PROFILE -->
+  <aside class="box" id="profile" style="padding:12px">
+    <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer.jpg" width="166" height="166"/>
+    <div class="who">
+      <div class="name">Fred Flamer</div>
+      <div class="role">Consumer-safety writer</div>
+      <p class="bio">Thirty years explaining how the con works — so it stops working on you.</p>
+    </div>
+  </aside>
+
+  <!-- ② MASTHEAD -->
+  <header id="title">
+    <button class="home" onclick="go('/')" aria-label="seniorsecured.org home">
+      <h1>senior<span>secured</span><span class="tld">.org</span></h1>
+      <div class="kicker">Community</div>
+    </button>
+  </header>
+
+  <!-- ③ THE BLOG -->
+  <main class="box" id="blog">
+    <p id="p-flag" hidden><span class="tag draft">Draft</span></p>
+    <h2 class="post-title" id="p-title"></h2>
+    <p class="post-sub" id="p-sub"></p>
+    <div class="byline" id="p-byline">
+      <b id="p-author">Fred Flamer</b><span class="dot">&middot;</span>
+      <span id="p-date"></span><span class="dot">&middot;</span>
+      <span id="p-read"></span>
+    </div>
+    <article class="article" id="p-body"></article>
+    <div class="post-foot" id="p-actions">
+      <span class="left" id="p-foot"></span>
+      <button class="share" onclick="sharePost()">Copy link</button>
+      <button class="heart" id="heart" aria-pressed="false" onclick="toggleHeart()">
+        <span class="em" aria-hidden="true">&#10084;&#65039;</span>
+        <span class="n" id="heart-n">0</span>
+      </button>
+    </div>
+    <div class="comments" id="comments"></div>
+  </main>
+
+  <!-- ④ LATEST PUBLISHINGS -->
+  <nav class="box" id="latest" aria-label="Latest publishings">
+    <div class="eyebrow">Latest publishings</div>
+    <ol id="pub-list"></ol>
+  </nav>
+
+  <!-- ⑤ ELSEWHERE -->
+  <aside class="box" id="links">
+    <div class="eyebrow">Elsewhere</div>
+    <ul id="link-list"></ul>
+    <div class="split"></div>
+    <div class="eyebrow" style="margin-bottom:3px">Contact</div>
+    <a class="mail" href="mailto:fred@seniorsecured.org">fred@seniorsecured.org</a>
+  </aside>
+
+</div>
+
+<!-- ═══ ANALYTICS DASHBOARD (author only) ═════════════════════ -->
+<main class="shell" id="dash" hidden>
+  <button class="back" onclick="go('/')">&#8592; Back to the site</button>
+  <div id="view"></div>
+</main>
+
+<!-- ═══ EDITOR ════════════════════════════════════════════════ -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="New post">
+    <button class="x" onclick="closeEditor()" aria-label="Close">&#10005;</button>
+    <h2 id="editor-title">New post</h2>
+
+    <div id="gate">
+      <div class="fg">
+        <label for="pw-email">Author email</label>
+        <input type="email" id="pw-email" placeholder="you@example.com" autocomplete="username"/>
+      </div>
+      <div class="fg">
+        <label for="pw">Password</label>
+        <input type="password" id="pw" placeholder="Password" autocomplete="current-password"/>
+      </div>
+      <button class="btn" onclick="unlock()">Sign in</button>
+    </div>
+
+    <div id="composer" hidden>
+      <div class="fg"><label for="in-title">Title</label>
+        <input type="text" id="in-title" placeholder="Post title"/></div>
+      <div class="fg"><label for="in-sub">Standfirst <span class="hint">(one-line summary, optional)</span></label>
+        <input type="text" id="in-sub" placeholder="What this piece is about"/></div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" onclick="setTab('write')">Write</button>
+        <button role="tab" aria-selected="false" onclick="setTab('preview')">Preview</button>
+      </div>
+      <div id="write-pane">
+        <div class="fg">
+          <label for="in-body">Body <span class="hint">blank line = paragraph &middot; ## heading &middot; ### subheading &middot; &gt; quote &middot; - list &middot; **bold**</span></label>
+          <textarea id="in-body" style="min-height:280px" placeholder="Write here..."></textarea>
+        </div>
+      </div>
+      <div id="preview" class="article" hidden></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button class="btn" id="btn-publish" onclick="publish('published')">Publish</button>
+        <button class="btn ghost" onclick="publish('draft')">Save as draft</button>
+        <span class="hint" id="wordcount" style="margin-left:auto"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer>
+  <div>&copy; 2026 <strong>Fred Flamer</strong> &middot; All rights reserved</div>
+  <div class="author-bar" id="author-bar"></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="/config.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════════ */
+const PROFILE_LINKS = [
+  { label:'LinkedIn', href:'https://linkedin.com/in/fredflamer',
+    path:'M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.5c0-1.3-.02-3-1.9-3-1.9 0-2.2 1.44-2.2 2.92V21H9z' },
+  { label:'GitHub', href:'https://github.com/fredflamer',
+    path:'M12 2a10 10 0 0 0-3.16 19.5c.5.08.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.57.69.48A10 10 0 0 0 12 2z' },
+  { label:'X / Twitter', href:'https://x.com/fredflamer',
+    path:'M18.9 2H22l-7.1 8.1L23.2 22h-6.6l-5.2-6.8L5.5 22H2.4l7.6-8.7L1.2 2h6.8l4.7 6.2zm-1.1 18h1.7L7.3 3.8H5.4z' },
+  { label:'Substack', href:'https://fredflamer.substack.com',
+    path:'M3 3h18v2.6H3zm0 4.6h18V22l-9-4.9L3 22zm0 4.6h18v2.6H3z' }
+];
+
+let session     = null;    // Supabase auth session — the author, when signed in
+let posts       = [];
+let postsLoaded = false;
+let current     = null;    // the open post
+let dashRange   = 30;
+let dashPost    = '';      // '' = all posts
+let lastDash    = null;    // cached payload, for resize redraws
+
+const visitorId = idFor('ff_visitor', localStorage);
+const sessionId = idFor('ff_session', sessionStorage);
+const DEVICE    = deviceType();
+
+function deviceType(){
+  const ua = navigator.userAgent || '';
+  if(/tablet|ipad/i.test(ua)) return 'tablet';
+  if(/mobi|android|iphone/i.test(ua)) return 'mobile';
+  return 'desktop';
+}
+
+function idFor(key, store){
+  let v = store.getItem(key);
+  if(!v){
+    v = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+    store.setItem(key, v);
+  }
+  return v;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SUPABASE
+   The browser talks to Postgres directly. Reads go through RLS;
+   every write goes through a security-definer function, so the
+   rules live in the database rather than out here.
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIGURED =
+  typeof SUPABASE_URL === 'string' && /^https?:\/\//.test(SUPABASE_URL) &&
+  !/YOUR-PROJECT-REF/.test(SUPABASE_URL) &&
+  typeof SUPABASE_ANON_KEY === 'string' &&
+  SUPABASE_ANON_KEY.length > 20 && !/^YOUR-ANON/.test(SUPABASE_ANON_KEY);
+
+const db = CONFIGURED
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+    })
+  : null;
+
+const isAuthor = () => !!session;
+
+/* Postgres RAISE messages arrive as error.message, so they reach the
+   reader as written in schema.sql. */
+async function rpc(name, args){
+  const { data, error } = await db.rpc(name, args || {});
+  if(error){
+    const err = new Error(error.message || 'Request failed');
+    err.code = error.code;
+    throw err;
+  }
+  return data;
+}
+
+async function initAuth(){
+  const { data } = await db.auth.getSession();
+  session = data.session || null;
+  db.auth.onAuthStateChange(function(_event, next){
+    const had = !!session;
+    session = next || null;
+    if(had !== !!session){ postsLoaded = false; }
+    paintAuthorBar();
+  });
+}
+
+async function signIn(email, password){
+  const { data, error } = await db.auth.signInWithPassword({ email, password });
+  if(error) throw new Error(error.message);
+  session = data.session;
+  postsLoaded = false;
+  paintAuthorBar();
+  return session;
+}
+
+async function signOut(){
+  await db.auth.signOut();
+  session = null;
+  postsLoaded = false;
+  paintAuthorBar();
+  toast('Signed out.');
+  go('/');
+}
+
+function paintAuthorBar(){
+  document.getElementById('author-bar').innerHTML =
+    '<button class="linkish" onclick="openEditor()">New post</button>' +
+    '<span class="dot">&middot;</span>' +
+    '<button class="linkish" onclick="go(\'/dashboard\')">Analytics</button>' +
+    (isAuthor()
+      ? '<span class="dot">&middot;</span><button class="linkish" onclick="signOut()">Sign out</button>'
+      : '');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANALYTICS CLIENT
+   Every measurement goes through track(). One post open at a time.
+   ═══════════════════════════════════════════════════════════════ */
+const tracker = {
+  postId:null, seen:new Set(), active:0, mark:0, timer:null, onScroll:null,
+
+  start(postId){
+    this.stop();
+    this.postId = postId; this.seen = new Set(); this.active = 0; this.mark = Date.now();
+    track({ type:'view', postId, referrer: refSource() });
+
+    this.onScroll = () => { this.depth(); this.progress(); };
+    addEventListener('scroll', this.onScroll, { passive:true });
+    addEventListener('resize', this.onScroll, { passive:true });
+    this.onScroll();
+
+    // Heartbeat keeps dwell alive for long reads; only counts visible time.
+    this.timer = setInterval(() => { this.tick(); this.flush(false); }, 30000);
+  },
+
+  tick(){
+    if(document.visibilityState === 'visible'){
+      this.active += (Date.now() - this.mark) / 1000;
+    }
+    this.mark = Date.now();
+  },
+
+  depth(){
+    const el = document.getElementById('p-body');
+    if(!el) return;
+    const box  = el.getBoundingClientRect();
+    const seen = Math.min(Math.max(innerHeight - box.top, 0), box.height);
+    const pct  = box.height ? (seen / box.height) * 100 : 0;
+    for(const step of [25,50,75,100]){
+      if(pct >= step && !this.seen.has(step)){
+        this.seen.add(step);
+        track({ type:'depth', postId:this.postId, value:step });
+      }
+    }
+  },
+
+  progress(){
+    const bar = document.getElementById('progress');
+    const el  = document.getElementById('p-body');
+    if(!bar) return;
+    if(!el || document.getElementById('site').hidden){ bar.style.width = '0'; return; }
+    const box = el.getBoundingClientRect();
+    const done = Math.min(Math.max((innerHeight - box.top) / (box.height || 1), 0), 1);
+    bar.style.width = (done * 100).toFixed(1) + '%';
+  },
+
+  flush(useBeacon){
+    if(!this.postId) return;
+    const secs = Math.round(this.active);
+    if(secs < 3) return;
+    track({ type:'dwell', postId:this.postId, value:secs }, useBeacon);
+  },
+
+  stop(){
+    if(this.timer) clearInterval(this.timer);
+    if(this.onScroll){
+      removeEventListener('scroll', this.onScroll);
+      removeEventListener('resize', this.onScroll);
+    }
+    if(this.postId){ this.tick(); this.flush(false); }
+    this.timer = null; this.onScroll = null; this.postId = null;
+    const bar = document.getElementById('progress');
+    if(bar) bar.style.width = '0';
+  }
+};
+
+function track(ev, useBeacon){
+  if(!db) return;
+  const args = {
+    p_post_id:    ev.postId,
+    p_visitor_id: visitorId,
+    p_session_id: sessionId,
+    p_type:       ev.type,
+    p_value:      ev.value == null ? null : ev.value,
+    p_referrer:   refSource(),
+    p_device:     DEVICE
+  };
+  if(useBeacon){
+    // The page is going away and supabase-js will not outlive it, so post
+    // to PostgREST directly with keepalive.
+    try{
+      fetch(SUPABASE_URL + '/rest/v1/rpc/track_event', {
+        method:'POST', keepalive:true,
+        headers:{
+          'Content-Type':'application/json',
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + ((session && session.access_token) || SUPABASE_ANON_KEY)
+        },
+        body: JSON.stringify(args)
+      }).catch(function(){});
+    }catch(e){}
+    return;
+  }
+  db.rpc('track_event', args).then(function(){}, function(){});
+}
+
+function refSource(){
+  try{
+    if(!document.referrer) return 'direct';
+    const h = new URL(document.referrer).hostname.replace(/^www\./,'');
+    return h === location.hostname ? 'internal' : h;
+  }catch(e){ return 'direct'; }
+}
+
+addEventListener('visibilitychange', () => {
+  tracker.tick();
+  if(document.visibilityState === 'hidden') tracker.flush(true);
+});
+addEventListener('pagehide', () => { tracker.tick(); tracker.flush(true); });
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function inline(s){
+  return esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[\s(])\*([^*]+)\*/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" rel="noopener noreferrer" target="_blank">$1</a>');
+}
+
+/* Minimal, predictable markdown: headings, quote, lists, paragraphs. */
+function renderBody(raw){
+  return String(raw || '').split(/\n{2,}/).map(function(block){
+    const t = block.trim();
+    if(!t) return '';
+    if(t.startsWith('### ')) return '<h3>' + inline(t.slice(4)) + '</h3>';
+    if(t.startsWith('## '))  return '<h2>' + inline(t.slice(3)) + '</h2>';
+    if(t.startsWith('# '))   return '<h2>' + inline(t.slice(2)) + '</h2>';
+    if(t.startsWith('> '))
+      return '<blockquote>' + inline(t.replace(/^> ?/gm,'')) + '</blockquote>';
+    if(/^[-*] /.test(t))
+      return '<ul>' + t.split('\n').map(l => '<li>' + inline(l.replace(/^[-*] /,'')) + '</li>').join('') + '</ul>';
+    if(/^\d+[.)] /.test(t))
+      return '<ol>' + t.split('\n').map(l => '<li>' + inline(l.replace(/^\d+[.)] /,'')) + '</li>').join('') + '</ol>';
+    return '<p>' + inline(t).replace(/\n/g,'<br/>') + '</p>';
+  }).join('');
+}
+
+function fmt(n){
+  n = Number(n) || 0;
+  if(n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+  if(n >= 1000)    return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+  return String(n);
+}
+function comma(n){ return (Number(n)||0).toLocaleString('en-US'); }
+
+function mmss(seconds){
+  const s = Math.max(0, Math.round(Number(seconds) || 0));
+  const m = Math.floor(s / 60);
+  return m + 'm ' + String(s % 60).padStart(2,'0') + 's';
+}
+
+function longDate(d){
+  return new Date(d).toLocaleDateString('en-US',{ month:'long', day:'numeric', year:'numeric' });
+}
+function shortDate(d){
+  return new Date(d).toLocaleDateString('en-US',{ month:'short', day:'numeric', year:'numeric' });
+}
+function dayLabel(iso){
+  const [y,m,d] = iso.split('-');
+  return new Date(Date.UTC(+y, +m-1, +d)).toLocaleDateString('en-US',{ month:'short', day:'numeric' });
+}
+
+function initials(name){
+  return String(name||'?').trim().split(/\s+/).map(w => w[0] || '').join('').slice(0,2).toUpperCase();
+}
+
+let toastTimer;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+const view = () => document.getElementById('view');
+function loading(msg){ view().innerHTML = '<p class="empty">' + esc(msg || 'Loading…') + '</p>'; }
+function errorBox(e){
+  view().innerHTML = '<div class="panel"><h4>Something went wrong</h4><p style="color:var(--muted)">' +
+    esc(e.message || e) + '</p></div>';
+}
+
+/* Writes a message into the blog panel — used for empty / error states. */
+function blogNotice(heading, detail){
+  document.getElementById('p-flag').hidden = true;
+  document.getElementById('p-title').textContent = heading;
+  document.getElementById('p-sub').hidden = true;
+  document.getElementById('p-byline').hidden = true;
+  document.getElementById('p-actions').hidden = true;
+  document.getElementById('p-body').innerHTML = '<p style="color:var(--muted)">' + esc(detail) + '</p>';
+  document.getElementById('comments').innerHTML = '';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROUTER  —  "/" newest piece · "/p/<slug>" a piece · "/dashboard"
+   ═══════════════════════════════════════════════════════════════ */
+function go(path, replace){
+  if(location.pathname !== path){
+    history[replace ? 'replaceState' : 'pushState']({}, '', path);
+  }
+  route();
+}
+addEventListener('popstate', route);
+
+/* Canonical origin. Falls back to wherever the page is actually served
+   from, so `vercel dev` and preview deploys stay self-consistent. */
+const SITE_URL   = 'https://seniorsecured.org';
+const SITE_TITLE = 'seniorsecured.org · Community';
+const SITE_DESC  = 'Plain-spoken writing on scams, fraud and staying safe online.';
+
+function canonicalOrigin(){
+  return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
+}
+/* Keeps <title>, canonical and the og:* tags pointing at the same URL. */
+function setMeta(path, title, desc){
+  const url = canonicalOrigin() + path;
+  document.title = title;
+  const set = (sel, attr, val) => {
+    const el = document.querySelector(sel);
+    if(el && val != null) el.setAttribute(attr, val);
+  };
+  set('link[rel="canonical"]', 'href', url);
+  set('meta[property="og:url"]', 'content', url);
+  set('meta[property="og:title"]', 'content', title);
+  if(desc){
+    set('meta[name="description"]', 'content', desc);
+    set('meta[property="og:description"]', 'content', desc);
+  }
+}
+
+async function route(){
+  tracker.stop();
+  scrollTo(0,0);
+  const path = location.pathname;
+
+  if(path === '/dashboard'){
+    document.getElementById('site').hidden = true;
+    document.getElementById('dash').hidden = false;
+    return showDashboard();
+  }
+
+  document.getElementById('dash').hidden = true;
+  document.getElementById('site').hidden = false;
+
+  try{ await ensurePosts(); }
+  catch(e){ return blogNotice('Something went wrong', e.message || String(e)); }
+
+  if(!posts.length){
+    paintList();
+    return blogNotice('No posts yet', 'Use “New post” at the foot of the page to publish the first piece.');
+  }
+
+  const m = path.match(/^\/p\/([^/]+)\/?$/);
+  return showPost(m ? decodeURIComponent(m[1]) : posts[0].slug, !m);
+}
+
+/* One list fetch per page load; the sidebar and the home post both use it. */
+async function ensurePosts(force){
+  if(postsLoaded && !force) return posts;
+  posts = (await rpc('list_posts', { include_drafts: isAuthor() })) || [];
+  postsLoaded = true;
+  return posts;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ④ LATEST PUBLISHINGS — newest first; click swaps ③
+   ═══════════════════════════════════════════════════════════════ */
+function paintList(){
+  document.getElementById('pub-list').innerHTML = posts.map(function(p){
+    const on = current && p.id === current.id;
+    return '<li><button class="pub" aria-current="' + on + '" onclick="go(\'/p/' +
+      encodeURIComponent(p.slug) + '\')">' +
+      '<div class="d">' + esc(shortDate(p.published_at)) + '</div>' +
+      '<div class="t">' + (p.status !== 'published' ? '<span class="tag draft">Draft</span> ' : '') +
+        esc(p.title) + '</div>' +
+      '<div class="m"><span>' + p.read_minutes + ' min read</span>' +
+      '<span class="dot">&middot;</span><span>&#10084;&#65039; ' + fmt(p.reaction_count) + '</span>' +
+      '<span class="dot">&middot;</span><span>&#128172; ' + fmt(p.comment_count) + '</span>' +
+      '</div></button></li>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ③ THE BLOG BODY
+   ═══════════════════════════════════════════════════════════════ */
+async function showPost(slug, isHome){
+  let data;
+  try{ data = await rpc('get_post', { p_slug: slug }); }
+  catch(e){ return blogNotice('Something went wrong', e.message || String(e)); }
+
+  if(!data){
+    current = null;
+    paintList();
+    return blogNotice('Not found', 'That piece isn’t here. Pick another from “Latest publishings”.');
+  }
+
+  current = data.post;
+  setMeta(isHome ? '/' : '/p/' + current.slug,
+          isHome ? SITE_TITLE : current.title + ' · seniorsecured.org',
+          isHome ? SITE_DESC : (current.subtitle || SITE_DESC));
+
+  document.getElementById('p-flag').hidden = current.status === 'published';
+  document.getElementById('p-title').textContent = current.title;
+
+  const sub = document.getElementById('p-sub');
+  sub.textContent = current.subtitle || '';
+  sub.hidden = !current.subtitle;
+
+  document.getElementById('p-byline').hidden = false;
+  document.getElementById('p-author').textContent = current.author;
+  document.getElementById('p-date').textContent = longDate(current.published_at);
+  document.getElementById('p-read').textContent = current.read_minutes + ' min read';
+  document.getElementById('p-body').innerHTML = renderBody(current.body);
+  document.getElementById('p-actions').hidden = false;
+  document.getElementById('p-foot').textContent = comma(current.word_count) + ' words';
+
+  paintHeart(data.reactions.heart);
+  paintList();
+  paintComments(data.comments || []);
+  tracker.start(current.id);
+}
+
+/* ── the heart ─────────────────────────────────────────────── */
+function heartKey(){ return 'ff_r_' + current.id + '_heart'; }
+
+function paintHeart(count){
+  const btn = document.getElementById('heart');
+  const on  = localStorage.getItem(heartKey()) === '1';
+  btn.setAttribute('aria-pressed', String(on));
+  btn.title = on ? 'You hearted this' : 'Heart this read';
+  if(count != null) document.getElementById('heart-n').textContent = fmt(count);
+}
+
+async function toggleHeart(){
+  const btn = document.getElementById('heart');
+  btn.disabled = true;
+  try{
+    const res = await rpc('toggle_reaction', {
+      p_post_id: current.id, p_visitor_id: visitorId, p_kind: 'heart'
+    });
+    if(res.added) localStorage.setItem(heartKey(), '1');
+    else localStorage.removeItem(heartKey());
+
+    // Keep the sidebar's count in step with the post we just changed.
+    const row = posts.find(p => p.id === current.id);
+    if(row) row.reaction_count = res.reactions.heart;
+
+    paintHeart(res.reactions.heart);
+    paintList();
+    if(res.added) toast('❤️  Thanks for the love.');
+  }catch(e){ toast(e.message); }
+  finally{ btn.disabled = false; }
+}
+
+async function sharePost(){
+  const url = location.origin + '/p/' + current.slug;
+  try{
+    if(navigator.share) await navigator.share({ title: current.title, url });
+    else { await navigator.clipboard.writeText(url); toast('Link copied.'); }
+    track({ type:'share', postId: current.id });
+  }catch(e){ /* user dismissed */ }
+}
+
+/* ── comments ──────────────────────────────────────────────── */
+function paintComments(list){
+  const box = document.getElementById('comments');
+  if(!box) return;
+  box.innerHTML =
+    '<h3>Discussion (' + list.length + ' comment' + (list.length !== 1 ? 's' : '') + ')</h3>' +
+    '<div id="c-list">' +
+      (list.length
+        ? list.map(function(c){
+            return '<div class="c-card"><div class="c-top">' +
+              '<span class="c-init" aria-hidden="true">' + initials(c.name) + '</span>' +
+              '<span class="c-name">' + esc(c.name) + '</span>' +
+              '<span class="c-date">' + esc(shortDate(c.created_at)) + '</span></div>' +
+              '<div class="c-text">' + esc(c.body) + '</div></div>';
+          }).join('')
+        : '<p class="empty">No comments yet. Be the first.</p>') +
+    '</div>' +
+    '<div class="panel" style="margin-top:12px"><h4>Join the discussion</h4>' +
+      '<div class="fg"><label for="c-name">Your name</label>' +
+        '<input type="text" id="c-name" maxlength="60" placeholder="First name or nickname" value="' +
+        esc(localStorage.getItem('ff_name') || '') + '"/></div>' +
+      '<div class="fg"><label for="c-text">Comment</label>' +
+        '<textarea id="c-text" maxlength="2000" placeholder="Share your thoughts…"></textarea></div>' +
+      '<button class="btn" id="c-btn" onclick="postComment()">Post comment</button></div>';
+}
+
+async function postComment(){
+  const name = (document.getElementById('c-name').value || '').trim();
+  const body = (document.getElementById('c-text').value || '').trim();
+  if(!name || !body){ toast('Please add your name and a comment.'); return; }
+  const btn = document.getElementById('c-btn');
+  btn.disabled = true; btn.textContent = 'Posting…';
+  try{
+    await rpc('add_comment', {
+      p_post_id: current.id, p_name: name, p_body: body, p_visitor_id: visitorId
+    });
+    localStorage.setItem('ff_name', name);
+
+    const { data: fresh, error } = await db.from('comments')
+      .select('id,name,body,created_at')
+      .eq('post_id', current.id).eq('approved', true)
+      .order('created_at', { ascending: true });
+    if(error) throw new Error(error.message);
+    paintComments(fresh || []);
+
+    const row = posts.find(p => p.id === current.id);
+    if(row){ row.comment_count = (fresh || []).length; paintList(); }
+    toast('Comment posted.');
+  }catch(e){
+    toast(e.message);
+    btn.disabled = false; btn.textContent = 'Post comment';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ⑤ ELSEWHERE
+   ═══════════════════════════════════════════════════════════════ */
+function paintLinks(){
+  document.getElementById('link-list').innerHTML = PROFILE_LINKS.map(function(l){
+    return '<li><a href="' + l.href + '" target="_blank" rel="noopener">' +
+      '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="' + l.path + '"/></svg>' +
+      '<span class="lab">' + esc(l.label) + '</span></a></li>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EDITOR
+   ═══════════════════════════════════════════════════════════════ */
+function openEditor(){
+  document.getElementById('overlay').classList.add('open');
+  const locked = !isAuthor();
+  document.getElementById('gate').hidden = !locked;
+  document.getElementById('composer').hidden = locked;
+  setTimeout(function(){
+    const el = document.getElementById(locked ? 'pw-email' : 'in-title');
+    if(el) el.focus();
+  }, 60);
+}
+function closeEditor(){ document.getElementById('overlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target.id === 'overlay') closeEditor(); }
+addEventListener('keydown', function(e){ if(e.key === 'Escape') closeEditor(); });
+document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') unlock(); });
+document.getElementById('pw-email').addEventListener('keydown', function(e){ if(e.key === 'Enter') document.getElementById('pw').focus(); });
+
+async function unlock(){
+  const email = (document.getElementById('pw-email').value || '').trim();
+  const pass  = document.getElementById('pw').value;
+  if(!email || !pass) return;
+  try{
+    await signIn(email, pass);
+    document.getElementById('gate').hidden = true;
+    document.getElementById('composer').hidden = false;
+    document.getElementById('in-title').focus();
+    await ensurePosts(true);                       // drafts become visible
+    paintList();
+    toast('Signed in.');
+  }catch(e){
+    document.getElementById('pw').value = '';
+    toast(e.message || 'Sign-in failed.');
+  }
+}
+
+function setTab(which){
+  const tabs = document.querySelectorAll('.tabs button');
+  tabs[0].setAttribute('aria-selected', String(which === 'write'));
+  tabs[1].setAttribute('aria-selected', String(which === 'preview'));
+  document.getElementById('write-pane').hidden = which !== 'write';
+  const pv = document.getElementById('preview');
+  pv.hidden = which === 'write';
+  if(which === 'preview'){
+    const body = document.getElementById('in-body').value;
+    pv.innerHTML = body.trim() ? renderBody(body)
+                               : '<p style="color:var(--muted)">Nothing to preview yet.</p>';
+  }
+}
+
+document.getElementById('in-body').addEventListener('input', function(e){
+  const words = e.target.value.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('wordcount').textContent =
+    comma(words) + ' words · ~' + Math.max(1, Math.round(words / 220)) + ' min read';
+});
+
+async function publish(status){
+  const title = (document.getElementById('in-title').value || '').trim();
+  const body  = (document.getElementById('in-body').value  || '').trim();
+  const subtitle = (document.getElementById('in-sub').value || '').trim();
+  if(!title || !body){ toast('A title and some body text are required.'); return; }
+
+  const btn = document.getElementById('btn-publish');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try{
+    // RLS lets only a signed-in author insert; the slug trigger fills in a
+    // unique slug from the title.
+    const { data: post, error } = await db.from('posts')
+      .insert({ title, subtitle: subtitle || null, body, status })
+      .select('slug').single();
+    if(error) throw new Error(error.message);
+    document.getElementById('in-title').value = '';
+    document.getElementById('in-sub').value = '';
+    document.getElementById('in-body').value = '';
+    document.getElementById('wordcount').textContent = '';
+    closeEditor();
+    toast(status === 'draft' ? 'Draft saved.' : 'Published.');
+    await ensurePosts(true);            // pick up the piece we just wrote
+    go('/p/' + post.slug);
+  }catch(e){ toast(e.message); }
+  finally{ btn.disabled = false; btn.textContent = 'Publish'; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEW: DASHBOARD
+   ═══════════════════════════════════════════════════════════════ */
+const RANGES = [ {d:7,l:'7 days'}, {d:30,l:'30 days'}, {d:90,l:'90 days'}, {d:0,l:'All time'} ];
+
+async function showDashboard(){
+  setMeta('/dashboard', 'Analytics · seniorsecured.org');
+
+  if(!isAuthor()){
+    view().innerHTML = '<div class="panel" style="max-width:360px">' +
+      '<h4>Author access</h4>' +
+      '<div class="fg"><label for="dash-email">Email</label>' +
+        '<input type="email" id="dash-email" autocomplete="username"/></div>' +
+      '<div class="fg"><label for="dash-pw">Password</label>' +
+        '<input type="password" id="dash-pw" autocomplete="current-password"/></div>' +
+      '<button class="btn" onclick="dashUnlock()">View analytics</button></div>';
+    const el = document.getElementById('dash-email');
+    el.focus();
+    document.getElementById('dash-pw')
+      .addEventListener('keydown', function(e){ if(e.key === 'Enter') dashUnlock(); });
+    return;
+  }
+
+  loading('Crunching numbers…');
+  let data;
+  try{
+    data = await rpc('analytics', {
+      p_days:    dashRange,
+      p_post_id: dashPost ? Number(dashPost) : null
+    });
+  }catch(e){
+    // A stale or expired session shows up here as a permission error.
+    if(e.code === '42501'){ session = null; paintAuthorBar(); return showDashboard(); }
+    return errorBox(e);
+  }
+  lastDash = data;
+  paintDashboard(data);
+}
+
+async function dashUnlock(){
+  const email = (document.getElementById('dash-email').value || '').trim();
+  const pass  = document.getElementById('dash-pw').value;
+  if(!email || !pass) return;
+  try{
+    await signIn(email, pass);          // also reloads the sidebar with drafts
+    showDashboard();
+  }catch(e){
+    document.getElementById('dash-pw').value = '';
+    toast(e.message || 'Sign-in failed.');
+  }
+}
+
+function paintDashboard(d){
+  const t = d.totals;
+  const scoped = dashPost ? d.posts.filter(p => String(p.id) === String(dashPost)) : d.posts;
+  const scopeName = dashPost ? ((scoped[0] || {}).title || 'this post') : 'all posts';
+  const reacts = scoped.reduce((s,p) => s + (p.reactions || 0), 0);
+  const comms  = scoped.reduce((s,p) => s + (p.comments  || 0), 0);
+
+  view().innerHTML =
+    '<div class="filters">' +
+      RANGES.map(r => '<button class="chip" aria-pressed="' + (r.d === dashRange) +
+        '" onclick="setRange(' + r.d + ')">' + r.l + '</button>').join('') +
+      '<select id="post-filter" onchange="setDashPost(this.value)" aria-label="Filter by post">' +
+        '<option value="">All posts</option>' +
+        d.posts.map(p => '<option value="' + p.id + '"' +
+          (String(p.id) === String(dashPost) ? ' selected' : '') + '>' +
+          esc(p.title.length > 46 ? p.title.slice(0,46) + '…' : p.title) + '</option>').join('') +
+      '</select>' +
+    '</div>' +
+
+    '<div class="hero"><div class="n">' + comma(t.views) + '</div>' +
+      '<div class="lbl">reads of ' + esc(scopeName) + ' · ' +
+      (dashRange ? 'last ' + dashRange + ' days' : 'all time') + '</div></div>' +
+
+    '<div class="tiles">' +
+      tile('Unique readers', comma(t.readers), 'distinct visitors') +
+      tile('Average attention', mmss(t.avg_dwell), comma(t.dwell_samples) + ' timed sessions') +
+      tile('Finished the piece', t.completion_rate + '%', comma(t.finishers) + ' reached the end') +
+      tile('Engagement', comma(reacts + comms),
+           comma(reacts) + ' reactions · ' + comma(comms) + ' comments') +
+    '</div>' +
+
+    '<div class="chart-card">' +
+      '<h3>Reads per day</h3><div class="cap">Daily read count' +
+        (dashRange ? ' over the last ' + dashRange + ' days' : ' over the last year') + '</div>' +
+      '<div class="plot" id="plot-daily"><div class="tt" id="tt-daily"></div></div>' +
+      tableView('Reads per day (table)',
+        ['Day','Reads','Readers'],
+        d.daily.map(r => [dayLabel(r.day), comma(r.views), comma(r.readers)])) +
+    '</div>' +
+
+    '<div class="grid2">' +
+      '<div class="chart-card">' +
+        '<h3>How far readers get</h3>' +
+        '<div class="cap">Share of reading sessions reaching each point of the article</div>' +
+        '<div class="plot" id="plot-funnel"><div class="tt" id="tt-funnel"></div></div>' +
+      '</div>' +
+      '<div class="chart-card">' +
+        '<h3>Where readers come from</h3><div class="cap">Referring source, by read</div>' +
+        '<div class="plot" id="plot-refs"><div class="tt" id="tt-refs"></div></div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="chart-card">' +
+      '<h3>Posts</h3><div class="cap">Every piece, ranked by reads in this window</div>' +
+      '<table class="data"><thead><tr>' +
+        '<th>Post</th><th>Reads</th><th>Readers</th><th>Attention</th>' +
+        '<th>Finished</th><th>Reactions</th><th>Comments</th></tr></thead><tbody>' +
+      (d.posts.length
+        ? d.posts.map(function(p){
+            const pct = p.views ? Math.round((p.finishers / p.views) * 100) : 0;
+            return '<tr><td><button class="linkish" onclick="go(\'/p/' +
+              encodeURIComponent(p.slug) + '\')">' + esc(p.title) + '</button>' +
+              (p.status !== 'published' ? ' <span class="tag draft">Draft</span>' : '') + '</td>' +
+              '<td>' + comma(p.views) + '</td><td>' + comma(p.readers) + '</td>' +
+              '<td>' + mmss(p.avg_dwell) + '</td><td>' + pct + '%</td>' +
+              '<td>' + comma(p.reactions) + '</td><td>' + comma(p.comments) + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="7" class="empty">No posts yet.</td></tr>') +
+      '</tbody></table>' +
+    '</div>' +
+
+    '<div class="grid2">' +
+      '<div class="chart-card"><h3>Devices</h3><div class="cap">Reads by device type</div>' +
+        '<table class="data"><thead><tr><th>Device</th><th>Reads</th><th>Share</th></tr></thead><tbody>' +
+        (d.devices.length
+          ? d.devices.map(r => '<tr><td>' + esc(r.device) + '</td><td>' + comma(r.views) + '</td><td>' +
+              (t.views ? Math.round(r.views / t.views * 100) : 0) + '%</td></tr>').join('')
+          : '<tr><td colspan="3" class="empty">No reads yet.</td></tr>') +
+        '</tbody></table></div>' +
+      '<div class="chart-card"><h3>Latest comments</h3><div class="cap">Newest first</div>' +
+        (d.recent_comments.length
+          ? d.recent_comments.map(c =>
+              '<div class="c-card"><div class="c-top"><span class="c-init">' + initials(c.name) +
+              '</span><span class="c-name">' + esc(c.name) + '</span>' +
+              '<span class="c-date">' + esc(shortDate(c.created_at)) + '</span></div>' +
+              '<div class="c-text">' + esc(c.body.length > 180 ? c.body.slice(0,180) + '…' : c.body) +
+              '</div><div style="margin-top:6px"><button class="linkish" onclick="go(\'/p/' +
+              encodeURIComponent(c.slug) + '\')">on “' + esc(c.title) + '”</button></div></div>').join('')
+          : '<p class="empty">No comments in this window.</p>') +
+      '</div>' +
+    '</div>';
+
+  drawCharts(d);
+}
+
+function tile(label, value, sub){
+  return '<div class="tile"><div class="lbl">' + esc(label) + '</div>' +
+    '<div class="n">' + esc(value) + '</div>' +
+    '<div class="sub">' + esc(sub) + '</div></div>';
+}
+
+function tableView(caption, headers, rows){
+  return '<details class="tableview"><summary>' + esc(caption) + '</summary>' +
+    '<table class="data"><thead><tr>' + headers.map(h => '<th>' + esc(h) + '</th>').join('') +
+    '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map(c => '<td>' + esc(c) + '</td>').join('') + '</tr>').join('') +
+    '</tbody></table></details>';
+}
+
+function setRange(days){ dashRange = days; showDashboard(); }
+function setDashPost(id){ dashPost = id; showDashboard(); }
+
+/* ═══════════════════════════════════════════════════════════════
+   CHARTS — inline SVG. Single series throughout, so no legend is
+   needed; each chart's title names what is plotted.
+   ═══════════════════════════════════════════════════════════════ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function el(name, attrs){
+  const node = document.createElementNS(SVG_NS, name);
+  for(const k in attrs) node.setAttribute(k, attrs[k]);
+  return node;
+}
+
+/* Bar with a 4px rounded data-end and a square baseline end. */
+function barPath(x, y, w, h, r){
+  r = Math.min(r, w, h / 2);
+  if(w <= 0) return '';
+  return 'M' + x + ',' + y + 'H' + (x + w - r) +
+         'a' + r + ',' + r + ' 0 0 1 ' + r + ',' + r +
+         'V' + (y + h - r) +
+         'a' + r + ',' + r + ' 0 0 1 ' + (-r) + ',' + r +
+         'H' + x + 'Z';
+}
+
+function niceMax(v){
+  if(v <= 5) return 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(v)));
+  return Math.ceil(v / mag * 2) / 2 * mag;
+}
+
+function drawCharts(d){
+  drawDaily(d.daily);
+  drawFunnel(d.funnel);
+  drawRefs(d.referrers);
+}
+
+/* ── reads per day: 2px line + 10% wash, crosshair tooltip ───── */
+function drawDaily(rows){
+  const host = document.getElementById('plot-daily');
+  if(!host || !rows.length) return;
+  const tt = document.getElementById('tt-daily');
+  host.querySelectorAll('svg').forEach(n => n.remove());
+
+  const W = host.clientWidth || 640, H = 200;
+  const pad = { t:12, r:14, b:24, l:38 };
+  const iw = Math.max(10, W - pad.l - pad.r), ih = H - pad.t - pad.b;
+  const max = niceMax(Math.max.apply(null, rows.map(r => r.views)) || 1);
+  const X = i => pad.l + (rows.length === 1 ? iw/2 : (i / (rows.length - 1)) * iw);
+  const Y = v => pad.t + ih - (v / max) * ih;
+
+  const svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, height:H,
+                          role:'img', 'aria-label':'Reads per day' });
+
+  // gridlines + y ticks
+  [0, .5, 1].forEach(function(f){
+    const y = pad.t + ih - f * ih;
+    svg.appendChild(el('line', { x1:pad.l, x2:pad.l+iw, y1:y, y2:y,
+      stroke: f === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width':1 }));
+    const label = el('text', { x:pad.l - 8, y:y + 3, 'text-anchor':'end', class:'tick num' });
+    label.textContent = comma(Math.round(max * f));
+    svg.appendChild(label);
+  });
+
+  const line = rows.map((r,i) => (i ? 'L' : 'M') + X(i) + ',' + Y(r.views)).join('');
+  svg.appendChild(el('path', { d: line + 'L' + X(rows.length-1) + ',' + Y(0) + 'L' + X(0) + ',' + Y(0) + 'Z',
+                               fill:'var(--series-wash)' }));
+  svg.appendChild(el('path', { d: line, fill:'none', stroke:'var(--series)',
+                               'stroke-width':2, 'stroke-linejoin':'round', 'stroke-linecap':'round' }));
+
+  // x ticks: first, middle, last only
+  [0, Math.floor((rows.length-1)/2), rows.length-1].filter((v,i,a) => a.indexOf(v) === i)
+    .forEach(function(i){
+      const label = el('text', { x:X(i), y:H - 6, class:'tick',
+        'text-anchor': i === 0 ? 'start' : (i === rows.length-1 ? 'end' : 'middle') });
+      label.textContent = dayLabel(rows[i].day);
+      svg.appendChild(label);
+    });
+
+  // endpoint marker + direct label (the only labelled point)
+  const last = rows[rows.length-1];
+  svg.appendChild(el('circle', { cx:X(rows.length-1), cy:Y(last.views), r:4,
+    fill:'var(--series)', stroke:'var(--surface)', 'stroke-width':2 }));
+
+  const crosshair = el('line', { y1:pad.t, y2:pad.t+ih, stroke:'var(--axis)',
+                                 'stroke-width':1, opacity:0 });
+  svg.appendChild(crosshair);
+  const cursor = el('circle', { r:4, fill:'var(--series)', stroke:'var(--surface)',
+                                'stroke-width':2, opacity:0 });
+  svg.appendChild(cursor);
+
+  const hit = el('rect', { x:0, y:0, width:W, height:H, fill:'transparent' });
+  svg.appendChild(hit);
+  hit.addEventListener('mousemove', function(ev){
+    const box = svg.getBoundingClientRect();
+    const px = (ev.clientX - box.left) * (W / box.width);
+    const i = Math.max(0, Math.min(rows.length - 1,
+      Math.round(((px - pad.l) / iw) * (rows.length - 1))));
+    const r = rows[i];
+    crosshair.setAttribute('x1', X(i)); crosshair.setAttribute('x2', X(i));
+    crosshair.setAttribute('opacity', 1);
+    cursor.setAttribute('cx', X(i)); cursor.setAttribute('cy', Y(r.views));
+    cursor.setAttribute('opacity', 1);
+    tt.innerHTML = esc(dayLabel(r.day)) + '<br/><b>' + comma(r.views) + '</b> reads · <b>' +
+                   comma(r.readers) + '</b> readers';
+    tt.style.left = (X(i) / W * box.width) + 'px';
+    tt.style.top  = (Y(r.views) / H * box.height - 8) + 'px';
+    tt.classList.add('on');
+  });
+  hit.addEventListener('mouseleave', function(){
+    crosshair.setAttribute('opacity', 0);
+    cursor.setAttribute('opacity', 0);
+    tt.classList.remove('on');
+  });
+
+  host.appendChild(svg);
+}
+
+/* ── read-depth funnel: ordinal blue ramp, labels outside ────── */
+function drawFunnel(rows){
+  const host = document.getElementById('plot-funnel');
+  if(!host) return;
+  const tt = document.getElementById('tt-funnel');
+  host.querySelectorAll('svg').forEach(n => n.remove());
+
+  const RAMP = ['var(--ord-1)','var(--ord-2)','var(--ord-3)','var(--ord-4)'];
+  const LBL  = ['A quarter in','Halfway','Three quarters','Finished'];
+  const W = host.clientWidth || 420;
+  const rowH = 34, barH = 20, padL = 96, padR = 46;
+  const H = rows.length * rowH + 8;
+  const iw = Math.max(10, W - padL - padR);
+
+  const svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, height:H,
+                          role:'img', 'aria-label':'How far readers get' });
+
+  rows.forEach(function(r, i){
+    const y = i * rowH + 4;
+    const w = Math.max(2, (r.pct / 100) * iw);
+
+    const name = el('text', { x:padL - 10, y:y + barH/2 + 4, 'text-anchor':'end', class:'tick' });
+    name.textContent = LBL[i] || (r.step + '%');
+    svg.appendChild(name);
+
+    svg.appendChild(el('rect', { x:padL, y:y, width:iw, height:barH, fill:'var(--surface-2)' }));
+
+    const bar = el('path', { d: barPath(padL, y, w, barH, 4), fill: RAMP[i] });
+    svg.appendChild(bar);
+
+    const val = el('text', { x:padL + w + 8, y:y + barH/2 + 4, class:'mark-label' });
+    val.textContent = r.pct + '%';
+    svg.appendChild(val);
+
+    const hit = el('rect', { x:0, y:y - 4, width:W, height:rowH, fill:'transparent' });
+    svg.appendChild(hit);
+    hit.addEventListener('mousemove', function(){
+      tt.innerHTML = esc(LBL[i] || (r.step + '%')) + '<br/><b>' + comma(r.sessions) +
+                     '</b> sessions · <b>' + r.pct + '%</b> of reads';
+      tt.style.left = Math.min(W - 60, padL + w) + 'px';
+      tt.style.top  = y + 'px';
+      tt.classList.add('on');
+    });
+    hit.addEventListener('mouseleave', function(){ tt.classList.remove('on'); });
+  });
+
+  host.appendChild(svg);
+}
+
+/* ── referrers: single-hue horizontal bars ───────────────────── */
+function drawRefs(rows){
+  const host = document.getElementById('plot-refs');
+  if(!host) return;
+  const tt = document.getElementById('tt-refs');
+  host.querySelectorAll('svg, p.empty').forEach(n => n.remove());
+
+  if(!rows.length){
+    host.insertAdjacentHTML('beforeend', '<p class="empty">No reads yet.</p>');
+    return;
+  }
+
+  const W = host.clientWidth || 420;
+  const rowH = 30, barH = 18, padL = 96, padR = 46;
+  const H = rows.length * rowH + 8;
+  const iw = Math.max(10, W - padL - padR);
+  const max = Math.max.apply(null, rows.map(r => r.views)) || 1;
+
+  const svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, height:H,
+                          role:'img', 'aria-label':'Reads by referring source' });
+
+  rows.forEach(function(r, i){
+    const y = i * rowH + 4;
+    const w = Math.max(2, (r.views / max) * iw);
+    const name = String(r.source);
+
+    const label = el('text', { x:padL - 10, y:y + barH/2 + 4, 'text-anchor':'end', class:'tick' });
+    label.textContent = name.length > 15 ? name.slice(0,14) + '…' : name;
+    svg.appendChild(label);
+
+    svg.appendChild(el('path', { d: barPath(padL, y, w, barH, 4), fill:'var(--series)' }));
+
+    const val = el('text', { x:padL + w + 8, y:y + barH/2 + 4, class:'mark-label' });
+    val.textContent = comma(r.views);
+    svg.appendChild(val);
+
+    const hit = el('rect', { x:0, y:y - 4, width:W, height:rowH, fill:'transparent' });
+    svg.appendChild(hit);
+    hit.addEventListener('mousemove', function(){
+      tt.innerHTML = esc(name) + '<br/><b>' + comma(r.views) + '</b> reads';
+      tt.style.left = Math.min(W - 60, padL + w) + 'px';
+      tt.style.top  = y + 'px';
+      tt.classList.add('on');
+    });
+    hit.addEventListener('mouseleave', function(){ tt.classList.remove('on'); });
+  });
+
+  host.appendChild(svg);
+}
+
+let resizeTimer;
+addEventListener('resize', function(){
+  if(location.pathname !== '/dashboard' || !lastDash) return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function(){ drawCharts(lastDash); }, 150);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════════ */
+/* GitHub Pages answers a hard load of /p/<slug> with 404.html, which
+   stashes the path and bounces here. Put the URL back before routing. */
+(function restoreDeepLink(){
+  let to = null;
+  try{
+    to = sessionStorage.getItem('ss_redirect');
+    if(to) sessionStorage.removeItem('ss_redirect');
+  }catch(e){}
+  if(to && to !== location.pathname + location.search + location.hash){
+    history.replaceState({}, '', to);
+  }
+})();
+
+paintLinks();
+paintAuthorBar();
+
+(async function boot(){
+  if(!db){
+    blogNotice('Not connected yet',
+      'Add your Supabase project URL and anon key to config.js, then reload. ' +
+      'Both are in the Supabase dashboard under Settings → API.');
+    return;
+  }
+  try{ await initAuth(); }catch(e){}
+  route();
+})();
+</script>
+</body>
+</html>
