@@ -148,6 +148,13 @@ Run these against the live URL, signed out first:
       sign out
 - [ ] `/dashboard` gated when signed out; after sign-in all three charts draw
 - [ ] Check `select count(*) from events` climbs as you browse
+- [ ] **Re-test the RLS lockdown once real data exists.** Anonymous
+      `GET /rest/v1/events` and `/rest/v1/reactions` returned an empty array
+      on 13 Aug 2026, but both tables were empty at the time, so the result
+      proved nothing. With rows present they must still come back empty —
+      that is what confirms the no-policy deny-all is doing the work.
+      Already verified as blocked: anonymous `rpc/analytics` and direct
+      inserts into `events` (both HTTP 401).
 
 ---
 
