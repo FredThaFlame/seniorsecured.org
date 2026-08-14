@@ -198,9 +198,10 @@ palette is a printed-page cream, navy and gold.
 
 ## Notes and limits
 
-- The reader UI offers one reaction, the heart. The schema still accepts
-  `thumb` and `bulb`, so a second or third button is a markup change, not a
-  schema change.
+- The reader UI offers all three reactions the schema accepts — heart, thumb
+  and bulb. They are driven by the `REACTIONS` table near the reaction
+  functions in `index.html`; a fourth kind would need the check constraint in
+  `schema.sql` widened too.
 - Comments publish immediately (`approved` defaults to `true`). Flip that
   default and the approved-only read policy becomes a moderation queue; the
   author can already update and delete any comment.

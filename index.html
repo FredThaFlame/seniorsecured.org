@@ -114,24 +114,25 @@ a{color:var(--navy-2)}
 .article strong{font-weight:700}
 .article a{color:var(--navy-2)}
 
-/* share + heart, bottom of the blog box */
+/* share + reactions, bottom of the blog box */
 .post-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);
            display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .post-foot .left{color:var(--muted)}
 .share{margin-left:auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;
        padding:7px 14px;cursor:pointer;color:var(--ink-2);font-weight:600}
 .share:hover{border-color:var(--navy);color:var(--navy)}
-.heart{
+.reacts{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.react{
   display:inline-flex;align-items:center;gap:7px;background:var(--surface);
   border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:700;
   transition:border-color .15s,background .15s
 }
-.heart .em{font-size:15px;line-height:1;filter:grayscale(1);opacity:.45;transition:filter .15s,opacity .15s}
-.heart .n{font-variant-numeric:tabular-nums;font-size:13px}
-.heart:hover{border-color:var(--gold);background:var(--gold-lt)}
-.heart[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-lt);color:#7A5300}
-.heart[aria-pressed="true"] .em{filter:none;opacity:1}
-.heart:disabled{opacity:.6;cursor:default}
+.react .em{font-size:15px;line-height:1;filter:grayscale(1);opacity:.45;transition:filter .15s,opacity .15s}
+.react .n{font-variant-numeric:tabular-nums;font-size:13px}
+.react:hover{border-color:var(--gold);background:var(--gold-lt)}
+.react[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-lt);color:#7A5300}
+.react[aria-pressed="true"] .em{filter:none;opacity:1}
+.react:disabled{opacity:.6;cursor:default}
 
 /* ── latest publishings ────────────────────────────────────── */
 #latest{padding:14px;position:sticky;top:18px}
@@ -337,10 +338,7 @@ footer .author-bar .linkish:hover{color:var(--navy)}
     <div class="post-foot" id="p-actions">
       <span class="left" id="p-foot"></span>
       <button class="share" onclick="sharePost()">Copy link</button>
-      <button class="heart" id="heart" aria-pressed="false" onclick="toggleHeart()">
-        <span class="em" aria-hidden="true">&#10084;&#65039;</span>
-        <span class="n" id="heart-n">0</span>
-      </button>
+      <span class="reacts" id="reacts"></span>
     </div>
     <div class="comments" id="comments"></div>
   </main>
@@ -863,42 +861,68 @@ async function showPost(slug, isHome){
   document.getElementById('p-actions').hidden = false;
   document.getElementById('p-foot').textContent = comma(current.word_count) + ' words';
 
-  paintHeart(data.reactions.heart);
+  paintReacts(data.reactions);
   paintList();
   paintComments(data.comments || []);
   tracker.start(current.id);
 }
 
-/* ── the heart ─────────────────────────────────────────────── */
-function heartKey(){ return 'ff_r_' + current.id + '_heart'; }
+/* ── the reactions ─────────────────────────────────────────── */
+/* The three kinds the schema accepts. Adding a fourth means a check
+   constraint change in schema.sql as well as a row here.            */
+const REACTIONS = [
+  { kind:'heart', emoji:'&#10084;&#65039;',
+    off:'Heart this read',      on:'You hearted this',
+    thanks:'❤️  Thanks for the love.' },
+  { kind:'thumb', emoji:'&#128077;',
+    off:'Give this a thumbs up', on:'You gave this a thumbs up',
+    thanks:'👍  Glad it landed.' },
+  { kind:'bulb',  emoji:'&#128161;',
+    off:'Mark this as useful',   on:'You marked this useful',
+    thanks:'💡  Good — that is the whole point.' }
+];
 
-function paintHeart(count){
-  const btn = document.getElementById('heart');
-  const on  = localStorage.getItem(heartKey()) === '1';
-  btn.setAttribute('aria-pressed', String(on));
-  btn.title = on ? 'You hearted this' : 'Heart this read';
-  if(count != null) document.getElementById('heart-n').textContent = fmt(count);
+function reactKey(kind){ return 'ff_r_' + current.id + '_' + kind; }
+
+/* list_posts() counts every kind, so the sidebar tally must too. */
+function reactTotal(counts){
+  return REACTIONS.reduce((s, r) => s + ((counts && counts[r.kind]) || 0), 0);
 }
 
-async function toggleHeart(){
-  const btn = document.getElementById('heart');
-  btn.disabled = true;
+function paintReacts(counts){
+  document.getElementById('reacts').innerHTML = REACTIONS.map(function(r){
+    const on  = localStorage.getItem(reactKey(r.kind)) === '1';
+    const lab = on ? r.on : r.off;
+    return '<button class="react" type="button" data-kind="' + r.kind + '"' +
+      ' aria-pressed="' + on + '" title="' + lab + '" aria-label="' + lab + '"' +
+      ' onclick="toggleReact(\'' + r.kind + '\')">' +
+      '<span class="em" aria-hidden="true">' + r.emoji + '</span>' +
+      '<span class="n">' + fmt((counts && counts[r.kind]) || 0) + '</span></button>';
+  }).join('');
+}
+
+async function toggleReact(kind){
+  const meta = REACTIONS.find(r => r.kind === kind);
+  const btn  = document.querySelector('.react[data-kind="' + kind + '"]');
+  if(btn) btn.disabled = true;
   try{
     const res = await rpc('toggle_reaction', {
-      p_post_id: current.id, p_visitor_id: visitorId, p_kind: 'heart'
+      p_post_id: current.id, p_visitor_id: visitorId, p_kind: kind
     });
-    if(res.added) localStorage.setItem(heartKey(), '1');
-    else localStorage.removeItem(heartKey());
+    if(res.added) localStorage.setItem(reactKey(kind), '1');
+    else localStorage.removeItem(reactKey(kind));
 
     // Keep the sidebar's count in step with the post we just changed.
     const row = posts.find(p => p.id === current.id);
-    if(row) row.reaction_count = res.reactions.heart;
+    if(row) row.reaction_count = reactTotal(res.reactions);
 
-    paintHeart(res.reactions.heart);
+    paintReacts(res.reactions);   // re-renders, so the disabled state clears
     paintList();
-    if(res.added) toast('❤️  Thanks for the love.');
-  }catch(e){ toast(e.message); }
-  finally{ btn.disabled = false; }
+    if(res.added && meta) toast(meta.thanks);
+  }catch(e){
+    toast(e.message);
+    if(btn) btn.disabled = false;
+  }
 }
 
 async function sharePost(){

@@ -67,11 +67,15 @@ rights, including the analytics dashboard. Do not miss it.
 
 `CNAME` currently contains `seniorsecured.org`.
 
-> **Decision needed:** this assumes a custom domain served at the root. On a
-> project page (`username.github.io/repo/`) the absolute paths in `index.html`
-> — `/config.js`, `/fred-flamer.jpg` — and the `404.html` redirect to `/` will
-> all break. If a custom domain is not the plan, say so and the paths get made
-> relative.
+> **Decided (13 Aug 2026): custom domain at the root.** The client owns
+> `seniorsecured.org` and DNS can be pointed at GitHub Pages, so the absolute
+> paths in `index.html` (`/config.js`, `/fred-flamer.jpg`) and the `404.html`
+> redirect to `/` all stay as they are — no code change needed.
+>
+> This holds only while the site is served at the domain root. If the plan ever
+> falls back to the project-page URL
+> (`FredThaFlame.github.io/seniorsecured.org/`), those paths must be made
+> relative or the page loads blank.
 
 ### 1.5 Tell Supabase about the live origin
 
@@ -106,7 +110,8 @@ Run these against the live URL, signed out first:
 - [ ] **Hard reload** of a `/p/<slug>` URL lands on the right article
       (this exercises the `404.html` shim — the most fragile part of GitHub
       Pages hosting)
-- [ ] Heart increments, survives a reload, does not double-count
+- [ ] Each of the three reactions (heart, thumb, bulb) increments, survives a
+      reload, and does not double-count; the sidebar tally is their sum
 - [ ] Comment posts and appears; a fourth comment within an hour is refused
 - [ ] Copy link produces a working URL
 - [ ] Footer → **New post** → sign in works
@@ -129,8 +134,8 @@ Run these against the live URL, signed out first:
 - **Comments publish immediately** (`approved` defaults to `true`). Flipping
   that default turns the existing read policy into a moderation queue, but
   there is no approval screen to work it from yet.
-- **One reaction only** (the heart). Schema still accepts `thumb` and `bulb`,
-  so adding buttons is markup, not migration.
+- ~~**One reaction only** (the heart).~~ Done — heart, thumb and bulb all ship
+  in the reader UI now. No schema change was needed.
 - **`supabase-js` loads from jsDelivr**, pinned to `2.58.0`. If a CDN
   dependency is unwanted, download it next to `index.html` and change the one
   `<script src>`.
