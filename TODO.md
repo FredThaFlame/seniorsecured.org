@@ -23,14 +23,15 @@ file. It is written to be idempotent.
 Sanity check afterwards, in the SQL editor:
 
 ```sql
-select id, slug, title, status from public.posts;
+select table_name from information_schema.tables where table_schema = 'public';
 select proname from pg_proc where pronamespace = 'public'::regnamespace
   and proname in ('list_posts','get_post','toggle_reaction',
                   'add_comment','track_event','analytics');
 ```
 
-Six functions and one seed post. Note the seed only inserts when `posts` is
-empty, so it will not fight you on a re-run.
+Four tables and six functions. **`posts` is empty on purpose** — the schema
+seeds no content, so the first piece is written through the site's own "New
+post" editor. Until then the site shows "No posts yet" rather than an error.
 
 ### 1.2 Fill in `config.js`
 
@@ -174,8 +175,9 @@ Run these against the live URL, signed out first:
 ## 5. Already done — no action needed
 
 - Accepted mockup layout is now `index.html`; `mockup.html` deleted
-- Guide renamed to **Senior Secured: Cyber Safety Plus Handbook**
-  (slug `cyber-safety-plus-handbook`), in the seed post
+- Seed post removed from `schema.sql` — it was template prose signed off as
+  Fred, and shipping it would have published placeholder content under his
+  byline. The database now starts empty.
 - Vercel serverless functions removed; all logic moved into
   `supabase/schema.sql` as RLS policies + six functions
 - Folder restructured for GitHub Pages root serving, with `CNAME`,

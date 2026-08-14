@@ -536,30 +536,10 @@ grant execute on function public.track_event(int, text, text, text, numeric, tex
 -- The dashboard is the author's alone.
 grant execute on function public.analytics(int, int)                to authenticated;
 
--- ── the first piece ────────────────────────────────────────────────────
-insert into public.posts (slug, title, subtitle, body, published_at)
-select
-  'cyber-safety-plus-handbook',
-  'Senior Secured: Cyber Safety Plus Handbook',
-  'How to spot the modern con — including the AI-powered ones — before it costs you.',
-  concat_ws(E'\n\n',
-    'Every year, older Americans lose an estimated $3 billion or more to fraud — and those are only the cases that get reported. If you are over 60, live with someone who is, or simply care about protecting the people you love, this guide is for you.',
-    'Scammers are not bumbling criminals operating out of dingy back rooms. They are sophisticated, organized, and increasingly armed with artificial intelligence that makes their tricks nearly indistinguishable from the real thing.',
-    '## Phishing Emails and Texts',
-    'A phishing email pretends to be from your bank, the IRS, Medicare, or Amazon and tricks you into clicking a link or providing personal information. Watch for urgent language like "Your account closes in 24 hours!", slightly misspelled addresses like amaz0n.com, and requests for your Social Security number or password.',
-    'Never click links in suspicious messages. Navigate directly to websites by typing the address yourself. Call the company using a number from their official website — never the number in the suspicious message.',
-    '## Tech Support Scams',
-    'A terrifying pop-up appears: "VIRUS DETECTED! Call Microsoft immediately." Microsoft, Apple, and your internet provider will never send a pop-up demanding you call them. Close the browser. If you cannot close it, hold the power button to shut down the computer. Then call a trusted family member or local repair shop.',
-    '## The Grandparent Scam — Now With AI Voices',
-    'You receive a panicked call. The voice sounds exactly like your grandson. Thanks to AI voice-cloning, scammers can now replicate a loved one''s voice from just seconds of audio pulled from social media.',
-    '## Create a Family Code Word',
-    'Agree on a secret phrase only your family knows. If anyone calls claiming to be a family member in trouble, ask for the code word before taking any action. A real family member will know it. A scammer will not.',
-    '> If anyone ever asks you to pay for anything by reading gift card numbers over the phone, it is a scam. No exceptions.',
-    '## The Gift Card Rule',
-    'No government agency, utility company, or real emergency ever requires gift card payment. Not the IRS. Not your power company. Not a hospital. Anyone who insists is telling you, plainly, that they are stealing from you.',
-    '## Protect Yourself',
-    'Freeze your credit at all three bureaus — Equifax, Experian, and TransUnion. It is free and the single strongest protection against identity theft. Enable two-factor authentication on your email and bank accounts.',
-    'Report every scam attempt to the FTC at ReportFraud.ftc.gov or the AARP Fraud Helpline at 1-877-908-3360. Your report protects the next person.',
-    'Stay curious. Stay skeptical. Stay safe. — Fred Flamer'),
-  timestamptz '2026-08-07 09:00:00+00'
-where not exists (select 1 from public.posts);
+-- ── no seed post ───────────────────────────────────────────────────────
+-- This file deliberately creates no content. The first piece is written by
+-- the author through the site's own "New post" editor, which also proves
+-- the sign-in and publish path works.
+--
+-- Until then the site shows its empty state ("No posts yet") rather than an
+-- error, so it is safe to deploy an empty database.

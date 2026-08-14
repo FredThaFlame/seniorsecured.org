@@ -17,7 +17,7 @@ security-definer functions in `supabase/schema.sql`.
 ├─ fred-flamer.jpg       the headshot in the profile panel
 ├─ CNAME                 the custom domain
 ├─ .nojekyll             serve files as-is, no Jekyll pass
-└─ supabase/schema.sql   tables, RLS policies, functions, seed post
+└─ supabase/schema.sql   tables, RLS policies, functions (no content)
 ```
 
 ---
@@ -29,9 +29,14 @@ security-definer functions in `supabase/schema.sql`.
 Create a project at [supabase.com](https://supabase.com). Open **SQL Editor**,
 paste the whole of `supabase/schema.sql`, and run it. It builds the four
 tables, the indexes that make the analytics dedupe work, the row-level security
-policies, the six functions the front end calls, and the first post.
+policies, and the six functions the front end calls. It creates **no content** —
+the first piece is written through the site's own "New post" editor.
 
 Running it again later is harmless — it is written to be idempotent.
+
+One paste gotcha: the Supabase SQL editor runs only the *highlighted* text when
+a selection exists. Paste, click once to clear the selection, then Run — a
+partial run can cut a statement in half and fail in confusing ways.
 
 ### 2. Point the front end at it
 
