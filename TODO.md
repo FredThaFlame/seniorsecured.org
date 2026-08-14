@@ -67,6 +67,32 @@ rights, including the analytics dashboard. Do not miss it.
 
 `CNAME` currently contains `seniorsecured.org`.
 
+**DNS as it stands (checked 13 Aug 2026).** The domain is registered and
+resolving, but to a **Namecheap parking page** — apex `A` is `192.64.119.199`
+and `www` is a `CNAME` to `parkingpage.namecheap.com`. Nameservers are
+`dns1/dns2.registrar-servers.com`, so DNS is managed at **Namecheap → Domain
+List → Manage → Advanced DNS**.
+
+Delete the parking records first — the stock Namecheap setup leaves a URL
+Redirect / parking `A` record and the `www` CNAME behind, and a leftover apex
+record will keep answering ahead of the new ones. Then add:
+
+| Type | Host | Value |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `FredThaFlame.github.io.` |
+
+Optional IPv6, same `@` host: `2606:50c0:8000::153`, `8001::153`, `8002::153`,
+`8003::153` as `AAAA` records.
+
+Then in GitHub → Settings → Pages, set the custom domain to
+`seniorsecured.org`. Leave **Enforce HTTPS** until the certificate is issued —
+it stays greyed out until DNS has propagated, which is usually minutes but the
+TTL on the parking record can stretch it.
+
 > **Decided (13 Aug 2026): custom domain at the root.** The client owns
 > `seniorsecured.org` and DNS can be pointed at GitHub Pages, so the absolute
 > paths in `index.html` (`/config.js`, `/fred-flamer.jpg`) and the `404.html`
