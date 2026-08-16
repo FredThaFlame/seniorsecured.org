@@ -1,73 +1,79 @@
 # What's left to do
 
-Status at end of day **13 Aug 2026**. The code is done, pushed, and connected
-to the live database. What remains is DNS, two Supabase settings, and content.
+Status **16 Aug 2026**. The site is live at `http://seniorsecured.org`, DNS is
+done, and the author allowlist is applied. What remains is the HTTPS
+certificate, one Supabase toggle, and content.
 
-**One thing blocks launch: the DNS change at Namecheap.** Everything else can
-happen before or after it. Fred's walkthrough for that is in
-[`NAMECHEAP-DNS.md`](NAMECHEAP-DNS.md).
+**Nothing blocks Fred writing his first post.** He has an account and publish
+rights; the remaining items are polish and hardening.
 
 ---
 
-## Tomorrow, in order
+## In order
 
-### 1. Point the domain at GitHub Pages  ← the blocker
+### 1. Point the domain at GitHub Pages — **done, 16 Aug 2026**
 
-Hand [`NAMECHEAP-DNS.md`](NAMECHEAP-DNS.md) to Fred, or drive it yourself if
-you have the Namecheap login. Summary of the change:
+Verified against Google DNS: apex answers with all four `185.199.10x.153`
+addresses, `www` is a CNAME to `fredthaflame.github.io`, and the parking
+records are gone. Email survived — all five `eforward*.registrar-servers.com`
+MX records and both TXT records (SPF, Google site verification) are intact.
 
-| Type | Host | Value |
-|---|---|---|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
-| CNAME | `www` | `FredThaFlame.github.io.` |
+`http://seniorsecured.org` returns 200 and serves the real page.
+`http://www.` 301-redirects to the apex.
 
-**Delete the two parking records first** — the apex `A` at `192.64.119.199`
-and the `www` CNAME to `parkingpage.namecheap.com`. A leftover apex record
-keeps answering ahead of the new ones, which looks exactly like "the change
-didn't work."
+Optional IPv6 was never added and is not needed. Same `@` host, as `AAAA`, if
+it is ever wanted: `2606:50c0:8000::153`, `2606:50c0:8001::153`,
+`2606:50c0:8002::153`, `2606:50c0:8003::153`.
 
-Optional IPv6, same `@` host, as `AAAA`: `2606:50c0:8000::153`,
-`2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`.
+### 2. Tick Enforce HTTPS  ← outstanding
 
-### 2. Tick Enforce HTTPS
+GitHub → repo **Settings → Pages**. As of 16 Aug the site still serves
+GitHub's wildcard `CN=*.github.io` certificate, so `https://` fails the trust
+check. That is expected: GitHub only requests the custom-domain certificate
+after it sees DNS pointing at it, which it now does. Usually minutes to a few
+hours. The checkbox stays greyed out until then.
 
-GitHub → repo **Settings → Pages**. The checkbox stays greyed out until the
-certificate is issued, which needs DNS to have propagated first. Usually
-minutes; the TTL on the old parking record can stretch it. Come back to it.
+Note for whoever does this: the repo owner is Fred. The account
+`AntJohnson-25` has read access only, so it cannot tick the box or push.
 
-### 3. Confirm the author account is locked down
+### 3. Author accounts and the allowlist — **done, 16 Aug 2026**
 
-Status unknown as of tonight — **verify both halves**:
+`auth.users` was completely empty; the account referred to in earlier notes
+had never been created. Two accounts now exist, both with *Auto Confirm User*:
 
-- **Authentication → Users** — one account exists, with Fred's email and
-  *Auto Confirm User* ticked. That account is the entire CMS login.
-- **Authentication → Sign In / Providers → Email** — *Allow new users to sign
-  up* is **off**.
+- `FFlamer29@gmail.com` — Fred, site owner
+- `Charles2025business@gmail.com` — manager
 
-The second half is the one that matters. Leave signups on and anyone can
-register themselves into author rights, which includes the analytics
-dashboard and the ability to publish.
+Publish rights no longer follow from merely holding a login. See
+[`supabase/authors.sql`](supabase/authors.sql) — `schema.sql` gated every
+author action on `auth.role() = 'authenticated'`, which meant *any* account.
+That is now membership of `public.authors`, keyed on the auth uuid.
 
-### 4. Tell Supabase about the live origin
+### 4. Turn signups off  ← outstanding
 
-**Authentication → URL Configuration** → set **Site URL** and add to
-**Redirect URLs**: `https://seniorsecured.org`. Add `http://localhost:3000`
-too if you will develop locally.
+**Authentication → Sign In / Providers → Email** → *Allow new users to sign
+up* is still **on** as of 16 Aug.
 
-Skip this and everything works except author sign-in on the live site — a
-confusing failure, because readers see a perfectly healthy page.
+Less urgent than it was — the allowlist means a stranger who registers can do
+nothing a logged-out reader cannot. The remaining reason is quota: every
+signup attempt sends a confirmation email through Supabase's shared, rate-
+limited SMTP, and exhausting it takes your transactional mail down with it.
 
-### 5. Fred writes the first piece
+### 5. Supabase URL configuration — not required
+
+Earlier notes listed this as a blocker for author sign-in. It is not.
+Sign-in is `signInWithPassword` ([`index.html`](index.html)), and Site URL /
+Redirect URLs apply only to magic links and OAuth. Set them anyway if you add
+either later.
+
+### 6. Fred writes the first piece  ← outstanding
 
 Footer → **New post** → sign in → write → **Publish**. The database ships
 empty on purpose, so until this happens the site shows "No posts yet" rather
 than an error.
 
 Doing it this way also smoke-tests sign-in, the editor, and the publish path
-in one go.
+in one go. He needs his password from the manager.
 
 ---
 
@@ -79,7 +85,9 @@ in one go.
   that do not exist. They live in `PROFILE_LINKS` near the top of the script in
   `index.html`.
 - **Contact address.** `fred@seniorsecured.org` shows in the same panel.
-  Confirm it exists and is monitored before it goes in front of readers.
+  Confirm it exists and is monitored before it goes in front of readers. Note
+  this is *not* his login — that is `FFlamer29@gmail.com`. The MX records
+  forward the domain address somewhere, but nobody has verified where.
 - **Bio and role.** "Consumer-safety writer" / "Thirty years explaining how the
   con works — so it stops working on you." Needs Fred's sign-off.
 - **Headshot.** `fred-flamer.jpg`, 512px square. Fine as-is; swap if there is a
@@ -100,6 +108,9 @@ Signed out first:
 - [ ] Comment posts and appears; a fourth comment within an hour is refused
 - [ ] Copy link produces a working URL
 - [ ] Footer → **New post** → sign in works
+- [ ] **Allowlist holds.** Register a throwaway account (while signups are
+      still on) and confirm sign-in is refused with "not an author on this
+      site", `/dashboard` stays gated, and no draft appears in the sidebar
 - [ ] Save a draft — tagged in the sidebar while signed in, gone after sign out
 - [ ] `/dashboard` gated when signed out; after sign-in all three charts draw
 - [ ] `select count(*) from events` climbs as you browse
@@ -134,6 +145,19 @@ Signed out first:
 
 ## Done — no action needed
 
+- **Author allowlist applied** (16 Aug 2026). `public.authors` plus
+  `public.is_author()`; the four `posts` policies, two `comments` moderation
+  policies, `list_posts`, `get_post` and `analytics` all gate on it. Verified
+  live: the table and function exist, and anonymous callers get `[]` and
+  `false` respectively. `analytics()` is rewritten in place by a `DO` block
+  that rereads `pg_get_functiondef`, so the file stays correct if that
+  function is edited later.
+- **Front end tells the truth about authorship.** `isAuthor()` in
+  `index.html` was `!!session` — merely signed in. It now also requires the
+  allowlist row, read through the `authors_read_self` policy, and fails
+  closed on any error. A non-author who signs in with a valid password is
+  signed straight back out with an explanation rather than being shown an
+  editor that the database will refuse.
 - **Schema is live.** `supabase/schema.sql` ran successfully against the
   project. Four tables, six functions. It parses under Postgres's own grammar
   (checked with `libpg-query`), so the "never been executed" risk is retired.

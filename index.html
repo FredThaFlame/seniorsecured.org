@@ -434,6 +434,7 @@ const PROFILE_LINKS = [
 ];
 
 let session     = null;    // Supabase auth session — the author, when signed in
+let onAllowlist = false;   // …and named in public.authors. Signed in is not enough.
 let posts       = [];
 let postsLoaded = false;
 let current     = null;    // the open post
@@ -479,7 +480,24 @@ const db = CONFIGURED
     })
   : null;
 
-const isAuthor = () => !!session;
+/* Authorship is the database's call, not ours. supabase/authors.sql gates
+   every author action on membership of public.authors, so a session alone
+   grants nothing — this only keeps the UI honest about it. */
+const isAuthor = () => !!session && onAllowlist;
+
+/* Re-reads the caller's own allowlist row. The authors_read_self policy
+   returns exactly one row for an author and none for anyone else, so the
+   count is the answer. Fails closed: any error leaves onAllowlist false. */
+async function refreshAllowlist(){
+  if(!session){ onAllowlist = false; return false; }
+  try{
+    const { data, error } = await db.from('authors').select('user_id').limit(1);
+    onAllowlist = !error && Array.isArray(data) && data.length > 0;
+  }catch(e){
+    onAllowlist = false;
+  }
+  return onAllowlist;
+}
 
 /* Postgres RAISE messages arrive as error.message, so they reach the
    reader as written in schema.sql. */
@@ -496,10 +514,14 @@ async function rpc(name, args){
 async function initAuth(){
   const { data } = await db.auth.getSession();
   session = data.session || null;
-  db.auth.onAuthStateChange(function(_event, next){
-    const had = !!session;
+  await refreshAllowlist();
+  db.auth.onAuthStateChange(async function(_event, next){
+    const had = isAuthor();
     session = next || null;
-    if(had !== !!session){ postsLoaded = false; }
+    await refreshAllowlist();
+    /* Drafts enter and leave list_posts() with authorship, not with the
+       session, so the cache turns on the stronger test. */
+    if(had !== isAuthor()){ postsLoaded = false; }
     paintAuthorBar();
   });
 }
@@ -509,6 +531,16 @@ async function signIn(email, password){
   if(error) throw new Error(error.message);
   session = data.session;
   postsLoaded = false;
+  await refreshAllowlist();
+  /* A valid password on a non-author account is a dead end: the database
+     refuses every author action. Drop the session rather than leave one
+     stranded — "Sign out" hangs off isAuthor(), so it would not be shown. */
+  if(!onAllowlist){
+    await db.auth.signOut();
+    session = null;
+    paintAuthorBar();
+    throw new Error('That account is not an author on this site.');
+  }
   paintAuthorBar();
   return session;
 }
@@ -516,6 +548,7 @@ async function signIn(email, password){
 async function signOut(){
   await db.auth.signOut();
   session = null;
+  onAllowlist = false;
   postsLoaded = false;
   paintAuthorBar();
   toast('Signed out.');
