@@ -515,14 +515,21 @@ async function initAuth(){
   const { data } = await db.auth.getSession();
   session = data.session || null;
   await refreshAllowlist();
-  db.auth.onAuthStateChange(async function(_event, next){
-    const had = isAuthor();
+  db.auth.onAuthStateChange(function(_event, next){
+    const had = isAuthor();          // measured before the session swaps
     session = next || null;
-    await refreshAllowlist();
-    /* Drafts enter and leave list_posts() with authorship, not with the
-       session, so the cache turns on the stronger test. */
-    if(had !== isAuthor()){ postsLoaded = false; }
-    paintAuthorBar();
+    /* supabase-js runs this callback while holding its internal auth lock,
+       and every PostgREST call needs that lock to attach a token. Awaiting
+       one in here deadlocks the whole client — the symptom is a Publish
+       button that spins forever with no error. So the async half is pushed
+       into a fresh task, which runs after the lock is released. */
+    setTimeout(async function(){
+      await refreshAllowlist();
+      /* Drafts enter and leave list_posts() with authorship, not with the
+         session, so the cache turns on the stronger test. */
+      if(had !== isAuthor()){ postsLoaded = false; }
+      paintAuthorBar();
+    }, 0);
   });
 }
 
