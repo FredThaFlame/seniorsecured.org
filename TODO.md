@@ -79,11 +79,10 @@ in one go. He needs his password from the manager.
 
 ## Still carrying placeholders
 
-- **Social links.** All four in the *Elsewhere* panel are the mockup's
-  inventions — `linkedin.com/in/fredflamer`, `github.com/fredflamer`,
-  `x.com/fredflamer`, `fredflamer.substack.com`. Real URLs, or delete the ones
-  that do not exist. They live in `PROFILE_LINKS` near the top of the script in
-  `index.html`.
+- ~~**Social links.**~~ Done 16 Aug 2026. *Elsewhere* is now LinkedIn only,
+  pointing at `linkedin.com/in/fred-flamer-norcal/`. The mockup's GitHub, X
+  and Substack entries were invented and have been removed. `PROFILE_LINKS`
+  near the top of the script in `index.html`.
 - **Contact address.** `fred@seniorsecured.org` shows in the same panel.
   Confirm it exists and is monitored before it goes in front of readers. Note
   this is *not* his login — that is `FFlamer29@gmail.com`. The MX records
@@ -111,6 +110,12 @@ Signed out first:
 - [ ] **Allowlist holds.** Register a throwaway account (while signups are
       still on) and confirm sign-in is refused with "not an author on this
       site", `/dashboard` stays gated, and no draft appears in the sidebar
+- [ ] **Cover image.** Publish a piece with a picture; confirm it appears
+      above the article, as a sidebar thumbnail, and in a link preview
+      (paste the URL into a message). Then replace it and remove it from the
+      article view
+- [ ] **Paste.** Paste a formatted passage from Word or Google Docs and
+      confirm headings, bold, bullets and links survive into Preview
 - [ ] Save a draft — tagged in the sidebar while signed in, gone after sign out
 - [ ] `/dashboard` gated when signed out; after sign-in all three charts draw
 - [ ] `select count(*) from events` climbs as you browse
@@ -124,9 +129,12 @@ Signed out first:
 
 ## Deliberate gaps — decide whether they matter
 
-- **No post editing in the UI.** Publish-only. RLS already permits updates and
-  the API is there; it needs a form. Fred will want this the first time he
-  typos a headline — the strongest candidate for the next piece of work.
+- **No post editing in the UI, except the cover image.** Title, standfirst
+  and body are still publish-only; the cover picture can be added, replaced
+  or removed from the article itself once signed in. RLS already permits
+  updates and the API is there, so extending this to the text needs a form,
+  not a migration. Fred will want it the first time he typos a headline —
+  the strongest candidate for the next piece of work.
 - **No delete in the UI** either. Both are table-editor jobs today.
 - **Comments publish immediately** (`approved` defaults to `true`). Flipping
   that default turns the existing read policy into a moderation queue, but
@@ -145,6 +153,23 @@ Signed out first:
 
 ## Done — no action needed
 
+- **Cover images** (16 Aug 2026). One optional picture per piece: shown above
+  the article, as a thumbnail in *Latest publishings*, and as the `og:image`
+  when the link is shared (with `twitter:card` upgrading to
+  `summary_large_image` only when there is a picture). Uploaded from the
+  composer, and addable, replaceable or removable from the article itself
+  afterwards. The browser downscales to 1600px on the long edge and
+  re-encodes as JPEG before upload, so a 5 MB phone photo lands as a few
+  hundred KB. Replaced files are deleted from the bucket on a best-effort
+  basis — cleanup never blocks the save. Needs
+  [`supabase/post-images.sql`](supabase/post-images.sql).
+- **Pasted formatting survives** (16 Aug 2026). Pasting from Word or Google
+  Docs into the body converts the clipboard's `text/html` into the markdown
+  the editor already speaks — headings, bold, italic, lists, quotes and
+  links. Plain-text pastes are left to the browser. Storage format, renderer
+  and escaping are unchanged, so nothing about the XSS posture moved.
+  Covered by 31 assertions including the full clipboard → markdown →
+  rendered-HTML round trip.
 - **Author allowlist applied** (16 Aug 2026). `public.authors` plus
   `public.is_author()`; the four `posts` policies, two `comments` moderation
   policies, `list_posts`, `get_post` and `analytics` all gate on it. Verified

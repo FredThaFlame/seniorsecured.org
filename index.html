@@ -102,6 +102,22 @@ a{color:var(--navy-2)}
      padding:1px 5px;border-radius:2px}
 .tag.draft{background:#F3F0FF;border-color:#D5CDF0;color:#4A3AA7}
 
+/* ── cover image ───────────────────────────────────────────── */
+/* Width and height are set on the element from the file itself, so the
+   space is reserved before the bytes arrive and the text below does not
+   jump once it does. */
+#p-hero{margin:0 0 16px}
+#p-hero img{display:block;width:100%;height:auto;border-radius:var(--r);
+            border:1px solid var(--line);background:var(--surface-2)}
+.pub .thumb{float:right;width:52px;height:52px;object-fit:cover;margin:0 0 4px 10px;
+            border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+#hero-preview{display:flex;gap:10px;align-items:flex-start;margin-top:8px}
+#hero-thumb{width:96px;height:64px;object-fit:cover;border-radius:4px;
+            border:1px solid var(--line);background:var(--surface-2);flex-shrink:0}
+#hero-preview .who{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+#hero-edit{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+#hero-edit .linkish{cursor:pointer}
+
 .article{font-size:16.5px;line-height:1.78;color:#1A1D21}
 #p-body{flex:1}
 .article p{margin-bottom:20px}
@@ -326,6 +342,18 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 
   <!-- ③ THE BLOG -->
   <main class="box" id="blog">
+    <figure id="p-hero" hidden><img id="p-hero-img" alt=""/></figure>
+    <!-- Author-only. Cover art is the one thing editable after publishing;
+         everything else still needs the table editor. -->
+    <div id="hero-edit" hidden>
+      <!-- A button rather than a <label for>, because label activation of a
+           hidden file input is inconsistent across browsers. -->
+      <button type="button" class="linkish" id="hero-edit-label"
+              onclick="document.getElementById('p-hero-file').click()">Add a cover image</button>
+      <input type="file" id="p-hero-file" accept="image/jpeg,image/png,image/webp,image/gif" hidden/>
+      <button type="button" class="linkish" id="hero-remove" onclick="removeCover()" hidden>Remove</button>
+      <span class="hint" id="hero-edit-status" aria-live="polite"></span>
+    </div>
     <p id="p-flag" hidden><span class="tag draft">Draft</span></p>
     <h2 class="post-title" id="p-title"></h2>
     <p class="post-sub" id="p-sub"></p>
@@ -389,6 +417,18 @@ footer .author-bar .linkish:hover{color:var(--navy)}
         <input type="text" id="in-title" placeholder="Post title"/></div>
       <div class="fg"><label for="in-sub">Standfirst <span class="hint">(one-line summary, optional)</span></label>
         <input type="text" id="in-sub" placeholder="What this piece is about"/></div>
+      <div class="fg">
+        <label for="in-hero">Cover image <span class="hint">(optional &middot; shown above the article and when the link is shared)</span></label>
+        <input type="file" id="in-hero" accept="image/jpeg,image/png,image/webp,image/gif"/>
+        <div id="hero-preview" hidden>
+          <img id="hero-thumb" alt=""/>
+          <div class="who">
+            <input type="text" id="in-hero-alt" placeholder="Describe the picture for people using a screen reader"/>
+            <button type="button" class="btn ghost" onclick="clearHero()">Remove image</button>
+          </div>
+        </div>
+        <div class="hint" id="hero-status" aria-live="polite"></div>
+      </div>
       <div class="tabs" role="tablist">
         <button role="tab" aria-selected="true" onclick="setTab('write')">Write</button>
         <button role="tab" aria-selected="false" onclick="setTab('preview')">Preview</button>
@@ -422,15 +462,11 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 /* ═══════════════════════════════════════════════════════════════
    STATE
    ═══════════════════════════════════════════════════════════════ */
+/* Real profiles only. The mockup's GitHub, X and Substack entries were
+   invented and pointed at accounts that do not exist. */
 const PROFILE_LINKS = [
-  { label:'LinkedIn', href:'https://linkedin.com/in/fredflamer',
-    path:'M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.5c0-1.3-.02-3-1.9-3-1.9 0-2.2 1.44-2.2 2.92V21H9z' },
-  { label:'GitHub', href:'https://github.com/fredflamer',
-    path:'M12 2a10 10 0 0 0-3.16 19.5c.5.08.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.57.69.48A10 10 0 0 0 12 2z' },
-  { label:'X / Twitter', href:'https://x.com/fredflamer',
-    path:'M18.9 2H22l-7.1 8.1L23.2 22h-6.6l-5.2-6.8L5.5 22H2.4l7.6-8.7L1.2 2h6.8l4.7 6.2zm-1.1 18h1.7L7.3 3.8H5.4z' },
-  { label:'Substack', href:'https://fredflamer.substack.com',
-    path:'M3 3h18v2.6H3zm0 4.6h18V22l-9-4.9L3 22zm0 4.6h18v2.6H3z' }
+  { label:'LinkedIn', href:'https://www.linkedin.com/in/fred-flamer-norcal/',
+    path:'M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.5c0-1.3-.02-3-1.9-3-1.9 0-2.2 1.44-2.2 2.92V21H9z' }
 ];
 
 let session     = null;    // Supabase auth session — the author, when signed in
@@ -570,6 +606,9 @@ function paintAuthorBar(){
     (isAuthor()
       ? '<span class="dot">&middot;</span><button class="linkish" onclick="signOut()">Sign out</button>'
       : '');
+  /* Signing in or out while a piece is open should reveal or hide the
+     cover-image controls without needing a reload. */
+  paintCoverEdit();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -722,6 +761,139 @@ function renderBody(raw){
   }).join('');
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   PASTED FORMATTING → MARKDOWN
+
+   Fred drafts in Word and Google Docs. The clipboard carries a
+   text/html flavour alongside the plain text, and taking the plain
+   one throws away every heading, list, link and bold run. This walks
+   the HTML and emits the same minimal markdown renderBody() already
+   speaks — so the stored format, the renderer and the escaping are
+   all untouched, and what he sees pasted is what publishes.
+   ═══════════════════════════════════════════════════════════════ */
+const MD_BLOCK = /^(P|DIV|SECTION|ARTICLE|MAIN|H[1-6]|UL|OL|LI|BLOCKQUOTE|TABLE|THEAD|TBODY|TR|TD|TH|PRE|FIGURE|HR)$/;
+
+function mdIsBold(el){
+  if(/^(B|STRONG)$/.test(el.nodeName)) return true;
+  const w = el.style && el.style.fontWeight;
+  return !!w && /^(bold|bolder|[6-9]00)$/.test(String(w).trim());
+}
+function mdIsItalic(el){
+  if(/^(I|EM)$/.test(el.nodeName)) return true;
+  return !!(el.style && String(el.style.fontStyle).trim() === 'italic');
+}
+
+/* Inline run of a single block: text with **bold**, *italic* and links. */
+function mdInline(node){
+  let out = '';
+  node.childNodes.forEach(function(n){
+    if(n.nodeType === 3){ out += n.nodeValue.replace(/\s+/g, ' '); return; }
+    if(n.nodeType !== 1) return;
+    const tag = n.nodeName;
+    if(tag === 'BR'){ out += '\n'; return; }
+    if(tag === 'IMG'){ return; }        // cover art has its own control
+    const inner = mdInline(n);
+    if(!inner.trim()){ out += inner; return; }
+    if(tag === 'A'){
+      const href = n.getAttribute('href') || '';
+      out += /^https?:/i.test(href) ? '[' + inner.trim() + '](' + href + ')' : inner;
+      return;
+    }
+    let s = inner;
+    if(mdIsItalic(n)) s = '*'  + s.trim() + '*';
+    if(mdIsBold(n))   s = '**' + s.trim() + '**';
+    out += s;
+  });
+  return out;
+}
+
+/* Block structure. Anything not recognised is descended into rather
+   than dropped, so an unfamiliar wrapper costs formatting, never text. */
+function mdBlocks(root){
+  const out = [];
+  (function walk(node){
+    node.childNodes.forEach(function(n){
+      if(n.nodeType === 3){
+        const t = n.nodeValue.replace(/\s+/g, ' ').trim();
+        if(t) out.push(t);
+        return;
+      }
+      if(n.nodeType !== 1) return;
+      const tag = n.nodeName;
+
+      if(/^H[1-6]$/.test(tag)){
+        const t = mdInline(n).trim();
+        /* renderBody only has two heading levels, so h1/h2 become ##
+           and everything deeper becomes ###. */
+        if(t) out.push((tag === 'H1' || tag === 'H2' ? '## ' : '### ') + t);
+        return;
+      }
+      if(tag === 'BLOCKQUOTE'){
+        const t = mdInline(n).trim();
+        if(t) out.push(t.split('\n').map(l => '> ' + l).join('\n'));
+        return;
+      }
+      if(tag === 'UL' || tag === 'OL'){
+        const items = [];
+        let i = 1;
+        Array.prototype.forEach.call(n.children, function(li){
+          if(li.nodeName !== 'LI') return;
+          const t = mdInline(li).trim();
+          if(t) items.push(tag === 'OL' ? (i++) + '. ' + t : '- ' + t);
+        });
+        if(items.length) out.push(items.join('\n'));
+        return;
+      }
+      if(tag === 'HR' || tag === 'IMG' || tag === 'BR') return;
+
+      /* A wrapper holding other blocks is scaffolding — descend. One
+         holding only inline content is a paragraph in disguise, which
+         is how Word and Docs emit most body text. */
+      const hasBlockChild = Array.prototype.some.call(
+        n.children, c => MD_BLOCK.test(c.nodeName));
+      if(MD_BLOCK.test(tag) && !hasBlockChild){
+        const t = mdInline(n).trim();
+        if(t) out.push(t);
+        return;
+      }
+      walk(n);
+    });
+  })(root);
+  return out;
+}
+
+function htmlToMarkdown(html){
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.querySelectorAll('style,script,meta,link,title,noscript').forEach(n => n.remove());
+
+  /* Google Docs wraps the entire clipboard in <b style="font-weight:normal">.
+     Left alone it turns a whole document into one bold run. */
+  doc.querySelectorAll('b[style*="font-weight"]').forEach(function(b){
+    if(!/font-weight\s*:\s*normal/i.test(b.getAttribute('style') || '')) return;
+    while(b.firstChild) b.parentNode.insertBefore(b.firstChild, b);
+    b.remove();
+  });
+
+  return mdBlocks(doc.body)
+    .join('\n\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+/* execCommand keeps the browser's own undo stack alive, so Ctrl+Z after a
+   paste behaves normally. setRangeText is the fallback where it is gone. */
+function insertAtCursor(el, text){
+  el.focus();
+  let ok = false;
+  try{ ok = document.execCommand('insertText', false, text); }catch(e){ ok = false; }
+  if(!ok){
+    const s = el.selectionStart, t = el.selectionEnd;
+    el.setRangeText(text, s, t, 'end');
+  }
+  el.dispatchEvent(new Event('input', { bubbles:true }));
+}
+
 function fmt(n){
   n = Number(n) || 0;
   if(n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
@@ -769,6 +941,10 @@ function errorBox(e){
 
 /* Writes a message into the blog panel — used for empty / error states. */
 function blogNotice(heading, detail){
+  /* No post is open, so neither the cover art nor its editing controls
+     belong on screen. */
+  document.getElementById('p-hero').hidden = true;
+  document.getElementById('hero-edit').hidden = true;
   document.getElementById('p-flag').hidden = true;
   document.getElementById('p-title').textContent = heading;
   document.getElementById('p-sub').hidden = true;
@@ -799,7 +975,9 @@ function canonicalOrigin(){
   return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
 }
 /* Keeps <title>, canonical and the og:* tags pointing at the same URL. */
-function setMeta(path, title, desc){
+const SITE_IMAGE = 'https://seniorsecured.org/fred-flamer.jpg';
+
+function setMeta(path, title, desc, image){
   const url = canonicalOrigin() + path;
   document.title = title;
   const set = (sel, attr, val) => {
@@ -813,6 +991,11 @@ function setMeta(path, title, desc){
     set('meta[name="description"]', 'content', desc);
     set('meta[property="og:description"]', 'content', desc);
   }
+  /* A piece with cover art shares as that picture; everything else falls
+     back to Fred's headshot. summary_large_image only earns its keep when
+     there is a wide picture to show. */
+  set('meta[property="og:image"]', 'content', image || SITE_IMAGE);
+  set('meta[name="twitter:card"]', 'content', image ? 'summary_large_image' : 'summary');
 }
 
 async function route(){
@@ -857,6 +1040,7 @@ function paintList(){
     const on = current && p.id === current.id;
     return '<li><button class="pub" aria-current="' + on + '" onclick="go(\'/p/' +
       encodeURIComponent(p.slug) + '\')">' +
+      (p.hero_url ? '<img class="thumb" src="' + esc(p.hero_url) + '" alt="" loading="lazy"/>' : '') +
       '<div class="d">' + esc(shortDate(p.published_at)) + '</div>' +
       '<div class="t">' + (p.status !== 'published' ? '<span class="tag draft">Draft</span> ' : '') +
         esc(p.title) + '</div>' +
@@ -870,6 +1054,22 @@ function paintList(){
 /* ═══════════════════════════════════════════════════════════════
    ③ THE BLOG BODY
    ═══════════════════════════════════════════════════════════════ */
+function paintHero(){
+  const hero = document.getElementById('p-hero');
+  const img  = document.getElementById('p-hero-img');
+  if(current && current.hero_url){
+    img.src = current.hero_url;
+    /* Empty alt marks it decorative, which is the honest label when no
+       description was written — better than a screen reader announcing
+       the filename or reading the headline twice. */
+    img.alt = current.hero_alt || '';
+    hero.hidden = false;
+  }else{
+    img.removeAttribute('src');
+    hero.hidden = true;
+  }
+}
+
 async function showPost(slug, isHome){
   let data;
   try{ data = await rpc('get_post', { p_slug: slug }); }
@@ -884,7 +1084,11 @@ async function showPost(slug, isHome){
   current = data.post;
   setMeta(isHome ? '/' : '/p/' + current.slug,
           isHome ? SITE_TITLE : current.title + ' · seniorsecured.org',
-          isHome ? SITE_DESC : (current.subtitle || SITE_DESC));
+          isHome ? SITE_DESC : (current.subtitle || SITE_DESC),
+          current.hero_url);
+
+  paintHero();
+  paintCoverEdit();
 
   document.getElementById('p-flag').hidden = current.status === 'published';
   document.getElementById('p-title').textContent = current.title;
@@ -1096,6 +1300,199 @@ document.getElementById('in-body').addEventListener('input', function(e){
     comma(words) + ' words · ~' + Math.max(1, Math.round(words / 220)) + ' min read';
 });
 
+document.getElementById('in-body').addEventListener('paste', function(e){
+  const cd = e.clipboardData || window.clipboardData;
+  if(!cd) return;
+  const html = cd.getData('text/html');
+  if(!html) return;                    // plain text: the browser's default is right
+  let md;
+  try{ md = htmlToMarkdown(html); }
+  catch(err){ return; }                // anything unexpected falls back to plain text
+  if(!md) return;
+  e.preventDefault();
+  insertAtCursor(this, md);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   COVER IMAGE
+
+   Uploaded the moment it is chosen, not at publish time, so a slow
+   connection blocks the picture rather than the piece — and Fred
+   sees whether it worked while he still has the editor open.
+   ═══════════════════════════════════════════════════════════════ */
+let heroUrl = null;
+
+const HERO_MAX_DIM = 1600;   // px on the long edge — plenty for a full-width cover
+const HERO_QUALITY = 0.82;
+
+function heroStatus(msg){ document.getElementById('hero-status').textContent = msg || ''; }
+
+function clearHero(){
+  heroUrl = null;
+  document.getElementById('in-hero').value = '';
+  document.getElementById('in-hero-alt').value = '';
+  document.getElementById('hero-preview').hidden = true;
+  document.getElementById('hero-thumb').removeAttribute('src');
+  heroStatus('');
+}
+
+/* A phone photo is 4-6 MB and far larger than it will ever be shown.
+   Shrinking in the browser keeps the article quick to load and the
+   storage bucket inside the free tier. */
+function downscaleImage(file){
+  return new Promise(function(resolve, reject){
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = function(){
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, HERO_MAX_DIM / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width  * scale));
+      const h = Math.max(1, Math.round(img.height * scale));
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      /* JPEG has no alpha, so a transparent PNG would flatten to black
+         without this. */
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      c.toBlob(function(blob){
+        blob ? resolve(blob) : reject(new Error('This browser could not process that image.'));
+      }, 'image/jpeg', HERO_QUALITY);
+    };
+    img.onerror = function(){
+      URL.revokeObjectURL(url);
+      reject(new Error('That file does not look like an image.'));
+    };
+    img.src = url;
+  });
+}
+
+/* Shrink, upload, hand back the public URL. Shared by the composer and by
+   the on-article control, so both behave identically. */
+async function uploadCover(file){
+  const blob = await downscaleImage(file);
+  const name = 'covers/' + Date.now() + '-' +
+               Math.random().toString(36).slice(2, 8) + '.jpg';
+  const { error } = await db.storage.from('post-images')
+    .upload(name, blob, { contentType:'image/jpeg', cacheControl:'31536000', upsert:false });
+  if(error) throw new Error(error.message);
+  return { url: db.storage.from('post-images').getPublicUrl(name).data.publicUrl,
+           bytes: blob.size };
+}
+
+/* Public URLs look like …/object/public/post-images/covers/xyz.jpg — the
+   bucket-relative path is whatever follows the bucket name. Returns null
+   for anything not in our bucket, so a hand-edited URL is never a delete
+   instruction. */
+function coverPathFromUrl(url){
+  const m = String(url || '').match(/\/object\/public\/post-images\/(.+)$/);
+  return m ? decodeURIComponent(m[1].split('?')[0]) : null;
+}
+
+/* Best effort: an orphaned file costs a little storage, a failed publish
+   costs Fred his work. Never let cleanup break the operation. */
+async function deleteCover(url){
+  const path = coverPathFromUrl(url);
+  if(!path) return;
+  try{ await db.storage.from('post-images').remove([path]); }catch(e){}
+}
+
+document.getElementById('in-hero').addEventListener('change', async function(){
+  const file = this.files && this.files[0];
+  if(!file) return;
+  if(!isAuthor()){ heroStatus('Sign in before adding a picture.'); this.value = ''; return; }
+
+  heroStatus('Preparing…');
+  try{
+    const previous = heroUrl;
+    heroStatus('Uploading…');
+    const { url, bytes } = await uploadCover(file);
+    /* Swapping the picture before publishing leaves the first upload
+       unreferenced — bin it now rather than let it linger. */
+    if(previous && previous !== url) deleteCover(previous);
+    heroUrl = url;
+    document.getElementById('hero-thumb').src = heroUrl;
+    document.getElementById('hero-preview').hidden = false;
+    heroStatus(Math.round(bytes / 1024) + ' KB · ready');
+  }catch(e){
+    heroUrl = null;
+    this.value = '';
+    document.getElementById('hero-preview').hidden = true;
+    heroStatus(e.message || 'Upload failed.');
+  }
+});
+
+/* ── changing the cover after publication ──────────────────────────
+   The posts_author_upd policy in authors.sql already permits an
+   allowlisted author to update any post, so this needs no new grant. */
+function paintCoverEdit(){
+  const bar = document.getElementById('hero-edit');
+  if(!bar) return;
+  const show = isAuthor() && !!current;
+  bar.hidden = !show;
+  if(!show) return;
+  document.getElementById('hero-edit-label').textContent =
+    current.hero_url ? 'Replace cover image' : 'Add a cover image';
+  document.getElementById('hero-remove').hidden = !current.hero_url;
+  document.getElementById('hero-edit-status').textContent = '';
+}
+
+function coverEditStatus(msg){
+  const el = document.getElementById('hero-edit-status');
+  if(el) el.textContent = msg || '';
+}
+
+async function saveCover(url, alt){
+  const { error } = await db.from('posts')
+    .update({ hero_url: url, hero_alt: alt })
+    .eq('id', current.id);
+  if(error) throw new Error(error.message);
+  current.hero_url = url;
+  current.hero_alt = alt;
+  /* The sidebar carries thumbnails, so its copy of the row is stale now. */
+  const row = posts.find(p => p.id === current.id);
+  if(row){ row.hero_url = url; row.hero_alt = alt; }
+  paintHero();
+  paintList();
+  paintCoverEdit();
+}
+
+document.getElementById('p-hero-file').addEventListener('change', async function(){
+  const file = this.files && this.files[0];
+  if(!file) return;
+  this.value = '';
+  if(!isAuthor() || !current) return;
+
+  coverEditStatus('Preparing…');
+  try{
+    const previous = current.hero_url;
+    coverEditStatus('Uploading…');
+    const { url } = await uploadCover(file);
+    const alt = prompt('Describe the picture for people using a screen reader (optional):',
+                       current.hero_alt || '');
+    await saveCover(url, (alt || '').trim() || null);
+    if(previous && previous !== url) deleteCover(previous);
+    toast('Cover image updated.');
+  }catch(e){
+    coverEditStatus(e.message || 'Could not update the cover image.');
+  }
+});
+
+async function removeCover(){
+  if(!isAuthor() || !current || !current.hero_url) return;
+  if(!confirm('Remove the cover image from this piece?')) return;
+  const previous = current.hero_url;
+  coverEditStatus('Removing…');
+  try{
+    await saveCover(null, null);
+    deleteCover(previous);
+    toast('Cover image removed.');
+  }catch(e){
+    coverEditStatus(e.message || 'Could not remove the cover image.');
+  }
+}
+
 async function publish(status){
   const title = (document.getElementById('in-title').value || '').trim();
   const body  = (document.getElementById('in-body').value  || '').trim();
@@ -1107,14 +1504,22 @@ async function publish(status){
   try{
     // RLS lets only a signed-in author insert; the slug trigger fills in a
     // unique slug from the title.
+    /* The hero columns are only named when there is an image to store, so
+       this build still publishes against a database where
+       supabase/post-images.sql has not been run yet. */
+    const row = { title, subtitle: subtitle || null, body, status };
+    if(heroUrl){
+      row.hero_url = heroUrl;
+      row.hero_alt = (document.getElementById('in-hero-alt').value || '').trim() || null;
+    }
     const { data: post, error } = await db.from('posts')
-      .insert({ title, subtitle: subtitle || null, body, status })
-      .select('slug').single();
+      .insert(row).select('slug').single();
     if(error) throw new Error(error.message);
     document.getElementById('in-title').value = '';
     document.getElementById('in-sub').value = '';
     document.getElementById('in-body').value = '';
     document.getElementById('wordcount').textContent = '';
+    clearHero();
     closeEditor();
     toast(status === 'draft' ? 'Draft saved.' : 'Published.');
     await ensurePosts(true);            // pick up the piece we just wrote
