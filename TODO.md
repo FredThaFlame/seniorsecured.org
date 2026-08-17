@@ -116,6 +116,12 @@ Signed out first:
       article view
 - [ ] **Paste.** Paste a formatted passage from Word or Google Docs and
       confirm headings, bold, bullets and links survive into Preview
+- [ ] **Edit.** Change a published piece's title and body, save, and confirm
+      the article and sidebar both update **and the URL is unchanged**. Then
+      "Move to drafts" and confirm it vanishes for a signed-out reader
+- [ ] **Edit does not leak into new posts.** Open an edit, hit Cancel, then
+      "New post" — confirm the form is blank and saving creates a new piece
+      rather than overwriting the one that was being edited
 - [ ] Save a draft — tagged in the sidebar while signed in, gone after sign out
 - [ ] `/dashboard` gated when signed out; after sign-in all three charts draw
 - [ ] `select count(*) from events` climbs as you browse
@@ -129,13 +135,9 @@ Signed out first:
 
 ## Deliberate gaps — decide whether they matter
 
-- **No post editing in the UI, except the cover image.** Title, standfirst
-  and body are still publish-only; the cover picture can be added, replaced
-  or removed from the article itself once signed in. RLS already permits
-  updates and the API is there, so extending this to the text needs a form,
-  not a migration. Fred will want it the first time he typos a headline —
-  the strongest candidate for the next piece of work.
-- **No delete in the UI** either. Both are table-editor jobs today.
+- **No delete in the UI.** Still a table-editor job. Moving a piece to
+  drafts from the editor hides it from readers, which covers most of what
+  delete would be wanted for.
 - **Comments publish immediately** (`approved` defaults to `true`). Flipping
   that default turns the existing read policy into a moderation queue, but
   there is no approval screen to work it from yet.
@@ -153,6 +155,14 @@ Signed out first:
 
 ## Done — no action needed
 
+- **Editing published pieces** (16 Aug 2026). "Edit this piece" above any
+  article, signed in, loads it back into the same composer — title,
+  standfirst, body and cover image. Saving updates in place; **the slug is
+  untouched, so shared links keep working** (`posts_before_write` only
+  builds a slug when one is blank, so an update leaves it alone). "Move to
+  drafts" pulls a published piece back out of view without deleting it.
+  Needed no migration: `posts_author_upd` in `authors.sql` already allowed
+  it. Verified that an anonymous `PATCH /rest/v1/posts` matches zero rows.
 - **Cover images** (16 Aug 2026). One optional picture per piece: shown above
   the article, as a thumbnail in *Latest publishings*, and as the `og:image`
   when the link is shared (with `twitter:card` upgrading to
