@@ -79,16 +79,18 @@ in one go. He needs his password from the manager.
 
 ## Still carrying placeholders
 
-- ~~**Social links.**~~ Done 16 Aug 2026. *Elsewhere* is now LinkedIn only,
-  pointing at `linkedin.com/in/fred-flamer-norcal/`. The mockup's GitHub, X
-  and Substack entries were invented and have been removed. `PROFILE_LINKS`
-  near the top of the script in `index.html`.
-- **Contact address.** `fred@seniorsecured.org` shows in the same panel.
-  Confirm it exists and is monitored before it goes in front of readers. Note
-  this is *not* his login — that is `FFlamer29@gmail.com`. The MX records
-  forward the domain address somewhere, but nobody has verified where.
-- **Bio and role.** "Consumer-safety writer" / "Thirty years explaining how the
-  con works — so it stops working on you." Needs Fred's sign-off.
+- ~~**Social links.**~~ Removed 17 Aug 2026 at Fred's request. The whole
+  *Elsewhere / Contact* panel is gone — LinkedIn link, `PROFILE_LINKS`,
+  `paintLinks()` and the `#links` styles with it.
+- ~~**Contact address.**~~ Moot for now: `fred@seniorsecured.org` came out with
+  that panel, so no address is published. Still worth confirming the mailbox
+  before any address goes back on the site. Note this is *not* his login —
+  that is `FFlamer29@gmail.com`. The MX records forward the domain address
+  somewhere, but nobody has verified where.
+- ~~**Bio and role.**~~ Set 17 Aug 2026 from Fred: role is "Certified
+  Information Systems Security Professional", bio is "Empowering individuals
+  and organizations with the knowledge and tools to navigate an increasingly
+  complex cybersecurity landscape with confidence."
 - **Headshot.** `fred-flamer.jpg`, 512px square. Fine as-is; swap if there is a
   better one.
 

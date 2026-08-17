@@ -54,7 +54,6 @@ a{color:var(--navy-2)}
   grid-template-areas:
     "profile  title    latest"
     "profile  blog     latest"
-    "links    blog     latest"
     ".        blog     latest";
   align-items:start;
 }
@@ -62,7 +61,6 @@ a{color:var(--navy-2)}
 #title{grid-area:title}
 #blog{grid-area:blog}
 #latest{grid-area:latest}
-#links{grid-area:links}
 
 .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
 .eyebrow{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
@@ -164,18 +162,6 @@ a{color:var(--navy-2)}
 .pub .t{font-weight:700;color:var(--navy);line-height:1.35;margin:3px 0 4px}
 .pub[aria-current="true"] .t{color:#7A5300}
 .pub .m{color:var(--muted);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-
-/* ── elsewhere ─────────────────────────────────────────────── */
-#links{padding:12px 14px}
-#links ul{list-style:none}
-#links li+li{margin-top:1px}
-#links a{display:flex;align-items:center;gap:8px;padding:5px 0;color:var(--ink-2);
-         text-decoration:none;font-weight:600}
-#links a:hover{color:var(--navy)}
-#links a:hover .lab{text-decoration:underline}
-.ico{width:15px;height:15px;flex-shrink:0;fill:var(--navy);opacity:.8}
-#links .split{border-top:1px solid var(--line-soft);margin:9px 0}
-#links .mail{color:var(--muted);font-weight:400;word-break:break-all;margin-top:2px}
 
 /* ── comments ──────────────────────────────────────────────── */
 .comments{margin-top:28px}
@@ -297,12 +283,12 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 /* ── responsive ────────────────────────────────────────────── */
 @media(max-width:1000px){
   .page{grid-template-columns:170px minmax(0,1fr);
-        grid-template-areas:"profile title" "profile blog" "links blog" "latest blog" ". blog"}
+        grid-template-areas:"profile title" "profile blog" "latest blog" ". blog"}
   #latest{position:static}
 }
 @media(max-width:720px){
   .page{grid-template-columns:1fr;
-        grid-template-areas:"title" "profile" "blog" "latest" "links";gap:12px}
+        grid-template-areas:"title" "profile" "blog" "latest";gap:12px}
   #profile{display:flex;gap:12px;align-items:flex-start}
   #profile .shot{width:78px;flex-shrink:0}
   #profile .who{min-width:0}
@@ -327,8 +313,8 @@ footer .author-bar .linkish:hover{color:var(--navy)}
     <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer.jpg" width="166" height="166"/>
     <div class="who">
       <div class="name">Fred Flamer</div>
-      <div class="role">Consumer-safety writer</div>
-      <p class="bio">Thirty years explaining how the con works — so it stops working on you.</p>
+      <div class="role">Certified Information Systems Security Professional</div>
+      <p class="bio">Empowering individuals and organizations with the knowledge and tools to navigate an increasingly complex cybersecurity landscape with confidence.</p>
     </div>
   </aside>
 
@@ -377,15 +363,6 @@ footer .author-bar .linkish:hover{color:var(--navy)}
     <div class="eyebrow">Latest publishings</div>
     <ol id="pub-list"></ol>
   </nav>
-
-  <!-- ⑤ ELSEWHERE -->
-  <aside class="box" id="links">
-    <div class="eyebrow">Elsewhere</div>
-    <ul id="link-list"></ul>
-    <div class="split"></div>
-    <div class="eyebrow" style="margin-bottom:3px">Contact</div>
-    <a class="mail" href="mailto:fred@seniorsecured.org">fred@seniorsecured.org</a>
-  </aside>
 
 </div>
 
@@ -465,13 +442,6 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 /* ═══════════════════════════════════════════════════════════════
    STATE
    ═══════════════════════════════════════════════════════════════ */
-/* Real profiles only. The mockup's GitHub, X and Substack entries were
-   invented and pointed at accounts that do not exist. */
-const PROFILE_LINKS = [
-  { label:'LinkedIn', href:'https://www.linkedin.com/in/fred-flamer-norcal/',
-    path:'M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.5c0-1.3-.02-3-1.9-3-1.9 0-2.2 1.44-2.2 2.92V21H9z' }
-];
-
 let session     = null;    // Supabase auth session — the author, when signed in
 let onAllowlist = false;   // …and named in public.authors. Signed in is not enough.
 let posts       = [];
@@ -1236,17 +1206,6 @@ async function postComment(){
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ⑤ ELSEWHERE
-   ═══════════════════════════════════════════════════════════════ */
-function paintLinks(){
-  document.getElementById('link-list').innerHTML = PROFILE_LINKS.map(function(l){
-    return '<li><a href="' + l.href + '" target="_blank" rel="noopener">' +
-      '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="' + l.path + '"/></svg>' +
-      '<span class="lab">' + esc(l.label) + '</span></a></li>';
-  }).join('');
-}
-
-/* ═══════════════════════════════════════════════════════════════
    EDITOR
    ═══════════════════════════════════════════════════════════════ */
 /* null while writing something new; a post id while revising one. The
@@ -2006,7 +1965,6 @@ addEventListener('resize', function(){
   }
 })();
 
-paintLinks();
 paintAuthorBar();
 
 (async function boot(){
