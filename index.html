@@ -193,6 +193,8 @@ a{color:var(--navy-2)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.ghost{background:none;color:var(--navy);border:1px solid var(--line)}
 .btn.ghost:hover{background:var(--surface-2)}
+.btn.danger{background:none;color:#b3261e;border:1px solid #b3261e}
+.btn.danger:hover{background:#b3261e;color:#fff}
 .hint{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 .linkish{background:none;border:0;color:var(--navy-2);cursor:pointer;padding:0;text-align:left;font-weight:600}
 .linkish:hover{text-decoration:underline}
@@ -433,6 +435,7 @@ footer .author-bar .linkish:hover{color:var(--navy)}
         <button class="btn" id="btn-publish" onclick="publish('published')">Publish</button>
         <button class="btn ghost" id="btn-draft" onclick="publish('draft')">Save as draft</button>
         <button class="btn ghost" id="btn-cancel-edit" onclick="closeEditor()" hidden>Cancel</button>
+        <button class="btn danger" id="btn-delete-post" onclick="deletePost()" hidden>Delete post</button>
         <span class="hint" id="wordcount" style="margin-left:auto"></span>
       </div>
     </div>
@@ -1229,6 +1232,7 @@ function paintComposerMode(){
   document.getElementById('btn-draft').textContent =
     editing ? 'Move to drafts' : 'Save as draft';
   document.getElementById('btn-cancel-edit').hidden = !editing;
+  document.getElementById('btn-delete-post').hidden = !editing;
   document.getElementById('composer-mode').textContent =
     editing ? 'Editing a published piece — the web address stays the same.' : '';
 }
@@ -1572,6 +1576,36 @@ async function publish(status){
     go('/p/' + slug);
   }catch(e){ toast(e.message); }
   finally{ btn.disabled = false; btn.textContent = label; }
+}
+
+/* Gone for good — RLS lets only an allowlisted author do this. Confirmed
+   because there is no undo, matching the cover-image removal prompt above. */
+async function deletePost(){
+  if(!isAuthor() || editingId === null) return;
+  const title = (document.getElementById('in-title').value || '').trim();
+  if(!confirm('Delete "' + (title || 'this post') + '"? This cannot be undone.')) return;
+
+  const id = editingId;
+  const heroToDelete = heroUrl;
+  const btn = document.getElementById('btn-delete-post');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try{
+    const { error } = await db.from('posts').delete().eq('id', id);
+    if(error) throw new Error(error.message);
+    if(heroToDelete) deleteCover(heroToDelete);
+
+    editingId = null;
+    document.getElementById('in-title').value = '';
+    document.getElementById('in-sub').value = '';
+    document.getElementById('in-body').value = '';
+    document.getElementById('wordcount').textContent = '';
+    clearHero();
+    closeEditor();
+    toast('Post deleted.');
+    await ensurePosts(true);
+    go('/');
+  }catch(e){ toast(e.message); }
+  finally{ btn.disabled = false; btn.textContent = 'Delete post'; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
