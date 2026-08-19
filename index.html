@@ -53,12 +53,14 @@ a{color:var(--navy-2)}
   grid-template-columns:190px minmax(0,1fr) 232px;
   grid-template-areas:
     "profile  title    latest"
+    "profile  contact  latest"
     "profile  blog     latest"
     ".        blog     latest";
   align-items:start;
 }
 #profile{grid-area:profile}
 #title{grid-area:title}
+#contact{grid-area:contact}
 #blog{grid-area:blog}
 #latest{grid-area:latest}
 
@@ -283,12 +285,12 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 /* ── responsive ────────────────────────────────────────────── */
 @media(max-width:1000px){
   .page{grid-template-columns:170px minmax(0,1fr);
-        grid-template-areas:"profile title" "profile blog" "latest blog" ". blog"}
+        grid-template-areas:"profile title" "profile contact" "profile blog" "latest blog" ". blog"}
   #latest{position:static}
 }
 @media(max-width:720px){
   .page{grid-template-columns:1fr;
-        grid-template-areas:"title" "profile" "blog" "latest";gap:12px}
+        grid-template-areas:"title" "contact" "profile" "blog" "latest";gap:12px}
   #profile{display:flex;gap:12px;align-items:flex-start}
   #profile .shot{width:78px;flex-shrink:0}
   #profile .who{min-width:0}
@@ -325,6 +327,14 @@ footer .author-bar .linkish:hover{color:var(--navy)}
       <div class="kicker">Community</div>
     </button>
   </header>
+
+  <!-- CONTACT -->
+  <aside class="box" id="contact" style="padding:10px 16px;text-align:center;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">
+    <span class="eyebrow" style="margin-bottom:0">Contact</span>
+    <a href="mailto:fredflamer@seniorsecured.org">fredflamer@seniorsecured.org</a>
+    <span class="dot">&middot;</span>
+    <a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </aside>
 
   <!-- ③ THE BLOG -->
   <main class="box" id="blog">
