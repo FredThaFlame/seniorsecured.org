@@ -53,13 +53,12 @@ a{color:var(--navy-2)}
   grid-template-columns:190px minmax(0,1fr) 232px;
   grid-template-areas:
     "profile  title    latest"
-    "contact  blog     latest"
+    "profile  blog     latest"
     ".        blog     latest";
   align-items:start;
 }
-#profile{grid-area:profile}
+.profile-col{grid-area:profile;display:flex;flex-direction:column;gap:18px}
 #title{grid-area:title}
-#contact{grid-area:contact}
 #blog{grid-area:blog}
 #latest{grid-area:latest}
 
@@ -284,12 +283,12 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 /* ── responsive ────────────────────────────────────────────── */
 @media(max-width:1000px){
   .page{grid-template-columns:170px minmax(0,1fr);
-        grid-template-areas:"profile title" "contact blog" "latest blog" ". blog"}
+        grid-template-areas:"profile title" "profile blog" "latest blog" ". blog"}
   #latest{position:static}
 }
 @media(max-width:720px){
   .page{grid-template-columns:1fr;
-        grid-template-areas:"title" "profile" "contact" "blog" "latest";gap:12px}
+        grid-template-areas:"title" "profile" "blog" "latest";gap:12px}
   #profile{display:flex;gap:12px;align-items:flex-start}
   #profile .shot{width:78px;flex-shrink:0}
   #profile .who{min-width:0}
@@ -309,24 +308,25 @@ footer .author-bar .linkish:hover{color:var(--navy)}
 <!-- ═══ READER SITE ═══════════════════════════════════════════ -->
 <div class="page" id="site">
 
-  <!-- ① PROFILE -->
-  <aside class="box" id="profile" style="padding:12px">
-    <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer.jpg" width="166" height="166"/>
-    <div class="who">
-      <div class="name">Fred Flamer</div>
-      <div class="role">Certified Information Systems Security Professional</div>
-      <p class="bio">Empowering individuals and organizations with the knowledge and tools to navigate an increasingly complex cybersecurity landscape with confidence.</p>
-    </div>
-  </aside>
+  <!-- ① PROFILE + CONTACT -->
+  <div class="profile-col">
+    <aside class="box" id="profile" style="padding:12px">
+      <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer.jpg" width="166" height="166"/>
+      <div class="who">
+        <div class="name">Fred Flamer</div>
+        <div class="role">Certified Information Systems Security Professional</div>
+        <p class="bio">Empowering individuals and organizations with the knowledge and tools to navigate an increasingly complex cybersecurity landscape with confidence.</p>
+      </div>
+    </aside>
 
-  <!-- CONTACT -->
-  <aside class="box" id="contact" style="padding:12px">
-    <div class="eyebrow">Contact</div>
-    <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
-      <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
-      <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-    </ul>
-  </aside>
+    <aside class="box" id="contact" style="padding:12px">
+      <div class="eyebrow">Contact</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+        <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
+        <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </aside>
+  </div>
 
   <!-- ② MASTHEAD -->
   <header id="title">
