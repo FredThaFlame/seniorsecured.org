@@ -4,16 +4,75 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>seniorsecured.org &middot; Community</title>
-<meta name="description" content="Plain-spoken writing on scams, fraud and staying safe online."/>
+<meta name="description" content="Plain-spoken cybersecurity and fraud-prevention writing for seniors — phone scams, phishing, identity theft, romance scams and more. Fred Flamer, CISSP, writes and speaks locally in San Mateo, San Francisco and Alameda counties."/>
+<meta name="keywords" content="senior scam prevention, elder fraud protection, phone scams for seniors, vishing, phishing, identity theft, SIM swapping, romance scams, check washing, title fraud, San Mateo County, San Francisco, Alameda County, cybersecurity speaker"/>
+<meta name="geo.region" content="US-CA"/>
+<meta name="geo.placename" content="San Mateo County, San Francisco, Alameda County"/>
 <link rel="canonical" href="https://seniorsecured.org/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="seniorsecured.org"/>
 <meta property="og:url" content="https://seniorsecured.org/"/>
 <meta property="og:title" content="seniorsecured.org &middot; Community"/>
-<meta property="og:description" content="Plain-spoken writing on scams, fraud and staying safe online."/>
+<meta property="og:description" content="Plain-spoken cybersecurity and fraud-prevention writing for seniors — phone scams, phishing, identity theft, romance scams and more. Fred Flamer, CISSP, writes and speaks locally in San Mateo, San Francisco and Alameda counties."/>
 <meta property="og:image" content="https://seniorsecured.org/fred-flamer.jpg"/>
 <meta name="twitter:card" content="summary"/>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231B3A5C'/><text x='16' y='23' font-size='19' font-family='Tahoma' font-weight='bold' fill='%23C8922A' text-anchor='middle'>S</text></svg>"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are the most common scams targeting seniors right now?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Phone-based vishing and fake tech-support calls, romance scams, phishing texts and emails, SIM-swapping, fake Wi-Fi \"evil twin\" networks, check washing, and title or deed fraud by mail are among the most commonly reported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I tell if a phone call is a scam?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A legitimate agency or business will never demand immediate payment by gift card or wire transfer, ask you to stay on the line while you go to the bank, or ask you to confirm your full Social Security number over the phone. Hang up and call the organization back on a number you look up yourself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is vishing, and how is it different from regular phishing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Vishing is phishing carried out by voice call rather than email or text. A caller impersonates a bank, government agency or tech company to pressure you into revealing personal information or moving money quickly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I protect against identity theft and SIM-swapping?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Freeze your credit with the three major bureaus, set up a PIN or passcode with your mobile carrier so a SIM cannot be transferred without it, and watch for your phone suddenly losing signal — that can be the first sign of a SIM swap in progress."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I do if I think I've been scammed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Contact your bank or card issuer immediately, file a report at reportfraud.ftc.gov and with local police, and change any passwords that may have been exposed. Acting quickly gives you the best chance of stopping or reversing a transaction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Fred Flamer speak publicly about senior scam prevention?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — Fred gives talks on senior cybersecurity and fraud prevention for community groups, libraries and senior centers. Reach out through the contact links on this site to inquire about a speaking engagement."
+      }
+    }
+  ]
+}
+</script>
 <style>
 /* ─────────────────────────────────────────────────────────────
    TOKENS  ·  UI type: MS Sans Serif @ 12px  ·  Article @ 16.5px
@@ -75,15 +134,41 @@ a{color:var(--navy-2)}
 #profile .role{color:var(--muted);margin-top:1px}
 #profile .bio{color:var(--ink-2);margin-top:8px;line-height:1.55}
 
+/* ── collapsible contact / FAQ ────────────────────────────────── */
+.collapse summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+                  justify-content:space-between;margin-bottom:0}
+.collapse summary::-webkit-details-marker{display:none}
+.collapse summary .chev{color:var(--muted);font-size:9px;transition:transform .15s}
+.collapse details[open] summary .chev{transform:rotate(90deg)}
+.collapse details[open] summary{margin-bottom:7px}
+.faq-item+.faq-item{margin-top:12px}
+.faq-item .q{font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.4}
+.faq-item .a{color:var(--ink-2);line-height:1.55}
+
 /* ── masthead ──────────────────────────────────────────────── */
 #title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
-       padding:12px 0 10px;text-align:center}
+       padding:12px 0 10px;text-align:center;position:relative}
 #title h1{font-size:30px;font-weight:700;letter-spacing:-.6px;color:var(--navy);line-height:1}
 #title h1 span{color:var(--gold)}
 #title h1 .tld{color:var(--muted);font-weight:400;letter-spacing:0}
 #title .kicker{font-size:9px;font-weight:700;letter-spacing:3.4px;text-transform:uppercase;
                color:var(--muted);margin-top:6px}
 #title .home{background:none;border:0;cursor:pointer;padding:0;display:block;width:100%}
+
+/* ── newsletter — far right of the masthead ribbon ────────────── */
+.newsletter{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
+.nl-toggle{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+           padding:6px 14px;cursor:pointer;font-weight:700;color:var(--navy)}
+.nl-toggle:hover{border-color:var(--navy)}
+.nl-toggle[aria-expanded="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.nl-panel{position:absolute;top:calc(100% + 8px);right:0;width:230px;
+          text-align:left;z-index:20;box-shadow:0 6px 18px rgba(20,24,29,.16)}
+.nl-panel h4{margin-bottom:4px}
+.nl-panel .hint{display:block;margin-bottom:10px}
+@media(max-width:720px){
+  .newsletter{position:static;transform:none;display:flex;justify-content:center;margin-top:10px}
+  .nl-panel{left:50%;right:auto;transform:translateX(-50%)}
+}
 
 /* ── the blog body ─────────────────────────────────────────── */
 #blog{padding:26px 30px 18px;min-height:520px;display:flex;flex-direction:column}
@@ -321,12 +406,46 @@ footer .author-bar .linkish:hover{color:var(--navy)}
       </div>
     </aside>
 
-    <aside class="box" id="contact" style="padding:12px">
-      <div class="eyebrow">Contact</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
-        <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
-        <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-      </ul>
+    <aside class="box collapse" id="contact" style="padding:12px">
+      <details>
+        <summary class="eyebrow">Contact<span class="chev" aria-hidden="true">&#9656;</span></summary>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
+          <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
+          <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        </ul>
+      </details>
+    </aside>
+
+    <aside class="box collapse" id="faq" style="padding:12px">
+      <details>
+        <summary class="eyebrow">FAQ<span class="chev" aria-hidden="true">&#9656;</span></summary>
+        <div class="faq-list">
+          <div class="faq-item">
+            <p class="q">What are the most common scams targeting seniors right now?</p>
+            <p class="a">Phone-based vishing and fake tech-support calls, romance scams, phishing texts and emails, SIM-swapping, fake &ldquo;evil twin&rdquo; Wi-Fi networks, check washing, and title or deed fraud by mail are among the most commonly reported.</p>
+          </div>
+          <div class="faq-item">
+            <p class="q">How can I tell if a phone call is a scam?</p>
+            <p class="a">A legitimate agency or business will never demand immediate payment by gift card or wire transfer, ask you to stay on the line while you go to the bank, or ask you to confirm your full Social Security number over the phone. Hang up and call the organization back on a number you look up yourself.</p>
+          </div>
+          <div class="faq-item">
+            <p class="q">What is vishing, and how is it different from regular phishing?</p>
+            <p class="a">Vishing is phishing carried out by voice call rather than email or text. A caller impersonates a bank, government agency or tech company to pressure you into revealing personal information or moving money quickly.</p>
+          </div>
+          <div class="faq-item">
+            <p class="q">How do I protect against identity theft and SIM-swapping?</p>
+            <p class="a">Freeze your credit with the three major bureaus, set up a PIN or passcode with your mobile carrier so a SIM cannot be transferred without it, and watch for your phone suddenly losing signal &mdash; that can be the first sign of a SIM swap in progress.</p>
+          </div>
+          <div class="faq-item">
+            <p class="q">What should I do if I think I&rsquo;ve been scammed?</p>
+            <p class="a">Contact your bank or card issuer immediately, file a report at reportfraud.ftc.gov and with local police, and change any passwords that may have been exposed. Acting quickly gives you the best chance of stopping or reversing a transaction.</p>
+          </div>
+          <div class="faq-item">
+            <p class="q">Does Fred speak publicly about senior scam prevention?</p>
+            <p class="a">Yes &mdash; Fred gives talks on senior cybersecurity and fraud prevention for community groups, libraries and senior centers. Reach out through the contact links above to inquire about a speaking engagement.</p>
+          </div>
+        </div>
+      </details>
     </aside>
   </div>
 
@@ -336,6 +455,20 @@ footer .author-bar .linkish:hover{color:var(--navy)}
       <h1>senior<span>secured</span><span class="tld">.org</span></h1>
       <div class="kicker">Community</div>
     </button>
+
+    <div class="newsletter" id="newsletter">
+      <button type="button" class="nl-toggle" id="nl-toggle"
+              aria-haspopup="true" aria-expanded="false" onclick="toggleNewsletter()">Newsletter</button>
+      <div class="panel nl-panel" id="nl-panel" hidden>
+        <h4>Get new pieces by email</h4>
+        <span class="hint">Fred sends a note when he publishes. No spam, unsubscribe anytime.</span>
+        <div class="fg"><label for="nl-name">Name</label>
+          <input type="text" id="nl-name" placeholder="Your name" autocomplete="name"/></div>
+        <div class="fg"><label for="nl-email">Email</label>
+          <input type="email" id="nl-email" placeholder="you@example.com" autocomplete="email"/></div>
+        <button class="btn" id="nl-submit" onclick="subscribeNewsletter()">Subscribe</button>
+      </div>
+    </div>
   </header>
 
   <!-- ③ THE BLOG -->
@@ -595,6 +728,53 @@ function paintAuthorBar(){
   /* Signing in or out while a piece is open should reveal or hide the
      cover-image controls without needing a reload. */
   paintCoverEdit();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NEWSLETTER — masthead dropdown, capture only (no send pipeline).
+   Storage and de-duplication live in subscribe_newsletter(); see
+   supabase/newsletter.sql.
+   ═══════════════════════════════════════════════════════════════ */
+function toggleNewsletter(){
+  const panel = document.getElementById('nl-panel');
+  const open  = panel.hidden;
+  panel.hidden = !open;
+  document.getElementById('nl-toggle').setAttribute('aria-expanded', String(open));
+  if(open) document.getElementById('nl-name').focus();
+}
+
+function closeNewsletter(){
+  document.getElementById('nl-panel').hidden = true;
+  document.getElementById('nl-toggle').setAttribute('aria-expanded', 'false');
+}
+
+addEventListener('click', function(e){
+  const box = document.getElementById('newsletter');
+  if(box && !document.getElementById('nl-panel').hidden && !box.contains(e.target)){
+    closeNewsletter();
+  }
+});
+
+async function subscribeNewsletter(){
+  const nameEl  = document.getElementById('nl-name');
+  const emailEl = document.getElementById('nl-email');
+  const name    = nameEl.value.trim();
+  const email   = emailEl.value.trim();
+  if(!name || !email){ toast('Enter your name and email.'); return; }
+  if(!db){ toast('Not connected yet.'); return; }
+
+  const btn = document.getElementById('nl-submit');
+  btn.disabled = true;
+  try{
+    await rpc('subscribe_newsletter', { p_name: name, p_email: email });
+    nameEl.value = ''; emailEl.value = '';
+    closeNewsletter();
+    toast('Subscribed — thanks!');
+  }catch(e){
+    toast(e.message);
+  }finally{
+    btn.disabled = false;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -955,7 +1135,7 @@ addEventListener('popstate', route);
    from, so `vercel dev` and preview deploys stay self-consistent. */
 const SITE_URL   = 'https://seniorsecured.org';
 const SITE_TITLE = 'seniorsecured.org · Community';
-const SITE_DESC  = 'Plain-spoken writing on scams, fraud and staying safe online.';
+const SITE_DESC  = 'Plain-spoken cybersecurity and fraud-prevention writing for seniors — phone scams, phishing, identity theft, romance scams and more. Fred Flamer, CISSP, writes and speaks locally in San Mateo, San Francisco and Alameda counties.';
 
 function canonicalOrigin(){
   return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
