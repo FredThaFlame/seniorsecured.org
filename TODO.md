@@ -87,12 +87,13 @@ in one go. He needs his password from the manager.
   before any address goes back on the site. Note this is *not* his login —
   that is `FFlamer29@gmail.com`. The MX records forward the domain address
   somewhere, but nobody has verified where.
-- ~~**Bio and role.**~~ Set 17 Aug 2026 from Fred: role is "Certified
-  Information Systems Security Professional", bio is "Empowering seniors
-  and organizations with the knowledge and tools to navigate an increasingly
-  complex cybersecurity landscape with confidence." The opening word was
-  "individuals" until 11 Sep 2026, when Fred asked for "seniors" — it names
-  who the site is for, and matches the audience the metadata already claims.
+- ~~**Bio and role.**~~ Role is "Certified Information Systems Security
+  Professional". The bio was rewritten by Fred on 11 Sep 2026 and now reads
+  "Empowering older adults with practical knowledge to recognize scams,
+  navigate technology safely, and protect what matters most." It replaces the
+  earlier "Empowering individuals/seniors and organizations…" wording. The
+  same sentence is the Person description in the JSON-LD graph, so change
+  both together.
 - ~~**Headshot.**~~ Replaced 11 Sep 2026 with `fred-flamer-2026.jpg`, a 512px
   square cropped from the photo Fred sent. New filename on purpose: link
   previews cache `og:image` by URL, so reusing the old name would have left
