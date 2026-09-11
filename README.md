@@ -11,14 +11,24 @@ security-definer functions in `supabase/schema.sql`.
 
 ```
 .
-├─ index.html            the whole front end (article, sidebar, editor, dashboard)
+├─ index.html            the page shell (article, sidebar, editor, dashboard)
+├─ site.css              every style on the site
+├─ app.js                every line of behaviour
 ├─ config.js             your Supabase URL + anon key  ← the only file you must edit
 ├─ 404.html              GitHub Pages deep-link shim (see "Routing" below)
 ├─ fred-flamer-2026.jpg  the headshot in the profile panel
+├─ p/<slug>/index.html   generated — one static page per published piece
+├─ sitemap.xml           generated
+├─ robots.txt            generated
+├─ tools/build-static.mjs   the generator (see "Indexing" below)
+├─ tools/test-render.mjs    tests for the shared rendering functions
 ├─ CNAME                 the custom domain
 ├─ .nojekyll             serve files as-is, no Jekyll pass
 └─ supabase/schema.sql   tables, RLS policies, functions (no content)
 ```
+
+Everything under `p/`, plus `sitemap.xml` and `robots.txt`, is generated.
+Edit the generator, never those files.
 
 ---
 
@@ -76,12 +86,17 @@ Configuration → Site URL / Redirect URLs** (`https://seniorsecured.org`).
 
 ### 5. Local development
 
-Any static file server works, since there is no build:
+Any static file server works:
 
 ```bash
 python -m http.server 3000
 # then open http://localhost:3000
 ```
+
+The site itself has no build step. The one generated part is the prerendered
+article pages; `node tools/build-static.mjs` writes those, and
+`node tools/test-render.mjs` checks the rendering functions both it and the
+page share.
 
 Add `http://localhost:3000` to the Supabase redirect URLs while you work.
 
@@ -106,10 +121,50 @@ sidebar drops below the article, so the arrows are the only way to move between
 pieces without scrolling past the whole thing.
 
 GitHub Pages has no rewrite rules, so a *hard* load of `/p/<slug>` would
-normally 404. `404.html` catches it, stashes the path in `sessionStorage`, and
-bounces to `/`, where the app restores the URL with `replaceState`. The reader
-sees the right article at the right address; the only cost is one redirect on
-cold deep links.
+normally 404. Two things stop that. Every published piece has a real file at
+`p/<slug>/index.html`, so its address answers 200 (see "Indexing"). For
+anything else — a piece published since the last generation, a mistyped URL —
+`404.html` catches it, stashes the path in `sessionStorage`, and bounces to
+`/`, where the app restores the URL with `replaceState`. The reader sees the
+right article at the right address; the only cost is one redirect.
+
+---
+
+## Indexing
+
+Until September 2026 every article URL answered **404**. Readers never noticed:
+the shim bounced them to the app and the right piece appeared. Crawlers did
+notice. A 404 is dropped no matter what renders afterwards, so not one of the
+pieces could be indexed, and nothing on the page was a link a crawler could
+follow either — the sidebar was a column of buttons.
+
+Both are fixed:
+
+```bash
+node tools/build-static.mjs
+```
+
+reads `list_posts()` and writes one real page per published piece at
+`p/<slug>/index.html`, plus `sitemap.xml` and `robots.txt`. Each generated page
+is the same shell as `index.html` — same stylesheet, same script — with the
+head retagged for that piece (title, description, canonical, `og:type=article`,
+publication date, `BlogPosting` schema) and the article, sidebar and pager
+already filled in. The app then boots on top and replaces that markup with live
+data, so reactions, comments and drafts behave exactly as they do elsewhere and
+a stale prerender heals itself on the next load.
+
+Nothing is written unless the bytes change, so a run with no new writing leaves
+the repository untouched. A piece pulled back to draft has its directory
+removed, so unpublishing actually unpublishes.
+
+**Run it after publishing, editing or deleting a piece.** Nobody has to
+remember: `.github/workflows/prerender.yml` runs it four times a day and
+whenever `index.html` changes, and commits the result.
+
+Two smaller pieces of the same job: the sidebar entries and the article pager
+are real `<a href>` elements that the router intercepts on a plain left click,
+so a crawler can follow them and a reader can middle-click them; and the piece's
+headline is the page's only `<h1>`, with the masthead demoted to plain text.
 
 **Writing.** Click **New post** in the site footer, sign in once, then write.
 The body understands a small, predictable subset of Markdown:

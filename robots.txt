@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The analytics view is author-only and holds nothing a search engine wants.
+Disallow: /dashboard
+
+Sitemap: https://seniorsecured.org/sitemap.xml

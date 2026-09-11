@@ -152,6 +152,27 @@ Signed out first:
 
 ---
 
+## Indexing — done 11 Sep 2026, one step left
+
+Every article URL used to answer 404, and nothing on the page was a link, so
+none of the 25 pieces could be indexed. `tools/build-static.mjs` now writes a
+real page per piece, the sidebar and pager are anchors, and the headline is the
+page's only `h1`. See "Indexing" in the README.
+
+- [ ] **Turn the workflow on.** `.github/workflows/prerender.yml` keeps the
+      generated pages in step with what Fred publishes. It needs Actions
+      enabled on the repo, with workflow write permission
+      (**Settings → Actions → General → Workflow permissions → Read and
+      write**). Until then, run `node tools/build-static.mjs` by hand after
+      Fred publishes, or his new piece answers 404 to a crawler.
+- [ ] **Submit the sitemap.** Google Search Console and Bing Webmaster Tools,
+      `https://seniorsecured.org/sitemap.xml`. Nothing gets crawled quickly
+      without it, and Search Console is where the 404s will show as fixed.
+- [ ] **Duplicate content, decide later.** The newest piece appears both at `/`
+      and at its own URL, and `/` is canonical to itself. This is the usual
+      shape for a blog whose home page is the latest piece; if it ever matters,
+      the home page can carry a canonical to the piece instead.
+
 ## Deliberate gaps — decide whether they matter
 
 - **No delete in the UI.** Still a table-editor job. Moving a piece to

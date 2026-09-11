@@ -1,0 +1,350 @@
+/* ─────────────────────────────────────────────────────────────
+   TOKENS  ·  UI type: MS Sans Serif @ 12px  ·  Article @ 16.5px
+   Light-only by design — a printed-page cream, navy and gold.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --font:"MS Sans Serif", Tahoma, "Segoe UI", system-ui, sans-serif;
+  --bg:#EFECE6;      --surface:#FFFFFF;   --surface-2:#F7F5F0;
+  --ink:#14181D;     --ink-2:#52514E;     --muted:#6F6D67;
+  --navy:#1B3A5C;    --navy-2:#254D78;
+  --gold:#B8862A;    --gold-lt:#FBF3E2;   --gold-line:#E8D3A2;
+  --line:#DCD7CB;    --line-soft:#EAE6DC;
+
+  /* chart ink */
+  --grid:#E6E3DA;    --axis:#C3C2B7;
+  --series:#2A78D6;  --series-wash:rgba(42,120,214,.10);
+  --ord-1:#86B6EF;   --ord-2:#5598E7;     --ord-3:#2A78D6;  --ord-4:#1C5CAB;
+
+  --r:3px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);font-size:12px;line-height:1.6;background:var(--bg);color:var(--ink);min-height:100vh}
+button,input,textarea,select{font-family:inherit;font-size:12px;color:inherit}
+a{color:var(--navy-2)}
+[hidden]{display:none!important}
+
+/* reading progress */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:300;transition:width .1s linear}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:#fff;padding:6px;z-index:500;border:1px solid var(--navy)}
+
+/* ── page frame: profile+links | masthead+blog | latest ────── */
+.page{
+  max-width:1180px;margin:0 auto;padding:22px 18px 60px;
+  display:grid;gap:18px;
+  grid-template-columns:190px minmax(0,1fr) 232px;
+  grid-template-areas:
+    "profile  title    latest"
+    "profile  blog     latest"
+    ".        blog     latest";
+  align-items:start;
+}
+.profile-col{grid-area:profile;display:flex;flex-direction:column;gap:18px}
+#title{grid-area:title}
+#blog{grid-area:blog}
+#latest{grid-area:latest}
+
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
+         color:var(--muted);margin-bottom:7px}
+
+/* ── profile ───────────────────────────────────────────────── */
+#profile .shot{
+  width:100%;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block;
+  border:1px solid var(--line);background:var(--bg)
+}
+#profile .name{font-size:14px;font-weight:700;color:var(--navy);margin-top:9px}
+/* The credential sits beside the name, not under it — it is part of how he
+   is introduced, and the role line below already spells it out in full.
+   Plain bold text: the name beside it carries the colour, so a badge here
+   would compete with it. */
+#profile .name .cred{margin-left:6px;font-size:inherit;color:var(--ink);white-space:nowrap}
+#profile .role{color:var(--muted);margin-top:1px}
+#profile .bio{color:var(--ink-2);margin-top:8px;line-height:1.55}
+
+/* ── collapsible contact / FAQ ────────────────────────────────── */
+.collapse summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+                  justify-content:space-between;margin-bottom:0}
+.collapse summary::-webkit-details-marker{display:none}
+.collapse summary .chev{color:var(--muted);font-size:9px;transition:transform .15s}
+.collapse details[open] summary .chev{transform:rotate(90deg)}
+.collapse details[open] summary{margin-bottom:7px}
+.faq-item+.faq-item{margin-top:12px}
+.faq-item .q{font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.4}
+.faq-item .a{color:var(--ink-2);line-height:1.55}
+
+/* ── masthead ──────────────────────────────────────────────── */
+#title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
+       padding:12px 0 10px;text-align:center;position:relative}
+#title .brand{font-size:30px;font-weight:700;letter-spacing:-.6px;color:var(--navy);line-height:1}
+#title .brand span{color:var(--gold)}
+#title .brand .tld{color:var(--muted);font-weight:400;letter-spacing:0}
+#title .kicker{font-size:9px;font-weight:700;letter-spacing:3.4px;text-transform:uppercase;
+               color:var(--muted);margin-top:6px}
+#title .home{background:none;border:0;cursor:pointer;padding:0;display:block;width:100%;
+             text-decoration:none;color:inherit}
+
+/* ── newsletter — far right of the masthead ribbon ────────────── */
+.newsletter{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
+.nl-toggle{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+           padding:6px 14px;cursor:pointer;font-weight:700;color:var(--navy)}
+.nl-toggle:hover{border-color:var(--navy)}
+.nl-toggle[aria-expanded="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.nl-panel{position:absolute;top:calc(100% + 8px);right:0;width:230px;
+          text-align:left;z-index:20;box-shadow:0 6px 18px rgba(20,24,29,.16)}
+.nl-panel h4{margin-bottom:4px}
+.nl-panel .hint{display:block;margin-bottom:10px}
+@media(max-width:720px){
+  .newsletter{position:static;transform:none;display:flex;justify-content:center;margin-top:10px}
+  .nl-panel{left:50%;right:auto;transform:translateX(-50%)}
+}
+
+/* ── the blog body ─────────────────────────────────────────── */
+#blog{padding:26px 30px 18px;min-height:520px;display:flex;flex-direction:column}
+.post-title{font-size:26px;line-height:1.22;font-weight:700;color:var(--navy);
+            letter-spacing:-.3px;margin-bottom:8px}
+.post-sub{font-size:14px;line-height:1.5;color:var(--ink-2);margin-bottom:12px}
+.byline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);
+        padding:9px 0;border-top:1px solid var(--line-soft);
+        border-bottom:1px solid var(--line-soft);margin-bottom:24px}
+.byline b{color:var(--ink)}
+.dot{color:var(--line)}
+.tag{background:var(--gold-lt);border:1px solid var(--gold-line);color:#7A5300;
+     font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+     padding:1px 5px;border-radius:2px}
+.tag.draft{background:#F3F0FF;border-color:#D5CDF0;color:#4A3AA7}
+
+/* ── cover image ───────────────────────────────────────────── */
+/* Width and height are set on the element from the file itself, so the
+   space is reserved before the bytes arrive and the text below does not
+   jump once it does. */
+#p-hero{margin:0 0 16px}
+#p-hero img{display:block;width:100%;height:auto;border-radius:var(--r);
+            border:1px solid var(--line);background:var(--surface-2)}
+.pub .thumb{float:right;width:52px;height:52px;object-fit:cover;margin:0 0 4px 10px;
+            border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+#hero-preview{display:flex;gap:10px;align-items:flex-start;margin-top:8px}
+#hero-thumb{width:96px;height:64px;object-fit:cover;border-radius:4px;
+            border:1px solid var(--line);background:var(--surface-2);flex-shrink:0}
+#hero-preview .who{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+#post-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+#post-tools .linkish{cursor:pointer}
+
+/* ── article pager ─────────────────────────────────────────── */
+/* Two halves that always hold their side of the row, so the Older
+   button stays put whether or not a newer piece exists. */
+.post-nav{display:flex;gap:8px;align-items:stretch;margin:0 0 14px}
+.post-nav.foot{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.post-nav .half{flex:1 1 0;min-width:0;display:flex}
+.post-nav .half.right{justify-content:flex-end}
+/* No chrome — an arrow and a title, nothing drawn around them. */
+.pnav{
+  display:flex;align-items:center;gap:9px;min-width:0;max-width:100%;
+  background:none;border:0;border-radius:0;padding:2px 0;
+  cursor:pointer;text-align:left;color:var(--ink-2);text-decoration:none
+}
+.pnav:hover .t{text-decoration:underline}
+.pnav .ar{font-size:15px;line-height:1;color:var(--navy);flex-shrink:0}
+.pnav .pn{min-width:0;display:flex;flex-direction:column;gap:1px}
+.pnav .dir{font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)}
+.pnav .t{font-weight:700;color:var(--navy);line-height:1.3;
+         overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pnav.next{text-align:right}
+.pnav.next .pn{align-items:flex-end}
+
+.article{font-size:16.5px;line-height:1.78;color:#1A1D21}
+#p-body{flex:1}
+.article p{margin-bottom:20px}
+.article h2{font-size:19px;line-height:1.35;color:var(--navy);margin:32px 0 10px;font-weight:700}
+.article h3{font-size:16px;color:var(--navy);margin:24px 0 8px;font-weight:700}
+.article ul,.article ol{margin:0 0 20px 22px}
+.article li{margin-bottom:6px}
+.article blockquote{border-left:3px solid var(--gold);padding:2px 0 2px 16px;margin:24px 0;
+                    color:#33383D;font-style:italic}
+.article strong{font-weight:700}
+.article a{color:var(--navy-2)}
+
+/* share + reactions, bottom of the blog box */
+.post-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);
+           display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.post-foot .left{color:var(--muted)}
+.share{margin-left:auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+       padding:7px 14px;cursor:pointer;color:var(--ink-2);font-weight:600}
+.share:hover{border-color:var(--navy);color:var(--navy)}
+.reacts{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.react{
+  display:inline-flex;align-items:center;gap:7px;background:var(--surface);
+  border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:700;
+  transition:border-color .15s,background .15s
+}
+.react .em{font-size:15px;line-height:1;filter:grayscale(1);opacity:.45;transition:filter .15s,opacity .15s}
+.react .n{font-variant-numeric:tabular-nums;font-size:13px}
+.react:hover{border-color:var(--gold);background:var(--gold-lt)}
+.react[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-lt);color:#7A5300}
+.react[aria-pressed="true"] .em{filter:none;opacity:1}
+.react:disabled{opacity:.6;cursor:default}
+
+/* ── latest publishings ────────────────────────────────────── */
+#latest{padding:14px;position:sticky;top:18px}
+#latest ol{list-style:none}
+#latest li+li{border-top:1px solid var(--line-soft)}
+/* An <a> rather than a button, so a crawler can follow it and a reader
+   can middle-click it; the router intercepts the plain left click. */
+.pub{
+  display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  padding:10px 8px;border-left:2px solid transparent;border-radius:0 var(--r) var(--r) 0;
+  text-decoration:none;color:inherit
+}
+.pub:hover{background:var(--surface-2)}
+.pub[aria-current="true"]{background:var(--gold-lt);border-left-color:var(--gold)}
+.pub .d{color:var(--muted);font-size:10px;letter-spacing:.4px;text-transform:uppercase}
+.pub .t{font-weight:700;color:var(--navy);line-height:1.35;margin:3px 0 4px}
+.pub[aria-current="true"] .t{color:#7A5300}
+.pub .m{color:var(--muted);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+
+/* ── comments ──────────────────────────────────────────────── */
+.comments{margin-top:28px}
+.comments h3{font-size:13px;color:var(--navy);margin-bottom:12px}
+.c-card{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--r);
+        padding:12px 14px;margin-bottom:6px}
+.c-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.c-init{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;
+        display:grid;place-items:center;font-size:10px;font-weight:700;flex-shrink:0}
+.c-name{font-weight:700}
+.c-date{color:var(--muted);margin-left:auto}
+.c-del{color:#b3261e;margin-left:10px;flex-shrink:0}
+.c-del:hover{color:#8c1d17}
+.c-text{color:#2A2E33;line-height:1.65;white-space:pre-wrap}
+/* A reader's link can be long and unbroken; let it wrap rather than
+   stretch the card off the side of a phone. */
+.c-text a{color:var(--navy-2);overflow-wrap:anywhere}
+.empty{color:var(--muted);padding:16px 0;text-align:center}
+
+/* ── forms ─────────────────────────────────────────────────── */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.panel h4{font-size:12px;color:var(--navy);margin-bottom:12px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:10px;font-weight:700;letter-spacing:.8px;
+          text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fg input,.fg textarea,.fg select{
+  width:100%;border:1px solid var(--line);border-radius:var(--r);
+  padding:7px 9px;background:var(--surface-2);line-height:1.5;resize:vertical}
+.fg textarea{min-height:90px}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:2px solid var(--navy);outline-offset:-1px;background:#fff}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:var(--r);padding:8px 16px;
+     font-weight:700;cursor:pointer}
+.btn:hover{background:var(--navy-2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:none;color:var(--navy);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.danger{background:none;color:#b3261e;border:1px solid #b3261e}
+.btn.danger:hover{background:#b3261e;color:#fff}
+.hint{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.linkish{background:none;border:0;color:var(--navy-2);cursor:pointer;padding:0;text-align:left;font-weight:600}
+.linkish:hover{text-decoration:underline}
+.back{background:none;border:0;color:var(--navy);cursor:pointer;font-weight:600;padding:0;margin-bottom:16px}
+.back:hover{text-decoration:underline}
+
+/* ── editor modal ──────────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(20,24,29,.55);z-index:200;
+         display:none;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+       width:100%;max-width:680px;padding:20px;position:relative}
+.modal h2{font-size:14px;color:var(--navy);margin-bottom:14px}
+.modal .x{position:absolute;top:10px;right:10px;background:none;border:0;font-size:14px;
+          cursor:pointer;color:var(--muted);line-height:1;padding:4px}
+.modal .x:hover{color:var(--ink)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;
+             padding:6px 12px;font-weight:700;cursor:pointer;color:var(--muted)}
+.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy)}
+#preview{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--r);
+         padding:14px;min-height:140px;margin-bottom:10px}
+
+/* ── dashboard ─────────────────────────────────────────────── */
+.shell{max-width:1080px;margin:0 auto;padding:24px 16px 72px}
+.filters{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+      padding:5px 11px;cursor:pointer;color:var(--ink-2);font-weight:600}
+.chip:hover{border-color:var(--navy)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.filters select{width:auto;min-width:180px;border:1px solid var(--line);border-radius:20px;
+                padding:5px 10px;background:var(--surface)}
+
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+      padding:18px 20px;margin-bottom:8px}
+.hero .n{font-size:48px;line-height:1;font-weight:700;color:var(--navy);letter-spacing:-1px}
+.hero .lbl{color:var(--muted);margin-top:6px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.tile .lbl{color:var(--muted);margin-bottom:5px}
+.tile .n{font-size:22px;font-weight:700;color:var(--ink);line-height:1.1}
+.tile .sub{color:var(--muted);margin-top:4px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+            padding:14px 16px;margin-bottom:8px;position:relative}
+.chart-card h3{font-size:12px;color:var(--ink);margin-bottom:2px}
+.chart-card .cap{color:var(--muted);margin-bottom:12px}
+.plot{position:relative}
+.plot svg{display:block;width:100%;overflow:visible}
+.tick{fill:var(--muted);font-size:10px}
+.tick.num{font-variant-numeric:tabular-nums}
+.mark-label{fill:var(--ink-2);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.tt{position:absolute;pointer-events:none;background:var(--ink);color:#fff;
+    border-radius:var(--r);padding:6px 9px;white-space:nowrap;opacity:0;
+    transition:opacity .1s;z-index:5;transform:translate(-50%,-100%);line-height:1.45}
+.tt b{font-variant-numeric:tabular-nums}
+.tt.on{opacity:1}
+
+table.data{width:100%;border-collapse:collapse}
+table.data th,table.data td{padding:7px 8px;border-bottom:1px solid var(--line-soft);text-align:right}
+table.data th:first-child,table.data td:first-child{text-align:left}
+table.data th{color:var(--muted);font-weight:700;font-size:10px;letter-spacing:.6px;
+              text-transform:uppercase;border-bottom:1px solid var(--line)}
+table.data td{font-variant-numeric:tabular-nums}
+table.data td:first-child{font-variant-numeric:normal}
+table.data tbody tr:hover{background:var(--surface-2)}
+
+details.tableview{margin-top:10px}
+details.tableview summary{cursor:pointer;color:var(--muted);font-weight:600;padding:4px 0}
+details.tableview summary:hover{color:var(--ink)}
+
+/* ── toast + footer ────────────────────────────────────────── */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(50px);
+       background:var(--ink);color:#fff;padding:8px 16px;border-radius:20px;opacity:0;
+       transition:transform .22s,opacity .22s;pointer-events:none;z-index:400;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+footer{border-top:1px solid var(--line);padding:16px;text-align:center;color:var(--muted)}
+footer .author-bar{margin-top:6px;display:flex;gap:8px;justify-content:center;align-items:center}
+footer .author-bar .linkish{color:var(--muted);font-weight:400}
+footer .author-bar .linkish:hover{color:var(--navy)}
+
+/* ── responsive ────────────────────────────────────────────── */
+@media(max-width:1000px){
+  .page{grid-template-columns:170px minmax(0,1fr);
+        grid-template-areas:"profile title" "profile blog" "latest blog" ". blog"}
+  #latest{position:static}
+}
+@media(max-width:720px){
+  .page{grid-template-columns:1fr;
+        grid-template-areas:"title" "profile" "blog" "latest";gap:12px}
+  #profile{display:flex;gap:12px;align-items:flex-start}
+  #profile .shot{width:78px;flex-shrink:0}
+  #profile .who{min-width:0}
+  #profile .name{margin-top:0}
+  #blog{padding:20px 18px 16px;min-height:0}
+  .post-title{font-size:22px}
+  .article{font-size:16px}
+  /* Thumb-sized targets. The height comes from padding rather than from
+     anything drawn, so the target is big without a box around it. */
+  .pnav{flex:1 1 0;padding:10px 0;min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
