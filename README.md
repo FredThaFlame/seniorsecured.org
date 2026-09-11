@@ -14,7 +14,7 @@ security-definer functions in `supabase/schema.sql`.
 ├─ index.html            the whole front end (article, sidebar, editor, dashboard)
 ├─ config.js             your Supabase URL + anon key  ← the only file you must edit
 ├─ 404.html              GitHub Pages deep-link shim (see "Routing" below)
-├─ fred-flamer.jpg       the headshot in the profile panel
+├─ fred-flamer-2026.jpg  the headshot in the profile panel
 ├─ CNAME                 the custom domain
 ├─ .nojekyll             serve files as-is, no Jekyll pass
 └─ supabase/schema.sql   tables, RLS policies, functions (no content)
@@ -98,6 +98,12 @@ Add `http://localhost:3000` to the Supabase redirect URLs while you work.
 The reader sees one page: profile and links on the left, the piece in the
 middle, **Latest publishings** on the right. Clicking a piece in that sidebar
 navigates to its own `/p/<slug>` URL, so every article stays shareable.
+
+The article itself also carries a pager — *Newer* and *Older* arrows above the
+headline and again below the reactions. It walks the same list the sidebar
+shows, in the same order, which is what a phone reader needs: at that width the
+sidebar drops below the article, so the arrows are the only way to move between
+pieces without scrolling past the whole thing.
 
 GitHub Pages has no rewrite rules, so a *hard* load of `/p/<slug>` would
 normally 404. `404.html` catches it, stashes the path in `sessionStorage`, and
@@ -208,8 +214,16 @@ palette is a printed-page cream, navy and gold.
   functions in `index.html`; a fourth kind would need the check constraint in
   `schema.sql` widened too.
 - Comments publish immediately (`approved` defaults to `true`). Flip that
-  default and the approved-only read policy becomes a moderation queue; the
-  author can already update and delete any comment.
+  default and the approved-only read policy becomes a moderation queue. In the
+  meantime the author, signed in, gets a **Delete** control on every comment in
+  the discussion itself — `comments_author_del` in `authors.sql` is what
+  actually permits it, so a forged call from a reader's console deletes
+  nothing.
+- A web address typed into a comment becomes a link. Only `http`, `https` and
+  `www.` are recognised, so `javascript:` and `data:` stay inert text, and the
+  links carry `nofollow ugc noopener noreferrer`. Comments are reader-written
+  and publish on sight, so this is a route for a scam link onto a page about
+  scams — delete is the answer until the moderation queue is turned on.
 - Editing an existing post is not wired into the UI yet. RLS already permits
   it, so it is a form away.
 - `supabase-js` loads from jsDelivr, pinned to `2.58.0`. Vendor it next to

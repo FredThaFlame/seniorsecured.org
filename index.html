@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://seniorsecured.org/"/>
 <meta property="og:title" content="seniorsecured.org &middot; Community"/>
 <meta property="og:description" content="Plain-spoken cybersecurity and fraud-prevention writing for seniors — phone scams, phishing, identity theft, romance scams and more. Fred Flamer, CISSP, writes and speaks locally in San Mateo, San Francisco and Alameda counties."/>
-<meta property="og:image" content="https://seniorsecured.org/fred-flamer.jpg"/>
+<meta property="og:image" content="https://seniorsecured.org/fred-flamer-2026.jpg"/>
 <meta name="twitter:card" content="summary"/>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231B3A5C'/><text x='16' y='23' font-size='19' font-family='Tahoma' font-weight='bold' fill='%23C8922A' text-anchor='middle'>S</text></svg>"/>
 <script type="application/ld+json">
@@ -131,6 +131,9 @@ a{color:var(--navy-2)}
   border:1px solid var(--line);background:var(--bg)
 }
 #profile .name{font-size:14px;font-weight:700;color:var(--navy);margin-top:9px}
+/* The credential sits beside the name, not under it — it is part of how he
+   is introduced, and the role line below already spells it out in full. */
+#profile .name .cred{margin-left:5px;vertical-align:2px;white-space:nowrap}
 #profile .role{color:var(--muted);margin-top:1px}
 #profile .bio{color:var(--ink-2);margin-top:8px;line-height:1.55}
 
@@ -201,6 +204,27 @@ a{color:var(--navy-2)}
 #post-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
 #post-tools .linkish{cursor:pointer}
 
+/* ── article pager ─────────────────────────────────────────── */
+/* Two halves that always hold their side of the row, so the Older
+   button stays put whether or not a newer piece exists. */
+.post-nav{display:flex;gap:8px;align-items:stretch;margin:0 0 14px}
+.post-nav.foot{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.post-nav .half{flex:1 1 0;min-width:0;display:flex}
+.post-nav .half.right{justify-content:flex-end}
+.pnav{
+  display:flex;align-items:center;gap:9px;min-width:0;max-width:100%;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  padding:8px 14px;cursor:pointer;text-align:left;color:var(--ink-2)
+}
+.pnav:hover{border-color:var(--navy);background:var(--surface-2)}
+.pnav .ar{font-size:15px;line-height:1;color:var(--navy);flex-shrink:0}
+.pnav .pn{min-width:0;display:flex;flex-direction:column;gap:1px}
+.pnav .dir{font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)}
+.pnav .t{font-weight:700;color:var(--navy);line-height:1.3;
+         overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pnav.next{text-align:right}
+.pnav.next .pn{align-items:flex-end}
+
 .article{font-size:16.5px;line-height:1.78;color:#1A1D21}
 #p-body{flex:1}
 .article p{margin-bottom:20px}
@@ -258,7 +282,12 @@ a{color:var(--navy-2)}
         display:grid;place-items:center;font-size:10px;font-weight:700;flex-shrink:0}
 .c-name{font-weight:700}
 .c-date{color:var(--muted);margin-left:auto}
+.c-del{color:#b3261e;margin-left:10px;flex-shrink:0}
+.c-del:hover{color:#8c1d17}
 .c-text{color:#2A2E33;line-height:1.65;white-space:pre-wrap}
+/* A reader's link can be long and unbroken; let it wrap rather than
+   stretch the card off the side of a phone. */
+.c-text a{color:var(--navy-2);overflow-wrap:anywhere}
 .empty{color:var(--muted);padding:16px 0;text-align:center}
 
 /* ── forms ─────────────────────────────────────────────────── */
@@ -383,6 +412,9 @@ footer .author-bar .linkish:hover{color:var(--navy)}
   #blog{padding:20px 18px 16px;min-height:0}
   .post-title{font-size:22px}
   .article{font-size:16px}
+  /* Thumb-sized targets, and the pager fills the width rather than
+     leaving two small pills stranded at the edges. */
+  .pnav{flex:1 1 0;padding:11px 14px;min-height:44px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -398,9 +430,9 @@ footer .author-bar .linkish:hover{color:var(--navy)}
   <!-- ① PROFILE + CONTACT -->
   <div class="profile-col">
     <aside class="box" id="profile" style="padding:12px">
-      <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer.jpg" width="166" height="166"/>
+      <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer-2026.jpg" width="166" height="166"/>
       <div class="who">
-        <div class="name">Fred Flamer</div>
+        <div class="name">Fred Flamer <span class="tag cred">CISSP</span></div>
         <div class="role">Certified Information Systems Security Professional</div>
         <p class="bio">Empowering individuals and organizations with the knowledge and tools to navigate an increasingly complex cybersecurity landscape with confidence.</p>
       </div>
@@ -487,6 +519,9 @@ footer .author-bar .linkish:hover{color:var(--navy)}
       <span class="hint" id="hero-edit-status" aria-live="polite"></span>
     </div>
     <p id="p-flag" hidden><span class="tag draft">Draft</span></p>
+    <!-- Walk the pieces without going back to the sidebar — the only way to
+         move between them on a phone, where the sidebar sits below the fold. -->
+    <nav class="post-nav" id="post-nav" aria-label="Move between pieces" hidden></nav>
     <h2 class="post-title" id="p-title"></h2>
     <p class="post-sub" id="p-sub"></p>
     <div class="byline" id="p-byline">
@@ -500,6 +535,8 @@ footer .author-bar .linkish:hover{color:var(--navy)}
       <button class="share" onclick="sharePost()">Copy link</button>
       <span class="reacts" id="reacts"></span>
     </div>
+    <!-- The same pager again, for a reader who has just finished. -->
+    <nav class="post-nav foot" id="post-nav-foot" aria-label="Move between pieces" hidden></nav>
     <div class="comments" id="comments"></div>
   </main>
 
@@ -726,8 +763,10 @@ function paintAuthorBar(){
       ? '<span class="dot">&middot;</span><button class="linkish" onclick="signOut()">Sign out</button>'
       : '');
   /* Signing in or out while a piece is open should reveal or hide the
-     cover-image controls without needing a reload. */
+     cover-image controls and the per-comment Delete buttons without
+     needing a reload. */
   paintCoverEdit();
+  if(current) paintComments(commentList);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -900,6 +939,30 @@ function esc(s){
   return String(s == null ? '' : s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Comment text: escaped first, then bare web addresses turned into links.
+   The regex is the whole allowlist — only http, https and www. become a
+   link, so a "javascript:" or "data:" address stays inert text. Comments
+   are reader-written, so the links carry nofollow and ugc, and the author
+   can delete any comment from the discussion itself. */
+function linkify(raw){
+  const s  = String(raw == null ? '' : raw);
+  const re = /(?:https?:\/\/|www\.)[^\s<>"']+/gi;
+  let out = '', last = 0, m;
+  while((m = re.exec(s)) !== null){
+    let url = m[0];
+    /* A URL at the end of a sentence swallows the punctuation; give it back. */
+    const trail = url.match(/[.,!?;:)\]}'"]+$/);
+    if(trail) url = url.slice(0, -trail[0].length);
+    if(!url){ continue; }
+    const href = /^www\./i.test(url) ? 'https://' + url : url;
+    out += esc(s.slice(last, m.index)) +
+      '<a href="' + esc(href) + '" target="_blank" rel="nofollow ugc noopener noreferrer">' +
+      esc(url) + '</a>';
+    last = m.index + url.length;
+  }
+  return out + esc(s.slice(last));
 }
 
 function inline(s){
@@ -1118,6 +1181,10 @@ function blogNotice(heading, detail){
   document.getElementById('p-actions').hidden = true;
   document.getElementById('p-body').innerHTML = '<p style="color:var(--muted)">' + esc(detail) + '</p>';
   document.getElementById('comments').innerHTML = '';
+  ['post-nav','post-nav-foot'].forEach(function(id){
+    const bar = document.getElementById(id);
+    if(bar){ bar.hidden = true; bar.innerHTML = ''; }
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1141,7 +1208,7 @@ function canonicalOrigin(){
   return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
 }
 /* Keeps <title>, canonical and the og:* tags pointing at the same URL. */
-const SITE_IMAGE = 'https://seniorsecured.org/fred-flamer.jpg';
+const SITE_IMAGE = 'https://seniorsecured.org/fred-flamer-2026.jpg';
 
 function setMeta(path, title, desc, image){
   const url = canonicalOrigin() + path;
@@ -1217,6 +1284,40 @@ function paintList(){
   }).join('');
 }
 
+/* ── the article pager ─────────────────────────────────────────────
+   posts[] is newest first, so the piece before the current one in the
+   array is the newer read and the one after it is the older. Drafts are
+   in that array only while an author is signed in, which is the same
+   rule the sidebar follows — the two stay in step by construction. */
+function navBtn(p, older){
+  if(!p) return '';
+  const dir   = older ? 'Older' : 'Newer';
+  const arrow = older ? '&#8594;' : '&#8592;';
+  const inner = '<span class="pn"><span class="dir">' + dir + '</span>' +
+                '<span class="t">' + esc(p.title) + '</span></span>';
+  return '<button type="button" class="pnav ' + (older ? 'next' : 'prev') + '"' +
+    ' onclick="go(\'/p/' + encodeURIComponent(p.slug) + '\')"' +
+    ' aria-label="' + dir + ' piece: ' + esc(p.title) + '">' +
+    (older ? inner + '<span class="ar" aria-hidden="true">' + arrow + '</span>'
+           : '<span class="ar" aria-hidden="true">' + arrow + '</span>' + inner) +
+    '</button>';
+}
+
+function paintPostNav(){
+  const i = current ? posts.findIndex(p => p.id === current.id) : -1;
+  const html = i < 0 ? '' :
+    '<div class="half">'       + navBtn(posts[i - 1], false) + '</div>' +
+    '<div class="half right">' + navBtn(posts[i + 1], true)  + '</div>';
+  /* One piece on the site means nothing to page to. */
+  const show = i >= 0 && posts.length > 1;
+  ['post-nav','post-nav-foot'].forEach(function(id){
+    const bar = document.getElementById(id);
+    if(!bar) return;
+    bar.hidden = !show;
+    bar.innerHTML = show ? html : '';
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ③ THE BLOG BODY
    ═══════════════════════════════════════════════════════════════ */
@@ -1273,6 +1374,7 @@ async function showPost(slug, isHome){
 
   paintReacts(data.reactions);
   paintList();
+  paintPostNav();
   paintComments(data.comments || []);
   tracker.start(current.id);
 }
@@ -1345,19 +1447,33 @@ async function sharePost(){
 }
 
 /* ── comments ──────────────────────────────────────────────── */
+/* The list last painted. Signing in or out has to repaint it — the
+   author's Delete buttons appear and vanish with authorship. */
+let commentList = [];
+
 function paintComments(list){
   const box = document.getElementById('comments');
   if(!box) return;
+  list = list || [];
+  commentList = list;
   box.innerHTML =
     '<h3>Discussion (' + list.length + ' comment' + (list.length !== 1 ? 's' : '') + ')</h3>' +
     '<div id="c-list">' +
       (list.length
         ? list.map(function(c){
-            return '<div class="c-card"><div class="c-top">' +
+            return '<div class="c-card" id="c-' + c.id + '"><div class="c-top">' +
               '<span class="c-init" aria-hidden="true">' + initials(c.name) + '</span>' +
               '<span class="c-name">' + esc(c.name) + '</span>' +
-              '<span class="c-date">' + esc(shortDate(c.created_at)) + '</span></div>' +
-              '<div class="c-text">' + esc(c.body) + '</div></div>';
+              '<span class="c-date">' + esc(shortDate(c.created_at)) + '</span>' +
+              /* Moderation lives where the comment is, not in a separate
+                 screen. comments_author_del in authors.sql is what actually
+                 permits it; this button only offers it. */
+              (isAuthor()
+                ? '<button type="button" class="linkish c-del" onclick="deleteComment(' + c.id + ')"' +
+                  ' aria-label="Delete the comment by ' + esc(c.name) + '">Delete</button>'
+                : '') +
+              '</div>' +
+              '<div class="c-text">' + linkify(c.body) + '</div></div>';
           }).join('')
         : '<p class="empty">No comments yet. Be the first.</p>') +
     '</div>' +
@@ -1368,6 +1484,22 @@ function paintComments(list){
       '<div class="fg"><label for="c-text">Comment</label>' +
         '<textarea id="c-text" maxlength="2000" placeholder="Share your thoughts…"></textarea></div>' +
       '<button class="btn" id="c-btn" onclick="postComment()">Post comment</button></div>';
+}
+
+/* Re-reads the discussion and repaints it, keeping the sidebar tally in
+   step. The comments_read policy returns approved rows to anyone, so this
+   is the same view a signed-out reader gets. */
+async function refreshComments(){
+  const { data, error } = await db.from('comments')
+    .select('id,name,body,created_at')
+    .eq('post_id', current.id).eq('approved', true)
+    .order('created_at', { ascending: true });
+  if(error) throw new Error(error.message);
+  const fresh = data || [];
+  paintComments(fresh);
+  const row = posts.find(p => p.id === current.id);
+  if(row){ row.comment_count = fresh.length; paintList(); }
+  return fresh;
 }
 
 async function postComment(){
@@ -1381,20 +1513,27 @@ async function postComment(){
       p_post_id: current.id, p_name: name, p_body: body, p_visitor_id: visitorId
     });
     localStorage.setItem('ff_name', name);
-
-    const { data: fresh, error } = await db.from('comments')
-      .select('id,name,body,created_at')
-      .eq('post_id', current.id).eq('approved', true)
-      .order('created_at', { ascending: true });
-    if(error) throw new Error(error.message);
-    paintComments(fresh || []);
-
-    const row = posts.find(p => p.id === current.id);
-    if(row){ row.comment_count = (fresh || []).length; paintList(); }
+    await refreshComments();
     toast('Comment posted.');
   }catch(e){
     toast(e.message);
     btn.disabled = false; btn.textContent = 'Post comment';
+  }
+}
+
+/* Author-only, and the database says so too: comments_author_del in
+   authors.sql permits a delete only for a row in public.authors, so a
+   forged call from a reader's console deletes nothing. */
+async function deleteComment(id){
+  if(!isAuthor() || !current) return;
+  if(!confirm('Delete this comment? This cannot be undone.')) return;
+  try{
+    const { error } = await db.from('comments').delete().eq('id', id);
+    if(error) throw new Error(error.message);
+    await refreshComments();
+    toast('Comment deleted.');
+  }catch(e){
+    toast(e.message || 'Could not delete that comment.');
   }
 }
 

@@ -91,8 +91,11 @@ in one go. He needs his password from the manager.
   Information Systems Security Professional", bio is "Empowering individuals
   and organizations with the knowledge and tools to navigate an increasingly
   complex cybersecurity landscape with confidence."
-- **Headshot.** `fred-flamer.jpg`, 512px square. Fine as-is; swap if there is a
-  better one.
+- ~~**Headshot.**~~ Replaced 11 Sep 2026 with `fred-flamer-2026.jpg`, a 512px
+  square cropped from the photo Fred sent. New filename on purpose: link
+  previews cache `og:image` by URL, so reusing the old name would have left
+  the old face in every scraper's cache. `fred-flamer.jpg` is now unreferenced
+  and can be deleted once the new one is confirmed live.
 
 ---
 
@@ -124,6 +127,18 @@ Signed out first:
 - [ ] **Edit does not leak into new posts.** Open an edit, hit Cancel, then
       "New post" — confirm the form is blank and saving creates a new piece
       rather than overwriting the one that was being edited
+- [ ] **Article pager.** With two or more pieces published, the *Newer* /
+      *Older* arrows above the headline and below the reactions move between
+      them, the arrow that has nowhere to go is absent rather than dead, and
+      the pager disappears entirely when only one piece exists
+- [ ] **Pager on a phone.** At 430px both buttons are thumb-sized, titles
+      ellipsise rather than wrap, and the row never scrolls sideways
+- [ ] **Comment links.** Post a comment containing `https://example.com` and
+      one containing `javascript:alert(1)`; the first is a working link that
+      opens in a new tab, the second stays plain text
+- [ ] **Comment delete.** Signed in, Delete removes a comment and the sidebar
+      tally drops; signed out the button is absent. Confirm an anonymous
+      `DELETE /rest/v1/comments?id=eq.<n>` removes nothing
 - [ ] Save a draft — tagged in the sidebar while signed in, gone after sign out
 - [ ] `/dashboard` gated when signed out; after sign-in all three charts draw
 - [ ] `select count(*) from events` climbs as you browse
