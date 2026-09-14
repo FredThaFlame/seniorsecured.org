@@ -100,6 +100,30 @@ a{color:var(--navy-2)}
   .nl-panel{left:50%;right:auto;transform:translateX(-50%)}
 }
 
+/* ── translate — far left of the masthead, mirroring the newsletter ── */
+.translate{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+           display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.gt-toggle{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+           padding:6px 14px;cursor:pointer;font-weight:700;color:var(--navy)}
+.gt-toggle:hover{border-color:var(--navy)}
+.gt-toggle[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.gt-note{font-size:9px;color:var(--muted);white-space:nowrap}
+@media(max-width:720px){
+  .translate{position:static;transform:none;align-items:center;margin-top:10px}
+}
+
+/* Google's widget. Its own menu stays in the page, where the script can
+   drive it, but out of sight; the button above replaces it. */
+#gt-element{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Google pushes the page down for a banner at the top and pops a tooltip
+   over every translated sentence. The masthead note says the page is
+   translated, so both are hidden. The class names are Google's and have
+   changed before; if the banner reappears, look here first. */
+.goog-te-banner-frame,.skiptranslate > iframe,iframe.VIpgJd-ZVi9od-ORHb-OEVmcd,
+#goog-gt-tt,.goog-te-balloon-frame,.VIpgJd-yAWNEb-L7lbkb{display:none!important}
+body{top:0!important;position:static!important}
+.goog-text-highlight,font[style]{background:none!important;box-shadow:none!important}
+
 /* ── the blog body ─────────────────────────────────────────── */
 #blog{padding:26px 30px 18px;min-height:520px;display:flex;flex-direction:column}
 .post-title{font-size:26px;line-height:1.22;font-weight:700;color:var(--navy);

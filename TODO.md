@@ -194,6 +194,31 @@ page's only `h1`. See "Indexing" in the README.
 
 ---
 
+## Spanish translation button — built 14 Sep 2026, not yet live
+
+An **Español** button at the left of the masthead runs the page through
+Google's website translator (machine translation, Spanish only). A small
+note reads *Traducción automática de Google* while it is on, and the button
+turns into **English**, which clears Google's `googtrans` cookie and
+reloads. The choice sticks across pages via that cookie. Nothing from Google
+loads until a reader presses the button.
+
+Kept in English on purpose (`translate="no"`): the logo, Fred's name, the
+editor, the analytics dashboard and the footer author links.
+
+Things to know:
+
+- Google stopped offering this widget to new sites in 2019. It still works
+  (script checked 14 Sep 2026), but it could be switched off without notice.
+  If it fails to load, the button toasts "Translation is not available" and
+  the site stays in English.
+- Google's top banner and hover tooltips are hidden in `site.css` by Google's
+  own class names. If the banner ever reappears, those selectors are why.
+- It is unreviewed machine translation, and search engines never see a
+  Spanish page.
+
+---
+
 ## Done — no action needed
 
 - **Editing published pieces** (16 Aug 2026). "Edit this piece" above any

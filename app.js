@@ -193,6 +193,118 @@ async function subscribeNewsletter(){
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   TRANSLATION — Google's website translator, Spanish only.
+
+   Nothing from Google loads until a reader presses "Español", so a
+   reader who never asks for Spanish never touches Google. Google
+   remembers the choice in its own "googtrans" cookie; while that is
+   set, every page loads the translator again and stays in Spanish,
+   and Google's watcher translates each article as the app swaps it in.
+
+   Back to English clears the cookie and reloads. Google offers no
+   clean way to undo a translation in place, and a reload always works.
+
+   Google stopped offering this widget to new sites in 2019 but still
+   serves it. If it ever stops, the button says so and the site carries
+   on in English — nothing else depends on it.
+   ═══════════════════════════════════════════════════════════════ */
+const GT_SCRIPT = 'https://translate.google.com/translate_a/element.js?cb=gtInit';
+let gtLoading = null;
+
+function gtCookieLang(){
+  const m = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
+  return m && /\/es$/.test(decodeURIComponent(m[1])) ? 'es' : 'en';
+}
+
+/* Google writes the cookie for the bare host and for the dot-domain, so
+   both have to go or the translation comes straight back. */
+function gtSetCookie(value){
+  const expires = value ? '' : '; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  const v = 'googtrans=' + (value || '') + expires + '; path=/';
+  document.cookie = v;
+  const host = location.hostname;
+  if(host.indexOf('.') > 0){
+    document.cookie = v + '; domain=' + host;
+    document.cookie = v + '; domain=.' + host.replace(/^www\./, '');
+  }
+}
+
+function paintTranslation(on){
+  const btn = document.getElementById('gt-toggle');
+  btn.textContent = on ? 'English' : 'Español';
+  btn.lang = on ? 'en' : 'es';
+  btn.setAttribute('aria-pressed', String(on));
+  document.getElementById('gt-note').hidden = !on;
+}
+
+function loadTranslator(){
+  if(gtLoading) return gtLoading;
+  gtLoading = new Promise(function(resolve, reject){
+    window.gtInit = function(){
+      try{
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'es',
+          autoDisplay: false
+        }, 'gt-element');
+        resolve();
+      }catch(e){ reject(e); }
+    };
+    const s = document.createElement('script');
+    s.src = GT_SCRIPT;
+    s.async = true;
+    s.onerror = function(){ reject(new Error('Google Translate did not load')); };
+    document.head.appendChild(s);
+  });
+  return gtLoading;
+}
+
+/* The widget reads the cookie when it starts, which covers most loads.
+   Where it ignores it, choosing Spanish in its own hidden menu does the
+   same job. */
+function gtSelectSpanish(){
+  let tries = 0;
+  (function attempt(){
+    const combo = document.querySelector('#gt-element select.goog-te-combo');
+    if(combo && combo.options.length > 1){
+      if(combo.value !== 'es'){
+        combo.value = 'es';
+        combo.dispatchEvent(new Event('change'));
+      }
+      return;
+    }
+    if(++tries < 40) setTimeout(attempt, 150);
+  })();
+}
+
+async function toggleTranslation(){
+  if(gtCookieLang() === 'es'){
+    gtSetCookie(null);
+    location.reload();
+    return;
+  }
+  gtSetCookie('/en/es');
+  paintTranslation(true);
+  try{
+    await loadTranslator();
+    gtSelectSpanish();
+  }catch(e){
+    gtSetCookie(null);
+    paintTranslation(false);
+    toast('Translation is not available right now.');
+  }
+}
+
+function initTranslation(){
+  const on = gtCookieLang() === 'es';
+  paintTranslation(on);
+  if(on) loadTranslator().then(gtSelectSpanish, function(){
+    gtSetCookie(null);
+    paintTranslation(false);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
    ANALYTICS CLIENT
    Every measurement goes through track(). One post open at a time.
    ═══════════════════════════════════════════════════════════════ */
@@ -1787,6 +1899,7 @@ addEventListener('resize', function(){
 })();
 
 paintAuthorBar();
+initTranslation();
 
 (async function boot(){
   if(!db){

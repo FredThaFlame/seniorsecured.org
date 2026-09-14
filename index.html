@@ -146,7 +146,7 @@
     <aside class="box" id="profile" style="padding:12px">
       <img class="shot" id="avatar" alt="Fred Flamer" src="/fred-flamer-2026.jpg" width="166" height="166"/>
       <div class="who">
-        <div class="name">Fred Flamer <span class="cred">CISSP</span></div>
+        <div class="name notranslate" translate="no">Fred Flamer <span class="cred">CISSP</span></div>
         <div class="role">Certified Information Systems Security Professional</div>
         <p class="bio">Empowering older adults with practical knowledge to recognize scams, navigate technology safely, and protect what matters most.</p>
       </div>
@@ -199,10 +199,20 @@
   <header id="title">
     <!-- The masthead is the brand, not the heading: on every URL the one
          h1 is the headline of the piece being read. -->
-    <a class="home" href="/" onclick="nav(event,'/')" aria-label="seniorsecured.org home">
+    <a class="home notranslate" translate="no" href="/" onclick="nav(event,'/')" aria-label="seniorsecured.org home">
       <div class="brand">senior<span>secured</span><span class="tld">.org</span></div>
       <div class="kicker">Community</div>
     </a>
+
+    <!-- Machine translation through Google. Nothing from Google loads until
+         a reader asks for Spanish; see TRANSLATION in app.js. The button and
+         its note are notranslate so "English" stays readable in Spanish. -->
+    <div class="translate notranslate" translate="no">
+      <button type="button" class="gt-toggle" id="gt-toggle" onclick="toggleTranslation()"
+              lang="es" aria-pressed="false">Español</button>
+      <span class="gt-note" id="gt-note" lang="es" hidden>Traducción automática de Google</span>
+      <div id="gt-element" aria-hidden="true"></div>
+    </div>
 
     <div class="newsletter" id="newsletter">
       <button type="button" class="nl-toggle" id="nl-toggle"
@@ -241,7 +251,7 @@
     <h1 class="post-title" id="p-title"></h1>
     <p class="post-sub" id="p-sub"></p>
     <div class="byline" id="p-byline">
-      <b id="p-author">Fred Flamer</b><span class="dot">&middot;</span>
+      <b id="p-author" class="notranslate" translate="no">Fred Flamer</b><span class="dot">&middot;</span>
       <span id="p-date"></span><span class="dot">&middot;</span>
       <span id="p-read"></span>
     </div>
@@ -265,13 +275,14 @@
 </div>
 
 <!-- ═══ ANALYTICS DASHBOARD (author only) ═════════════════════ -->
-<main class="shell" id="dash" hidden>
+<!-- The dashboard and the editor are Fred's, and always in English. -->
+<main class="shell notranslate" translate="no" id="dash" hidden>
   <button class="back" onclick="go('/')">&#8592; Back to the site</button>
   <div id="view"></div>
 </main>
 
 <!-- ═══ EDITOR ════════════════════════════════════════════════ -->
-<div class="overlay" id="overlay" onclick="overlayClick(event)">
+<div class="overlay notranslate" translate="no" id="overlay" onclick="overlayClick(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-label="New post">
     <button class="x" onclick="closeEditor()" aria-label="Close">&#10005;</button>
     <h2 id="editor-title">New post</h2>
@@ -332,7 +343,7 @@
 
 <footer>
   <div>&copy; 2026 <strong>Fred Flamer</strong> &middot; All rights reserved</div>
-  <div class="author-bar" id="author-bar"></div>
+  <div class="author-bar notranslate" translate="no" id="author-bar"></div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>

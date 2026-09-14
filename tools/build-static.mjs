@@ -209,8 +209,8 @@ function body(html, p, posts, i){
   html = swap(html, '<p class="post-sub" id="p-sub"></p>',
     p.subtitle ? '<p class="post-sub" id="p-sub">' + esc(p.subtitle) + '</p>'
                : '<p class="post-sub" id="p-sub" hidden></p>', 'standfirst');
-  html = swap(html, '<b id="p-author">Fred Flamer</b>',
-                    '<b id="p-author">' + esc(p.author || 'Fred Flamer') + '</b>', 'author');
+  html = swap(html, '<b id="p-author" class="notranslate" translate="no">Fred Flamer</b>',
+                    '<b id="p-author" class="notranslate" translate="no">' + esc(p.author || 'Fred Flamer') + '</b>', 'author');
   html = swap(html, '<span id="p-date"></span>',
     '<time id="p-date" datetime="' + esc(iso(p.published_at)) + '">' +
     esc(longDate(p.published_at)) + '</time>', 'date');
