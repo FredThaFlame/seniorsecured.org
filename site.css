@@ -77,11 +77,10 @@ a{color:var(--navy-2)}
 /* ── masthead ──────────────────────────────────────────────── */
 #title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
        padding:12px 0 10px;text-align:center;position:relative}
+#title .logo{display:block;height:64px;width:auto;margin:0 auto 6px}
 #title .brand{font-size:30px;font-weight:700;letter-spacing:-.6px;color:var(--navy);line-height:1}
 #title .brand span{color:var(--gold)}
 #title .brand .tld{color:var(--muted);font-weight:400;letter-spacing:0}
-#title .kicker{font-size:9px;font-weight:700;letter-spacing:3.4px;text-transform:uppercase;
-               color:var(--muted);margin-top:6px}
 #title .home{background:none;border:0;cursor:pointer;padding:0;display:block;width:100%;
              text-decoration:none;color:inherit}
 
