@@ -104,7 +104,7 @@ function head(html, p){
   const url   = postUrl(p.slug);
   const img   = p.hero_url || (SITE + '/fred-flamer-2026.jpg');
 
-  html = swap(html, '<title>seniorsecured.org &middot; Community</title>',
+  html = swap(html, '<title>seniorsecured.org &middot; Scam Awareness for Seniors, CISSP-Led</title>',
                     '<title>' + esc(title) + '</title>', 'title');
   html = swap(html, '<meta name="description" content="' + SITE_DESC + '"/>',
                     '<meta name="description" content="' + esc(desc) + '"/>', 'description');
@@ -112,7 +112,7 @@ function head(html, p){
                     '<link rel="canonical" href="' + esc(url) + '"/>', 'canonical');
   html = swap(html, '<meta property="og:url" content="' + SITE + '/"/>',
                     '<meta property="og:url" content="' + esc(url) + '"/>', 'og:url');
-  html = swap(html, '<meta property="og:title" content="seniorsecured.org &middot; Community"/>',
+  html = swap(html, '<meta property="og:title" content="seniorsecured.org &middot; Scam Awareness for Seniors, CISSP-Led"/>',
                     '<meta property="og:title" content="' + esc(title) + '"/>', 'og:title');
   html = swap(html, '<meta property="og:description" content="' + SITE_DESC + '"/>',
                     '<meta property="og:description" content="' + esc(desc) + '"/>', 'og:description');

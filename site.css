@@ -76,13 +76,18 @@ a{color:var(--navy-2)}
 
 /* ── masthead ──────────────────────────────────────────────── */
 #title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
-       padding:12px 0 10px;text-align:center;position:relative}
-#title .logo{display:block;height:64px;width:auto;margin:0 auto 6px}
-#title .brand{font-size:30px;font-weight:700;letter-spacing:-.6px;color:var(--navy);line-height:1}
+       padding:12px 0 10px;text-align:center}
+/* Top ribbon: Español — logo + wordmark — Newsletter, all on one line. */
+.mast-row{display:flex;align-items:center;justify-content:center;gap:18px;position:relative}
+#title .logo{display:block;height:40px;width:auto}
+#title .brand{font-size:22px;font-weight:700;letter-spacing:-.4px;color:var(--navy);line-height:1}
 #title .brand span{color:var(--gold)}
 #title .brand .tld{color:var(--muted);font-weight:400;letter-spacing:0}
-#title .home{background:none;border:0;cursor:pointer;padding:0;display:block;width:100%;
+#title .home{background:none;border:0;cursor:pointer;padding:0;display:flex;align-items:center;gap:10px;
              text-decoration:none;color:inherit}
+/* Where the wordmark used to sit alone — now the tagline, centered below the ribbon. */
+.tagline{margin-top:10px;font-size:15px;font-style:italic;font-weight:600;
+         letter-spacing:-.2px;color:var(--navy)}
 
 /* ── newsletter — far right of the masthead ribbon ────────────── */
 .newsletter{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
@@ -109,6 +114,7 @@ a{color:var(--navy-2)}
 .gt-note{font-size:9px;color:var(--muted);white-space:nowrap}
 @media(max-width:720px){
   .translate{position:static;transform:none;align-items:center;margin-top:10px}
+  .mast-row{flex-direction:column;gap:10px}
 }
 
 /* Google's widget. Its own menu stays in the page, where the script can

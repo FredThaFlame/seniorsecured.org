@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>seniorsecured.org &middot; Community</title>
+<title>seniorsecured.org &middot; Scam Awareness for Seniors, CISSP-Led</title>
 <!-- Search results show roughly 155 characters; everything past that is
      cut, so the sentence has to land inside it. -->
-<meta name="description" content="Plain-spoken cybersecurity and fraud-prevention writing for seniors: phone scams, phishing, identity theft and more. By Fred Flamer, CISSP."/>
+<meta name="description" content="Fred Flamer, CISSP, helps California seniors spot and avoid today's digital-age scams &mdash; phone fraud, phishing, identity theft and more."/>
 <meta name="robots" content="index, follow, max-image-preview:large"/>
 <meta name="author" content="Fred Flamer"/>
-<meta name="keywords" content="senior scam prevention, elder fraud protection, phone scams for seniors, vishing, phishing, identity theft, SIM swapping, romance scams, check washing, title fraud, San Mateo County, San Francisco, Alameda County, cybersecurity speaker"/>
+<meta name="keywords" content="senior scam prevention, elder fraud protection, digital scams for seniors, online fraud awareness, phone scams for seniors, vishing, phishing, identity theft, SIM swapping, romance scams, check washing, title fraud, tech support scams, California senior safety, San Mateo County, San Francisco, Alameda County, cybersecurity speaker"/>
 <meta name="geo.region" content="US-CA"/>
 <meta name="geo.placename" content="San Mateo County, San Francisco, Alameda County"/>
 <link rel="canonical" href="https://seniorsecured.org/"/>
@@ -17,8 +17,8 @@
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="seniorsecured.org"/>
 <meta property="og:url" content="https://seniorsecured.org/"/>
-<meta property="og:title" content="seniorsecured.org &middot; Community"/>
-<meta property="og:description" content="Plain-spoken cybersecurity and fraud-prevention writing for seniors: phone scams, phishing, identity theft and more. By Fred Flamer, CISSP."/>
+<meta property="og:title" content="seniorsecured.org &middot; Scam Awareness for Seniors, CISSP-Led"/>
+<meta property="og:description" content="Fred Flamer, CISSP, helps California seniors spot and avoid today's digital-age scams &mdash; phone fraud, phishing, identity theft and more."/>
 <meta property="og:image" content="https://seniorsecured.org/fred-flamer-2026.jpg"/>
 <!-- Dimensions let a scraper lay the card out before the file arrives.
      They describe the headshot, so setMeta() drops them when a piece
@@ -96,7 +96,7 @@
       "url": "https://seniorsecured.org/",
       "name": "seniorsecured.org",
       "inLanguage": "en-US",
-      "description": "Plain-spoken cybersecurity and fraud-prevention writing for seniors.",
+      "description": "Plain-spoken writing that helps California seniors recognize and avoid today's digital-age scams.",
       "publisher": { "@id": "https://seniorsecured.org/#fred" }
     },
     {
@@ -118,12 +118,21 @@
       "knowsAbout": [
         "senior scam prevention",
         "elder fraud",
+        "digital-age scams",
+        "online fraud awareness",
         "phishing",
         "vishing",
         "identity theft",
         "cybersecurity awareness"
       ],
       "sameAs": ["https://www.linkedin.com/in/fred-flamer-norcal/"],
+      "telephone": "+1-502-402-6504",
+      "email": "mailto:fredflamer@seniorsecured.org",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
       "areaServed": [
         "San Mateo County, California",
         "San Francisco, California",
@@ -160,6 +169,7 @@
         <ul style="list-style:none;display:flex;flex-direction:column;gap:5px">
           <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
           <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="tel:+15024026504">(502) 402-6504</a></li>
         </ul>
       </details>
     </aside>
@@ -199,36 +209,40 @@
 
   <!-- ② MASTHEAD -->
   <header id="title">
-    <!-- The masthead is the brand, not the heading: on every URL the one
-         h1 is the headline of the piece being read. -->
-    <a class="home notranslate" translate="no" href="/" onclick="nav(event,'/')" aria-label="seniorsecured.org home">
-      <img class="logo" src="/logo.png" width="160" height="192" alt=""/>
-      <div class="brand">senior<span>secured</span><span class="tld">.org</span></div>
-    </a>
+    <div class="mast-row">
+      <!-- Machine translation through Google. Nothing from Google loads until
+           a reader asks for Spanish; see TRANSLATION in app.js. The button and
+           its note are notranslate so "English" stays readable in Spanish. -->
+      <div class="translate notranslate" translate="no">
+        <button type="button" class="gt-toggle" id="gt-toggle" onclick="toggleTranslation()"
+                lang="es" aria-pressed="false">Español</button>
+        <span class="gt-note" id="gt-note" lang="es" hidden>Traducción automática de Google</span>
+        <div id="gt-element" aria-hidden="true"></div>
+      </div>
 
-    <!-- Machine translation through Google. Nothing from Google loads until
-         a reader asks for Spanish; see TRANSLATION in app.js. The button and
-         its note are notranslate so "English" stays readable in Spanish. -->
-    <div class="translate notranslate" translate="no">
-      <button type="button" class="gt-toggle" id="gt-toggle" onclick="toggleTranslation()"
-              lang="es" aria-pressed="false">Español</button>
-      <span class="gt-note" id="gt-note" lang="es" hidden>Traducción automática de Google</span>
-      <div id="gt-element" aria-hidden="true"></div>
-    </div>
+      <!-- The masthead is the brand, not the heading: on every URL the one
+           h1 is the headline of the piece being read. -->
+      <a class="home notranslate" translate="no" href="/" onclick="nav(event,'/')" aria-label="seniorsecured.org home">
+        <img class="logo" src="/logo.png" width="160" height="192" alt=""/>
+        <div class="brand">senior<span>secured</span><span class="tld">.org</span></div>
+      </a>
 
-    <div class="newsletter" id="newsletter">
-      <button type="button" class="nl-toggle" id="nl-toggle"
-              aria-haspopup="true" aria-expanded="false" onclick="toggleNewsletter()">Newsletter</button>
-      <div class="panel nl-panel" id="nl-panel" hidden>
-        <h4>Get new pieces by email</h4>
-        <span class="hint">Fred sends a note when he publishes. No spam, unsubscribe anytime.</span>
-        <div class="fg"><label for="nl-name">Name</label>
-          <input type="text" id="nl-name" placeholder="Your name" autocomplete="name"/></div>
-        <div class="fg"><label for="nl-email">Email</label>
-          <input type="email" id="nl-email" placeholder="you@example.com" autocomplete="email"/></div>
-        <button class="btn" id="nl-submit" onclick="subscribeNewsletter()">Subscribe</button>
+      <div class="newsletter" id="newsletter">
+        <button type="button" class="nl-toggle" id="nl-toggle"
+                aria-haspopup="true" aria-expanded="false" onclick="toggleNewsletter()">Newsletter</button>
+        <div class="panel nl-panel" id="nl-panel" hidden>
+          <h4>Get new pieces by email</h4>
+          <span class="hint">Fred sends a note when he publishes. No spam, unsubscribe anytime.</span>
+          <div class="fg"><label for="nl-name">Name</label>
+            <input type="text" id="nl-name" placeholder="Your name" autocomplete="name"/></div>
+          <div class="fg"><label for="nl-email">Email</label>
+            <input type="email" id="nl-email" placeholder="you@example.com" autocomplete="email"/></div>
+          <button class="btn" id="nl-submit" onclick="subscribeNewsletter()">Subscribe</button>
+        </div>
       </div>
     </div>
+
+    <p class="tagline">Emotions Up = Decision Making Down</p>
   </header>
 
   <!-- ③ THE BLOG -->
