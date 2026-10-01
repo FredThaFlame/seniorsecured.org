@@ -50,8 +50,10 @@ a{color:var(--navy-2)}
          color:var(--muted);margin-bottom:7px}
 
 /* ── profile ───────────────────────────────────────────────── */
+/* height:auto, or the height="166" attribute wins over aspect-ratio and
+   the phone layout's 78px-wide photo becomes a tall oval. */
 #profile .shot{
-  width:100%;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block;
+  width:100%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;display:block;
   border:1px solid var(--line);background:var(--bg)
 }
 #profile .name{font-size:14px;font-weight:700;color:var(--navy);margin-top:9px}
@@ -73,6 +75,22 @@ a{color:var(--navy-2)}
 .faq-item+.faq-item{margin-top:12px}
 .faq-item .q{font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.4}
 .faq-item .a{color:var(--ink-2);line-height:1.55}
+
+/* ── upcoming talks ────────────────────────────────────────── */
+/* The summary line names the next date only while the box is folded. */
+.ev-next{margin-left:auto;margin-right:8px;color:var(--navy);letter-spacing:.6px}
+#events details[open] .ev-next{display:none}
+.ev-list{list-style:none}
+.ev+.ev{border-top:1px solid var(--line-soft);margin-top:9px;padding-top:9px}
+.ev-when{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#7A5300}
+.ev-when .dot{margin:0 5px}
+.ev.past .ev-when{color:var(--muted)}
+.ev-title{font-weight:700;color:var(--navy);line-height:1.35;margin:2px 0 3px}
+.ev-where,.ev-note{color:var(--ink-2);line-height:1.45}
+.ev-where a{color:inherit}
+.ev-where a:hover{color:var(--navy)}
+.ev-more{display:inline-block;margin-top:4px;font-weight:700}
+.ev-ask{margin-top:11px;padding-top:9px;border-top:1px solid var(--line-soft);color:var(--muted);line-height:1.45}
 
 /* ── masthead ──────────────────────────────────────────────── */
 #title{border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);
@@ -181,6 +199,24 @@ body{top:0!important;position:static!important}
          overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pnav.next{text-align:right}
 .pnav.next .pn{align-items:flex-end}
+
+/* ── listen — read the piece aloud ─────────────────────────── */
+/* Sits in the byline's bottom margin, directly under it. */
+.listen{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-12px 0 22px}
+.ls-play,.ls-stop{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  border-radius:20px;padding:8px 16px;font-weight:700;font-size:13px}
+.ls-play{background:var(--navy);border:1px solid var(--navy);color:#fff}
+.ls-play:hover{background:var(--navy-2)}
+.ls-stop{background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.ls-stop:hover{border-color:var(--navy);color:var(--navy)}
+.listen .ic{font-size:11px;line-height:1;width:12px;text-align:center}
+.ls-rate{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:600}
+.ls-rate select{border:1px solid var(--line);border-radius:20px;padding:6px 10px;
+  background:var(--surface);cursor:pointer;font-size:12px}
+.ls-where{color:var(--muted);font-variant-numeric:tabular-nums}
+/* The paragraph being read. A gold wash in the margin, so the text itself
+   does not move. */
+.reading{background:var(--gold-lt);box-shadow:0 0 0 6px var(--gold-lt);border-radius:2px}
 
 .article{font-size:16.5px;line-height:1.78;color:#1A1D21}
 #p-body{flex:1}

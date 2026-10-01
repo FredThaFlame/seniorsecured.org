@@ -163,6 +163,16 @@
       </div>
     </aside>
 
+    <!-- Upcoming training, painted from events.js by paintEvents() in app.js.
+         Hidden until there is something to show. -->
+    <aside class="box collapse" id="events" style="padding:12px" hidden>
+      <details id="ev-details" open>
+        <summary class="eyebrow"><span>Upcoming training</span><span class="ev-next" id="ev-next"></span><span class="chev" aria-hidden="true">&#9656;</span></summary>
+        <ol class="ev-list" id="ev-list"></ol>
+        <p class="ev-ask">Want Fred to speak to your group? <a href="mailto:fredflamer@seniorsecured.org?subject=Speaking%20request">Get in touch</a></p>
+      </details>
+    </aside>
+
     <aside class="box collapse" id="contact" style="padding:12px">
       <details>
         <summary class="eyebrow">Contact<span class="chev" aria-hidden="true">&#9656;</span></summary>
@@ -271,6 +281,25 @@
       <span id="p-date"></span><span class="dot">&middot;</span>
       <span id="p-read"></span>
     </div>
+    <!-- Reads the piece aloud in the browser's own voice; see LISTEN in app.js.
+         Shown by showPost() only where the browser can speak. -->
+    <div class="listen" id="listen" hidden>
+      <button type="button" class="ls-play" id="ls-play" onclick="listenToggle()" aria-pressed="false">
+        <span class="ic" id="ls-icon" aria-hidden="true">&#9654;</span><span id="ls-label">Listen to this article</span>
+      </button>
+      <button type="button" class="ls-stop" id="ls-stop" onclick="listenStop()" hidden>
+        <span class="ic" aria-hidden="true">&#9632;</span>Stop
+      </button>
+      <label class="ls-rate">Speed
+        <select id="ls-rate" onchange="listenRate(this.value)">
+          <option value="0.8">Slower</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.2">Faster</option>
+          <option value="1.4">Fastest</option>
+        </select>
+      </label>
+      <span class="ls-where" id="ls-where"></span>
+    </div>
     <article class="article" id="p-body"></article>
     <div class="post-foot" id="p-actions">
       <span class="left" id="p-foot"></span>
@@ -364,6 +393,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
 <script src="/config.js"></script>
+<script src="/events.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>

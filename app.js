@@ -690,6 +690,7 @@ function blogNotice(heading, detail){
   document.getElementById('p-title').textContent = heading;
   document.getElementById('p-sub').hidden = true;
   document.getElementById('p-byline').hidden = true;
+  document.getElementById('listen').hidden = true;
   document.getElementById('p-actions').hidden = true;
   document.getElementById('p-body').innerHTML = '<p style="color:var(--muted)">' + esc(detail) + '</p>';
   document.getElementById('comments').innerHTML = '';
@@ -800,6 +801,7 @@ function setMeta(path, title, desc, image, post){
 
 async function route(){
   tracker.stop();
+  listenStop();
   scrollTo(0,0);
   const path = location.pathname;
 
@@ -946,6 +948,7 @@ async function showPost(slug, isHome){
   paintList();
   paintPostNav();
   paintComments(data.comments || []);
+  listenReady();
   tracker.start(current.id);
 }
 
@@ -1883,6 +1886,299 @@ addEventListener('resize', function(){
 });
 
 /* ═══════════════════════════════════════════════════════════════
+   LISTEN — reads the open piece aloud in the browser's own voice.
+
+   speechSynthesis is built into every current browser, so there is no
+   service, key or cost. The piece is queued as one utterance per
+   sentence-sized chunk: some Chrome voices cut a long utterance off
+   after about fifteen seconds, and chunks let the page highlight the
+   paragraph being read.
+
+   Pause is a cancel that keeps its place, not speechSynthesis.pause(),
+   which does nothing on Android and loses its place on some desktops.
+   Resume queues the rest again from the start of that paragraph.
+
+   The page is read as it stands, so a reader who switched to Spanish
+   hears Google's translation in a Spanish voice.
+   ═══════════════════════════════════════════════════════════════ */
+const LISTEN_OK = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+/* gen invalidates the callbacks of a cancelled queue — Chrome fires
+   end/error on every utterance it drops. queue holds the utterances
+   because Chrome loses their events if they are garbage-collected. */
+const listen = { blocks: [], at: 0, started: false, playing: false, gen: 0, queue: [] };
+
+function listenRateValue(){
+  let r = 1;
+  try{ r = parseFloat(localStorage.getItem('ff_listen_rate')) || 1; }catch(e){}
+  return r;
+}
+
+/* What gets read: headline, standfirst, then each block of the body. */
+function listenBlocks(){
+  const sub = document.getElementById('p-sub');
+  return [document.getElementById('p-title')]
+    .concat(sub.hidden ? [] : [sub])
+    .concat(Array.from(document.querySelectorAll(
+      '#p-body h2, #p-body h3, #p-body p, #p-body li, #p-body blockquote')))
+    .filter(el => (el.innerText || el.textContent || '').trim());
+}
+
+/* Sentences, packed up to ~220 characters a chunk. */
+function listenChunks(text){
+  const flat = String(text || '').replace(/\s+/g, ' ').trim();
+  const parts = flat.match(/[^.!?]+(?:[.!?]+["'”’)]*\s*|$)/g) || [flat];
+  const out = [];
+  let cur = '';
+  parts.forEach(function(s){
+    if(cur && (cur + s).length > 220){ out.push(cur.trim()); cur = ''; }
+    cur += s;
+  });
+  if(cur.trim()) out.push(cur.trim());
+  return out;
+}
+
+/* The best voice on offer for the language. The "natural" voices that
+   Edge, Chrome and Safari ship sound far less robotic than the defaults. */
+function listenVoice(lang){
+  const norm = v => v.lang.replace('_', '-').toLowerCase();
+  const mine = speechSynthesis.getVoices().filter(v => norm(v).startsWith(lang));
+  const home = lang === 'es' ? /^es-(us|mx)/ : /^en-us/;
+  const good = /natural|neural|enhanced|premium|google|samantha/i;
+  return mine.find(v => home.test(norm(v)) && good.test(v.name)) ||
+         mine.find(v => home.test(norm(v))) ||
+         mine.find(v => good.test(v.name)) ||
+         mine.find(v => v.default) || mine[0] || null;
+}
+
+function listenPaint(){
+  const play = document.getElementById('ls-play');
+  document.getElementById('ls-icon').innerHTML = listen.playing ? '&#10074;&#10074;' : '&#9654;';
+  document.getElementById('ls-label').textContent =
+    listen.playing ? 'Pause' : listen.started ? 'Resume' : 'Listen to this article';
+  play.setAttribute('aria-pressed', String(listen.playing));
+  document.getElementById('ls-stop').hidden = !listen.started;
+  document.getElementById('ls-where').textContent = listen.started && listen.blocks.length
+    ? (listen.at + 1) + ' of ' + listen.blocks.length : '';
+}
+
+/* Marks the paragraph being read and keeps it on screen. */
+function listenAt(i){
+  listen.at = i;
+  document.querySelectorAll('.reading').forEach(el => el.classList.remove('reading'));
+  const el = listen.blocks[i];
+  if(el){
+    el.classList.add('reading');
+    const r = el.getBoundingClientRect();
+    if(r.top < 0 || r.bottom > innerHeight){
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({ block: 'center', behavior: still ? 'auto' : 'smooth' });
+    }
+  }
+  listenPaint();
+}
+
+function listenPlay(){
+  listen.blocks = listenBlocks();
+  if(listen.at >= listen.blocks.length) listen.at = 0;
+  if(!listen.blocks.length) return;
+
+  const gen = ++listen.gen;
+  const lang = gtCookieLang() === 'es' ? 'es' : 'en';
+  const voice = listenVoice(lang);
+  const rate = listenRateValue();
+  speechSynthesis.cancel();
+  listen.queue = [];
+
+  for(let i = listen.at; i < listen.blocks.length; i++){
+    const el = listen.blocks[i];
+    listenChunks(el.innerText || el.textContent).forEach(function(text, j){
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = voice ? voice.lang : (lang === 'es' ? 'es-US' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = rate;
+      if(j === 0) u.onstart = function(){ if(gen === listen.gen) listenAt(i); };
+      u.onerror = function(e){
+        if(gen !== listen.gen || e.error === 'interrupted' || e.error === 'canceled') return;
+        listenStop();
+        toast('Reading aloud stopped: ' + (e.error || 'the voice is not available') + '.');
+      };
+      listen.queue.push(u);
+    });
+  }
+  const last = listen.queue[listen.queue.length - 1];
+  last.onend = function(){ if(gen === listen.gen) listenStop(); };
+
+  listen.started = listen.playing = true;
+  listen.queue.forEach(u => speechSynthesis.speak(u));
+  listenAt(listen.at);
+}
+
+function listenPause(){
+  listen.gen++;
+  listen.playing = false;
+  speechSynthesis.cancel();
+  listenPaint();
+}
+
+function listenToggle(){
+  if(listen.playing) listenPause(); else listenPlay();
+}
+
+function listenStop(){
+  if(!LISTEN_OK) return;
+  listen.gen++;
+  listen.playing = listen.started = false;
+  listen.at = 0;
+  listen.queue = [];
+  speechSynthesis.cancel();
+  document.querySelectorAll('.reading').forEach(el => el.classList.remove('reading'));
+  listenPaint();
+}
+
+/* A new speed takes effect from the start of the current paragraph. */
+function listenRate(v){
+  try{ localStorage.setItem('ff_listen_rate', v); }catch(e){}
+  if(listen.playing) listenPlay();
+}
+
+/* Called once a piece is on screen. */
+function listenReady(){
+  listenStop();
+  document.getElementById('listen').hidden = !LISTEN_OK;
+  if(LISTEN_OK) document.getElementById('ls-rate').value = String(listenRateValue());
+}
+
+/* Leaving the page must not leave the voice talking. */
+addEventListener('pagehide', function(){ if(LISTEN_OK) speechSynthesis.cancel(); });
+
+/* ═══════════════════════════════════════════════════════════════
+   UPCOMING TRAINING — painted from EVENTS in events.js.
+
+   Dates are California dates. A session counts as upcoming through its
+   own day there; after that only the most recent past one stays, marked
+   "Previous", at the top. 'TBA' entries go last. Each dated upcoming
+   session is also described to search engines as a schema.org Event.
+   ═══════════════════════════════════════════════════════════════ */
+const EV_TZ = 'America/Los_Angeles';
+
+/* Today in California as YYYY-MM-DD, which compares as a string. */
+function evToday(){
+  return new Intl.DateTimeFormat('en-CA', { timeZone: EV_TZ }).format(new Date());
+}
+
+/* { prev: the latest past session or null, next: dated upcoming, tba } */
+function evSplit(){
+  const list = (typeof EVENTS !== 'undefined' && Array.isArray(EVENTS) ? EVENTS : [])
+    .filter(e => e && e.title);
+  const today = evToday();
+  const dated = list
+    .filter(e => /^\d{4}-\d{2}-\d{2}$/.test(e.date))
+    .sort((a, b) => (a.date + (a.start || '')).localeCompare(b.date + (b.start || '')));
+  const past = dated.filter(e => e.date < today);
+  return {
+    prev: past.length ? past[past.length - 1] : null,
+    next: dated.filter(e => e.date >= today),
+    tba:  list.filter(e => String(e.date).toUpperCase() === 'TBA')
+  };
+}
+
+/* Noon UTC keeps the calendar day the same in every time zone. */
+function evDay(e, opts){
+  return new Date(e.date + 'T12:00:00Z')
+    .toLocaleDateString('en-US', Object.assign({ timeZone: 'UTC' }, opts));
+}
+
+function evClock(hm, suffix){
+  const [h, m] = hm.split(':').map(Number);
+  return (h % 12 || 12) + (m ? ':' + String(m).padStart(2, '0') : '') +
+         (suffix ? (h < 12 ? ' am' : ' pm') : '');
+}
+
+/* "10–11:30 am", "11 am–1 pm", or just "2 pm". */
+function evTime(e){
+  if(!e.start) return '';
+  if(!e.end) return evClock(e.start, true);
+  const same = (Number(e.start.split(':')[0]) < 12) === (Number(e.end.split(':')[0]) < 12);
+  return evClock(e.start, !same) + '–' + evClock(e.end, true);
+}
+
+/* Full timestamp with California's offset on that day, for the schema. */
+function evIso(date, hm){
+  if(!hm) return date;
+  let off = '-08:00';
+  try{
+    const name = new Intl.DateTimeFormat('en-US', { timeZone: EV_TZ, timeZoneName: 'shortOffset' })
+      .formatToParts(new Date(date + 'T' + hm + ':00Z'))
+      .find(p => p.type === 'timeZoneName').value;          // "GMT-7"
+    const m = /GMT([+-])(\d+)/.exec(name);
+    if(m) off = m[1] + m[2].padStart(2, '0') + ':00';
+  }catch(e){}
+  return date + 'T' + hm + ':00' + off;
+}
+
+function paintEvents(){
+  const box = document.getElementById('events');
+  const { prev, next, tba } = evSplit();
+  const evs = (prev ? [prev] : []).concat(next, tba);
+  box.hidden = !evs.length;
+  if(!evs.length) return;
+
+  document.getElementById('ev-list').innerHTML = evs.map(function(e){
+    const where = [e.venue, e.city].filter(Boolean).join(', ');
+    const map = 'https://www.google.com/maps/search/?api=1&query=' +
+                encodeURIComponent(e.address ? e.venue + ', ' + e.address : where);
+    const link = /^https?:\/\//i.test(e.url || '') ? e.url : null;
+    const when = tba.includes(e) ? 'TBA'
+      : (e === prev ? 'Previous<span class="dot">&middot;</span>' : '') +
+        '<time datetime="' + esc(evIso(e.date, e.start)) + '">' +
+        esc(evDay(e, { weekday: 'short', month: 'short', day: 'numeric' })) + '</time>' +
+        (e.start ? '<span class="dot">&middot;</span>' + esc(evTime(e)) : '');
+    return '<li class="ev' + (e === prev ? ' past' : '') + '">' +
+      '<div class="ev-when">' + when + '</div>' +
+      '<div class="ev-title">' + esc(e.title) + '</div>' +
+      (where ? '<div class="ev-where"><a href="' + esc(map) +
+        '" target="_blank" rel="noopener noreferrer">' + esc(where) + '</a></div>' : '') +
+      (e.note ? '<div class="ev-note">' + esc(e.note) + '</div>' : '') +
+      (link ? '<a class="ev-more" href="' + esc(link) +
+        '" target="_blank" rel="noopener noreferrer">Details &amp; sign-up &rarr;</a>' : '') +
+      '</li>';
+  }).join('');
+
+  /* On a phone the box sits above the article, so it starts folded to
+     one line that still names the next date. */
+  document.getElementById('ev-next').textContent =
+    next.length ? 'Next ' + evDay(next[0], { month: 'short', day: 'numeric' })
+                : tba.length ? 'Next TBA' : '';
+  if(matchMedia('(max-width:720px)').matches) document.getElementById('ev-details').open = false;
+
+  /* Only dated sessions still to come are worth describing to Google. */
+  let ld = document.getElementById('ev-ld');
+  if(!next.length){ if(ld) ld.remove(); return; }
+  if(!ld){
+    ld = document.createElement('script');
+    ld.type = 'application/ld+json';
+    ld.id = 'ev-ld';
+    document.head.appendChild(ld);
+  }
+  ld.textContent = JSON.stringify(next.map(function(e){
+    const ev = {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: e.title,
+      startDate: evIso(e.date, e.start),
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: { '@type': 'Place', name: e.venue, address: e.address || e.city || 'California' },
+      performer: { '@id': SITE_URL + '/#fred' },
+      url: /^https?:\/\//i.test(e.url || '') ? e.url : SITE_URL + '/'
+    };
+    if(e.end) ev.endDate = evIso(e.date, e.end);
+    if(e.note) ev.description = e.note;
+    return ev;
+  })).replace(/</g, '\\u003c');
+}
+
+/* ═══════════════════════════════════════════════════════════════
    BOOT
    ═══════════════════════════════════════════════════════════════ */
 /* GitHub Pages answers a hard load of /p/<slug> with 404.html, which
@@ -1900,6 +2196,7 @@ addEventListener('resize', function(){
 
 paintAuthorBar();
 initTranslation();
+paintEvents();
 
 (async function boot(){
   if(!db){
