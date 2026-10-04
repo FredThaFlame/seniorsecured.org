@@ -731,10 +731,10 @@ function nav(ev, path){
 /* Canonical origin. Falls back to wherever the page is actually served
    from, so `vercel dev` and preview deploys stay self-consistent. */
 const SITE_URL   = 'https://seniorsecured.org';
-const SITE_TITLE = 'seniorsecured.org · Community';
-/* Kept identical to the description in index.html's head — routing back to
-   the home page has to restore what was served, not a second wording. */
-const SITE_DESC  = 'Plain-spoken cybersecurity and fraud-prevention writing for seniors: phone scams, phishing, identity theft and more. By Fred Flamer, CISSP.';
+/* Both kept identical to index.html's head — routing back to the home page
+   has to restore what was served, not a second wording. */
+const SITE_TITLE = 'seniorsecured.org · Scam Awareness for Seniors, CISSP-Led';
+const SITE_DESC  = 'Fred Flamer, CISSP, helps California seniors spot and avoid scams. Find him at the Senior Scam Stopper Seminar, Oct 23: phone fraud, phishing, ID theft.';
 
 function canonicalOrigin(){
   return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
