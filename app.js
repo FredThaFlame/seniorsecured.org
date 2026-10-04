@@ -734,7 +734,7 @@ const SITE_URL   = 'https://seniorsecured.org';
 /* Both kept identical to index.html's head — routing back to the home page
    has to restore what was served, not a second wording. */
 const SITE_TITLE = 'seniorsecured.org · Scam Awareness for Seniors, CISSP-Led';
-const SITE_DESC  = 'Fred Flamer, CISSP, helps California seniors spot and avoid scams. Find him at the Senior Scam Stopper Seminar, Oct 23: phone fraud, phishing, ID theft.';
+const SITE_DESC  = 'Fred Flamer, CISSP, helps California seniors spot and avoid scams. Find him at Senior Scam Stopper, Oct 23: phone fraud, phishing, ID theft.';
 
 function canonicalOrigin(){
   return /^https?:\/\/(localhost|127\.|\[::1\])/.test(location.origin) ? location.origin : SITE_URL;
