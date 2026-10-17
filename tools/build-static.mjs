@@ -266,7 +266,7 @@ function sitemap(posts){
   const newest = posts.length ? iso(posts[0].published_at) : null;
   return '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    [url(SITE + '/', newest)]
+    [url(SITE + '/', newest), url(SITE + '/about/'), url(SITE + '/food-for-thought/')]
       .concat(posts.map(p => url(postUrl(p.slug), iso(p.updated_at || p.published_at))))
       .join('\n') +
     '\n</urlset>\n';

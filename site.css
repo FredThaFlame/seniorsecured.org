@@ -64,6 +64,8 @@ a{color:var(--navy-2)}
 #profile .name .cred{margin-left:6px;font-size:inherit;color:var(--ink);white-space:nowrap}
 #profile .role{color:var(--muted);margin-top:1px}
 #profile .bio{color:var(--ink-2);margin-top:8px;line-height:1.55}
+#profile .about-link{display:block;margin-top:8px;font-weight:700}
+#profile .about-link + .about-link{margin-top:4px}
 
 /* ── collapsible contact / FAQ ────────────────────────────────── */
 .collapse summary{cursor:pointer;list-style:none;display:flex;align-items:center;

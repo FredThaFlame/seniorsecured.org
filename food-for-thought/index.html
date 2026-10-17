@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Food for Thought &middot; seniorsecured.org</title>
+<meta name="description" content="Short, plain-spoken notes from Fred Flamer, CISSP, on staying safe and keeping your personal information private in a digital world."/>
+<meta name="robots" content="index, follow, max-image-preview:large"/>
+<meta name="author" content="Fred Flamer"/>
+<link rel="canonical" href="https://seniorsecured.org/food-for-thought/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="seniorsecured.org"/>
+<meta property="og:url" content="https://seniorsecured.org/food-for-thought/"/>
+<meta property="og:title" content="Food for Thought &middot; seniorsecured.org"/>
+<meta property="og:description" content="Short, plain-spoken notes from Fred Flamer, CISSP, on staying safe and keeping your personal information private in a digital world."/>
+<meta property="og:image" content="https://seniorsecured.org/fred-flamer-2026.jpg"/>
+<meta property="og:image:width" content="512"/>
+<meta property="og:image:height" content="512"/>
+<meta property="og:image:alt" content="Fred Flamer, CISSP"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="stylesheet" href="/site.css"/>
+<style>
+  /* Plain page with one small script (fft.js). It borrows the masthead and
+     article styles from site.css and only adds its own frame. */
+  .about{max-width:760px;margin:0 auto;padding:22px 18px 60px}
+  .about #title{margin-bottom:18px}
+  .about .back{display:inline-block;margin:0 0 12px;font-weight:700;text-decoration:none}
+  .about .back:hover{text-decoration:underline}
+  .fft-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:16px 20px;
+            background:var(--gold-lt);border:1px solid var(--gold-line);border-radius:var(--r)}
+  .fft-bulb{flex:none;width:52px;height:52px;border-radius:50%;background:var(--navy);
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 0 0 4px var(--gold-lt),0 0 0 5px var(--gold)}
+  .fft-bulb svg{width:28px;height:28px}
+  .fft-head h1{font-size:28px;line-height:1.15;color:var(--navy);margin-bottom:3px;letter-spacing:-.4px}
+  .fft-head p{color:var(--ink-2);font-size:14px;line-height:1.5;font-style:italic}
+  .fft-note{position:relative;overflow:hidden;padding:24px 28px 20px 30px;margin-bottom:16px;
+            border-left:4px solid var(--gold)}
+  /* One big quotation mark behind the text; decoration only. */
+  .fft-note::before{content:"\201C";position:absolute;top:-14px;right:16px;
+                    font:700 120px/1 Georgia,"Times New Roman",serif;color:var(--gold-lt);
+                    pointer-events:none;user-select:none}
+  .fft-note > *{position:relative}
+  .fft-note.latest{background:linear-gradient(180deg,var(--gold-lt) 0,var(--surface) 90px)}
+  .fft-note .article{font-size:17px}
+  .fft-note .article p:last-child{margin-bottom:0}
+  .fft-note .article p.sign{text-align:right;font-style:italic;font-weight:700;color:var(--navy);margin-top:-4px}
+  .fft-date{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;
+            letter-spacing:.7px;text-transform:uppercase;color:#7A5300;margin-bottom:12px}
+  .fft-tag{background:var(--navy);color:#fff;border-radius:20px;padding:2px 9px;letter-spacing:.8px}
+  .fft-actions{display:flex;gap:8px;align-items:center;margin-top:14px}
+  .fft-del{color:#b3261e}
+  .fft-empty{color:var(--muted);text-align:center;padding:24px 0}
+  #fft-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:6px}
+  #fft-bar .box{width:100%}
+  #fft-signin{width:100%;max-width:320px;margin-top:10px}
+  .fft-note textarea{min-height:150px;width:100%}
+  @media(max-width:720px){
+    .about{padding:14px 12px 44px}
+    .fft-note{padding:16px 16px 14px}
+    .fft-head h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#fft-list">Skip to content</a>
+
+<div class="about">
+
+  <header id="title">
+    <div class="mast-row">
+      <a class="home notranslate" translate="no" href="/" aria-label="seniorsecured.org home">
+        <img class="logo" src="/logo.png" width="160" height="192" alt=""/>
+        <div class="brand">senior<span>secured</span><span class="tld">.org</span></div>
+      </a>
+    </div>
+    <p class="tagline">Emotions Up = Decision Making Down</p>
+  </header>
+
+  <a class="back" href="/">&#8592; Back to the articles</a>
+
+  <main id="main">
+    <div class="fft-head">
+      <span class="fft-bulb" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#E8B84A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18h6M10 21h4"/>
+          <path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="#E8B84A" fill-opacity=".25"/>
+        </svg>
+      </span>
+      <div>
+        <h1>Food for Thought</h1>
+        <p>Short notes from Fred on staying safe, and on keeping your personal information yours.</p>
+      </div>
+    </div>
+
+    <div id="fft-list" aria-live="polite"><p class="fft-empty">Loading&hellip;</p></div>
+
+    <div id="fft-bar"></div>
+  </main>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer>
+  <div>&copy; 2026 <strong>Fred Flamer</strong> &middot; All rights reserved</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="/config.js"></script>
+<script src="/food-for-thought/fft.js"></script>
+</body>
+</html>
