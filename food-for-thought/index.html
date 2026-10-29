@@ -26,7 +26,7 @@
 <style>
   /* Plain page with one small script (fft.js). It borrows the masthead and
      article styles from site.css and only adds its own frame. */
-  .about{max-width:760px;margin:0 auto;padding:22px 18px 60px}
+  .about{max-width:960px;margin:0 auto;padding:22px 18px 60px}
   .about #title{margin-bottom:18px}
   .about .back{display:inline-block;margin:0 0 12px;font-weight:700;text-decoration:none}
   .about .back:hover{text-decoration:underline}
@@ -47,8 +47,7 @@
   .fft-note > *{position:relative}
   .fft-note.latest{background:linear-gradient(180deg,var(--gold-lt) 0,var(--surface) 90px)}
   .fft-note .article{font-size:17px}
-  .fft-note .article p:last-child{margin-bottom:0}
-  .fft-note .article p.sign{text-align:right;font-style:italic;font-weight:700;color:var(--navy);margin-top:-4px}
+  .fft-note .fft-body{white-space:pre-wrap;overflow-wrap:break-word}
   .fft-date{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;
             letter-spacing:.7px;text-transform:uppercase;color:#7A5300;margin-bottom:12px}
   .fft-tag{background:var(--navy);color:#fff;border-radius:20px;padding:2px 9px;letter-spacing:.8px}
@@ -59,7 +58,29 @@
   #fft-bar .box{width:100%}
   #fft-signin{width:100%;max-width:320px;margin-top:10px}
   .fft-note textarea{min-height:150px;width:100%}
+  /* Note on the left, calendar on the right; stacked on a phone. */
+  .fft-wrap{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px;align-items:start}
+  .fft-showing{font-size:13px;color:var(--ink-2);margin:0 0 10px;min-height:20px}
+  .fft-cal{padding:14px 14px 12px;position:sticky;top:16px}
+  .fft-cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .fft-cal-head strong{color:var(--navy);font-size:15px}
+  .fft-nav{width:30px;height:30px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+           color:var(--navy);font-size:18px;line-height:1;cursor:pointer}
+  .fft-nav:disabled{opacity:.35;cursor:default}
+  .fft-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+  .fft-wk span{font-size:10px;font-weight:700;color:var(--muted);padding-bottom:4px}
+  .fft-day{display:flex;align-items:center;justify-content:center;aspect-ratio:1;font-size:13px;
+           color:var(--muted);border-radius:50%;border:1px solid transparent}
+  .fft-day.today{border-color:var(--line)}
+  .fft-day.has{background:var(--gold-lt);border-color:var(--gold-line);color:var(--navy);font-weight:700;
+               cursor:pointer;font-family:inherit;padding:0}
+  .fft-day.has:hover{border-color:var(--gold)}
+  .fft-day.has.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .fft-key{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin:10px 0 0}
+  .fft-swatch{width:12px;height:12px;border-radius:50%;background:var(--gold-lt);border:1px solid var(--gold-line)}
   @media(max-width:720px){
+    .fft-wrap{grid-template-columns:1fr}
+    .fft-cal{position:static;max-width:340px}
     .about{padding:14px 12px 44px}
     .fft-note{padding:16px 16px 14px}
     .fft-head h1{font-size:22px}
@@ -97,7 +118,13 @@
       </div>
     </div>
 
-    <div id="fft-list" aria-live="polite"><p class="fft-empty">Loading&hellip;</p></div>
+    <div class="fft-wrap">
+      <div>
+        <p class="fft-showing" id="fft-showing"></p>
+        <div id="fft-list" aria-live="polite"><p class="fft-empty">Loading&hellip;</p></div>
+      </div>
+      <aside class="box fft-cal" id="fft-cal" aria-label="Browse notes by date"></aside>
+    </div>
 
     <div id="fft-bar"></div>
   </main>
