@@ -271,6 +271,8 @@
               onclick="document.getElementById('p-hero-file').click()">Add a cover image</button>
       <input type="file" id="p-hero-file" accept="image/jpeg,image/png,image/webp,image/gif" hidden/>
       <button type="button" class="linkish" id="hero-remove" onclick="removeCover()" hidden>Remove</button>
+      <span class="dot" id="feature-dot" hidden>&middot;</span>
+      <button type="button" class="linkish" id="feature-btn" onclick="toggleFeatured()" hidden>Feature on home page</button>
       <span class="hint" id="hero-edit-status" aria-live="polite"></span>
     </div>
     <p id="p-flag" hidden><span class="tag draft">Draft</span></p>

@@ -823,7 +823,14 @@ async function route(){
   }
 
   const m = path.match(/^\/p\/([^/]+)\/?$/);
-  return showPost(m ? decodeURIComponent(m[1]) : posts[0].slug, !m);
+  return showPost(m ? decodeURIComponent(m[1]) : homePost().slug, !m);
+}
+
+/* The home page opens the piece Fred featured (supabase/featured.sql),
+   or the newest when none is. Only a published piece counts, so a
+   signed-in author sees the same home page a reader does. */
+function homePost(){
+  return posts.find(p => p.featured && p.status === 'published') || posts[0];
 }
 
 /* One list fetch per page load; the sidebar and the home post both use it. */
@@ -846,6 +853,7 @@ function paintList(){
       (p.hero_url ? '<img class="thumb" src="' + esc(p.hero_url) + '" alt="" loading="lazy"/>' : '') +
       '<div class="d">' + esc(shortDate(p.published_at)) + '</div>' +
       '<div class="t">' + (p.status !== 'published' ? '<span class="tag draft">Draft</span> ' : '') +
+        (p.featured && p.status === 'published' ? '<span class="tag">Featured</span> ' : '') +
         esc(p.title) + '</div>' +
       '<div class="m"><span>' + p.read_minutes + ' min read</span>' +
       '<span class="dot">&middot;</span><span>&#10084;&#65039; ' + fmt(p.reaction_count) + '</span>' +
@@ -1359,6 +1367,32 @@ function paintCoverEdit(){
     current.hero_url ? 'Replace cover image' : 'Add a cover image';
   document.getElementById('hero-remove').hidden = !current.hero_url;
   document.getElementById('hero-edit-status').textContent = '';
+  /* Hidden until featured.sql has run (the list has no featured column
+     before then) and on drafts, which cannot be featured. */
+  const feat = document.getElementById('feature-btn');
+  const canFeature = posts.length > 0 && 'featured' in posts[0] && current.status === 'published';
+  feat.hidden = !canFeature;
+  document.getElementById('feature-dot').hidden = !canFeature;
+  feat.textContent = current.featured ? 'Stop featuring on home page' : 'Feature on home page';
+}
+
+/* One piece at a time: set_featured() clears the old feature in the same
+   call. Stopping sends the home page back to the newest piece. */
+async function toggleFeatured(){
+  if(!isAuthor() || !current) return;
+  const on = !current.featured;
+  coverEditStatus(on ? 'Featuring…' : 'Stopping…');
+  try{
+    await rpc('set_featured', { p_id: on ? current.id : null });
+    posts.forEach(p => { p.featured = on && p.id === current.id; });
+    current.featured = on;
+    paintList();
+    paintCoverEdit();
+    toast(on ? 'Featured. The home page now opens this piece.'
+             : 'No longer featured. The home page opens the newest piece.');
+  }catch(e){
+    coverEditStatus(e.message || 'Could not change the featured piece.');
+  }
 }
 
 function coverEditStatus(msg){
