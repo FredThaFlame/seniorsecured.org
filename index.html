@@ -131,7 +131,10 @@
       "email": "mailto:fredflamer@seniorsecured.org",
       "address": {
         "@type": "PostalAddress",
+        "postOfficeBoxNumber": "50764",
+        "addressLocality": "Palo Alto",
         "addressRegion": "CA",
+        "postalCode": "94303",
         "addressCountry": "US"
       },
       "areaServed": [
@@ -183,6 +186,7 @@
           <li><a href="mailto:fredflamer@seniorsecured.org" style="word-break:break-all">fredflamer@seniorsecured.org</a></li>
           <li><a href="https://www.linkedin.com/in/fred-flamer-norcal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
           <li><a href="tel:+15104026504">(510) 402-6504</a></li>
+          <li><address style="font-style:normal">P.O. Box 50764<br/>Palo Alto, CA 94303</address></li>
         </ul>
       </details>
     </aside>
@@ -242,15 +246,15 @@
 
       <div class="newsletter" id="newsletter">
         <button type="button" class="nl-toggle" id="nl-toggle"
-                aria-haspopup="true" aria-expanded="false" onclick="toggleNewsletter()">Newsletter</button>
+                aria-haspopup="true" aria-expanded="false" onclick="toggleNewsletter()">Join Email List</button>
         <div class="panel nl-panel" id="nl-panel" hidden>
-          <h4>Get new pieces by email</h4>
-          <span class="hint">Fred sends a note when he publishes. No spam, unsubscribe anytime.</span>
+          <h4>Join Fred&rsquo;s email list</h4>
+          <span class="hint">Get Fred&rsquo;s new articles sent straight to your inbox the moment they&rsquo;re published, plus subscriber-only exclusives. No spam, unsubscribe anytime.</span>
           <div class="fg"><label for="nl-name">Name</label>
             <input type="text" id="nl-name" placeholder="Your name" autocomplete="name"/></div>
           <div class="fg"><label for="nl-email">Email</label>
             <input type="email" id="nl-email" placeholder="you@example.com" autocomplete="email"/></div>
-          <button class="btn" id="nl-submit" onclick="subscribeNewsletter()">Subscribe</button>
+          <button class="btn" id="nl-submit" onclick="subscribeNewsletter()">Join the list</button>
         </div>
       </div>
     </div>

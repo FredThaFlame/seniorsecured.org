@@ -184,7 +184,7 @@ async function subscribeNewsletter(){
     await rpc('subscribe_newsletter', { p_name: name, p_email: email });
     nameEl.value = ''; emailEl.value = '';
     closeNewsletter();
-    toast('Subscribed — thanks!');
+    toast('You’re on the list — thanks!');
   }catch(e){
     toast(e.message);
   }finally{
